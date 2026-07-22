@@ -1,0 +1,16 @@
+{
+  "independent": true,
+  "checks": {
+    "compute_authority": true,
+    "full_atlas": true,
+    "archive_bundle": true,
+    "navigator": true,
+    "pflt_vision": true,
+    "pflt_core": true,
+    "linguistics": true,
+    "realities_snapshot": true
+  },
+  "package_root": "C:\\Users\\damia\\Desktop\\FSOT-Monte-Carlo-Intelligence",
+  "external_archive_optional": false,
+  "free_parameters": 0
+}

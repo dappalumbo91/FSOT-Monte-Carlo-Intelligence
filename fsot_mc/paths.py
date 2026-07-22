@@ -1,13 +1,16 @@
 """
-Portable path resolution for FSOT Monte Carlo Intelligence.
+Portable path resolution — **workspace-independent by default**.
 
-Never hardcode drive letters in library code. Override with env vars:
+All required data lives under this package tree:
+  vendor/archive_bundle/   — FSOT law bundle (D1D38A, navigator, certificates)
+  vendor/pflt/             — vendored PFLT eyes + language core
+  vendor/linguistics/      — linguistic anchors
+  data/realities_snapshot/ — offline Realities runtime snapshot
+  fsot_mc/full_atlas.json  — 402-domain atlas
+  fsot_mc/compute_authority.py — pin D1D38A
 
-  FSOT_MC_DATA_ROOT      root for OHLCV + patterns + journals
-  FSOT_MC_OHLCV_DIR      OHLCV CSV directory
-  FSOT_MC_PATTERN_DIR    pattern ledger directory
-  FSOT_MC_JOURNAL_DIR    forward journal directory
-  FSOT_ARCHIVE_ROOT      optional physical archive (authority checks)
+Optional overrides (never required):
+  FSOT_MC_DATA_ROOT, FSOT_ARCHIVE_ROOT, REALITIES_OS_ROOT, PFLT_ROOT
 """
 
 from __future__ import annotations
@@ -15,7 +18,6 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-# Package root (…/FSOT-Monte-Carlo-Intelligence)
 PACKAGE_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -23,13 +25,8 @@ def data_root() -> Path:
     env = os.environ.get("FSOT_MC_DATA_ROOT")
     if env:
         return Path(env)
-    # Prefer local project data/, then optional market-history drive
     local = PACKAGE_ROOT / "data"
-    legacy = Path(r"D:\training data\FSOT-Market-History")
-    if (local / "ohlcv").is_dir():
-        return local
-    if legacy.is_dir():
-        return legacy
+    local.mkdir(parents=True, exist_ok=True)
     return local
 
 
@@ -54,16 +51,56 @@ def journal_dir() -> Path:
     return data_root() / "journals"
 
 
+def vendor_root() -> Path:
+    return PACKAGE_ROOT / "vendor"
+
+
+def archive_bundle_dir() -> Path:
+    return vendor_root() / "archive_bundle"
+
+
+def pflt_vendor_dir() -> Path:
+    env = os.environ.get("PFLT_ROOT")
+    if env and Path(env).is_dir():
+        return Path(env)
+    return vendor_root() / "pflt"
+
+
+def linguistics_dir() -> Path:
+    return vendor_root() / "linguistics"
+
+
+def realities_snapshot_dir() -> Path:
+    return PACKAGE_ROOT / "data" / "realities_snapshot"
+
+
 def archive_root() -> Path | None:
+    """
+    Optional *external* archive for refresh only.
+    Independent mode does not require this — use archive_bundle_dir().
+    """
     env = os.environ.get("FSOT_ARCHIVE_ROOT")
     if env:
         p = Path(env)
         return p if p.is_dir() else None
+    # Prefer local bundle existence as "archive available"
+    if archive_bundle_dir().is_dir() and (archive_bundle_dir() / "MANIFEST.json").is_file():
+        return None  # independent: no external root
     default = Path(r"I:\FSOT-Physical-Archive")
     return default if default.is_dir() else None
 
 
 def archive_compute_path() -> Path | None:
+    """Local authority first, then optional external."""
+    local = PACKAGE_ROOT / "fsot_mc" / "compute_authority.py"
+    if local.is_file():
+        return local
+    bundled = archive_bundle_dir() / "vendor__fsot_compute.py"
+    if bundled.is_file():
+        return bundled
+    vendor = vendor_root() / "fsot_compute.py"
+    if vendor.is_file():
+        return vendor
     root = archive_root()
     if root is None:
         return None
@@ -77,5 +114,37 @@ def ohlcv_csv(symbol: str) -> Path:
 
 
 def ensure_data_dirs() -> None:
-    for d in (data_root(), pattern_dir(), journal_dir(), PACKAGE_ROOT / "data" / "exports"):
+    for d in (
+        data_root(),
+        pattern_dir(),
+        journal_dir(),
+        PACKAGE_ROOT / "data" / "exports",
+        PACKAGE_ROOT / "data" / "api_cache",
+        PACKAGE_ROOT / "data" / "obligations_pending",
+        PACKAGE_ROOT / "data" / "obligations_promoted",
+        PACKAGE_ROOT / "data" / "pathways",
+        realities_snapshot_dir(),
+    ):
         d.mkdir(parents=True, exist_ok=True)
+
+
+def independence_status() -> dict:
+    """Report whether the tree can run without external drives."""
+    checks = {
+        "compute_authority": (PACKAGE_ROOT / "fsot_mc" / "compute_authority.py").is_file(),
+        "full_atlas": (PACKAGE_ROOT / "fsot_mc" / "full_atlas.json").is_file(),
+        "archive_bundle": (archive_bundle_dir() / "MANIFEST.json").is_file(),
+        "navigator": (archive_bundle_dir() / "data__fsot_domain_navigator.json").is_file(),
+        "pflt_vision": (pflt_vendor_dir() / "fsot_multilayer_vision.py").is_file(),
+        "pflt_core": (pflt_vendor_dir() / "PFLT_FSOT_2_1_aligned.py").is_file(),
+        "linguistics": (linguistics_dir() / "linguistics_derivations.json").is_file(),
+        "realities_snapshot": (realities_snapshot_dir() / "runtime" / "emergence.jsonl").is_file()
+        or (realities_snapshot_dir() / "runtime" / "heartbeat").is_file(),
+    }
+    return {
+        "independent": all(checks.values()),
+        "checks": checks,
+        "package_root": str(PACKAGE_ROOT),
+        "external_archive_optional": archive_root() is not None,
+        "free_parameters": 0,
+    }

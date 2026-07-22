@@ -1,0 +1,59 @@
+{
+  "updated_at": "2026-07-17T14:13:09.875776+00:00",
+  "layer": "kernel",
+  "pid": 526,
+  "heartbeat_tick": 1360,
+  "cluster": "04_periodic_superheavy",
+  "scene": "abstract_field",
+  "mode": "fsot_2_1_engine",
+  "stats": {
+    "digest_n": 35,
+    "digest_maxabs": 9.623758,
+    "digest_min": -9.623758,
+    "digest_max": 1.092875,
+    "delta_psi_maxabs": 4.0,
+    "top_domains": [
+      {
+        "domain": "Biology",
+        "scalar": -9.62376
+      },
+      {
+        "domain": "Ecology",
+        "scalar": -9.3254
+      },
+      {
+        "domain": "Molecular_Chemistry",
+        "scalar": -2.89257
+      },
+      {
+        "domain": "Biochemistry",
+        "scalar": -2.7603
+      },
+      {
+        "domain": "Neuroscience",
+        "scalar": -2.74133
+      }
+    ],
+    "expansion": 0.03473922,
+    "recirc": 0.00696741,
+    "growth_applied": {
+      "Biology": 0.1633,
+      "Ecology": 0.1633
+    },
+    "sim_tick": 1360,
+    "wave_tick": 340,
+    "extended_tick": 170,
+    "affinities": {
+      "universe": 1.9777,
+      "earth_weather": 3.4798,
+      "cellular": 27.3434,
+      "abstract_field": 0.0
+    }
+  },
+  "dominant_domains": [
+    "Biology",
+    "Ecology",
+    "Molecular_Chemistry"
+  ],
+  "emergence_events": 95
+}

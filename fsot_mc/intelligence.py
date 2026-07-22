@@ -13,6 +13,8 @@ from typing import Any
 from fsot_mc.authority_gate import verify_fsot_gate
 from fsot_mc.discovery import run_discovery
 from fsot_mc.formal_bridge import promote_from_intelligence
+from fsot_mc.language_relay import relay_discovery, relay_universe_state
+from fsot_mc.paths import independence_status
 from fsot_mc.pflt_bridge import eyes_with_mc
 from fsot_mc.real_data import build_real_data_bundle
 from fsot_mc.universe_atlas import atlas_meta, domains_by_cluster, snapshot_universe
@@ -30,6 +32,7 @@ def run_intelligence(
     with_formal_promote: bool = False,
     with_realities: bool = False,
     with_apis: bool = False,
+    with_language_relay: bool = True,
     vision_mode: str = "auto",
 ) -> dict[str, Any]:
     """
@@ -101,12 +104,25 @@ def run_intelligence(
             top_n=12,
         )
 
+    language = None
+    if with_language_relay:
+        language = relay_discovery(discovery, top_n=8, use_pflt_surface=True)
+        language["universe_state"] = relay_universe_state(
+            {
+                "emergence_fraction": canonical["emergence_fraction"],
+                "mean_S": canonical["mean_S"],
+                "n_domains": canonical["n_domains"],
+            },
+            discovery["monte_carlo"]["ensemble"],
+        )
+
     return {
         "error": None,
         "method": "fsot_universe_monte_carlo_intelligence",
         "free_parameters": 0,
         "purpose": "Simulate the universe under FSOT; discover pathways and physics — not markets",
         "scope": scope,
+        "independent": independence_status(),
         "authority_gate": gate,
         "atlas": meta,
         "clusters": {k: len(v) for k, v in domains_by_cluster().items()},
@@ -124,6 +140,7 @@ def run_intelligence(
             "pathway_memory": discovery.get("pathway_memory"),
             "contested_physics": discovery.get("contested_physics"),
         },
+        "language_relay": language,
         "eyes": eyes,
         "formal": formal,
         "realities": realities,

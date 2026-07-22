@@ -1,6 +1,9 @@
 {
-  "source": "I:\\FSOT-Physical-Archive\\02_FSOT-2.1-Lean-Full\\vendor\\fsot_compute.py",
+  "source": "fsot_mc/compute_authority.py (vendored pin; origin FSOT-2.1-Lean)",
+  "local_authority": "fsot_mc/compute_authority.py",
+  "archive_bundle": "vendor/archive_bundle/",
   "github_authority": "https://github.com/dappalumbo91/FSOT-2.1-Lean",
+  "independent_workspace": true,
   "authority_sha256": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
   "formula": "S = K * (T1 + T2 + T3)",
   "free_parameters": 0,

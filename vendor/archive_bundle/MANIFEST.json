@@ -1,0 +1,89 @@
+{
+  "synced_at": "2026-07-22T20:56:41.139763+00:00",
+  "source": "I:\\FSOT-Physical-Archive\\02_FSOT-2.1-Lean-Full",
+  "direction": "archive_to_mc_one_way",
+  "files": [
+    {
+      "rel": "vendor/fsot_compute.py",
+      "local": "vendor__fsot_compute.py",
+      "sha256": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
+      "bytes": 59945
+    },
+    {
+      "rel": "vendor/fsot_compute_AUTHORITY_PIN.json",
+      "local": "vendor__fsot_compute_AUTHORITY_PIN.json",
+      "sha256": "3E2F485244372AD0B5DCBF74B77366DE778382605A096ED77666B936558D9AD4",
+      "bytes": 1204
+    },
+    {
+      "rel": "data/fsot_domain_scalar_fixtures.json",
+      "local": "data__fsot_domain_scalar_fixtures.json",
+      "sha256": "CD1B3CFEE2DA8D83600847FC8F2C44723A43D4D6C9B5B5D8ED3BB8C8FDB19054",
+      "bytes": 7272
+    },
+    {
+      "rel": "data/fsot_domain_navigator.json",
+      "local": "data__fsot_domain_navigator.json",
+      "sha256": "D082946E01A2E446EF866BF702DCC4658B3275B8750F47B2CDDD41D70A1B10FF",
+      "bytes": 826418
+    },
+    {
+      "rel": "data/canonical_constants.json",
+      "local": "data__canonical_constants.json",
+      "sha256": "7D5767FB04325943F70818B8A1FFDFFE4643C744010AFAAEF010D257D1B28E96",
+      "bytes": 5298
+    },
+    {
+      "rel": "data/certificate.json",
+      "local": "data__certificate.json",
+      "sha256": "419D1DBADD7257E1FFB99945739F1FC75B34BC37B040DE129110AC980EF2765E",
+      "bytes": 171886
+    },
+    {
+      "rel": "data/cross_proof_verification_report.json",
+      "local": "data__cross_proof_verification_report.json",
+      "sha256": "A782B36DAB755404D58EBECDFEB14206845EAD9772DD9EBFABF1398779BC8D7A",
+      "bytes": 38555
+    },
+    {
+      "rel": "data/preregistered_predictions_manifest.yaml",
+      "local": "data__preregistered_predictions_manifest.yaml",
+      "sha256": "0883461C37689D3EDBFFE1D9D284250699B70E5E84D49887A542E921618F0033",
+      "bytes": 77309
+    },
+    {
+      "rel": "data/honest_claims_manifest.yaml",
+      "local": "data__honest_claims_manifest.yaml",
+      "sha256": "404314BE76EF5A51A9E5B7EA00E9FDE35B15A23394F31311C45D880B25DEE3CB",
+      "bytes": 11609
+    },
+    {
+      "rel": "data/cosmology_anomalies_benchmark.json",
+      "local": "benchmarks/cosmology_anomalies_benchmark.json",
+      "sha256": "641A21F307F86FE922BF3647EAE16B9F47BB28928BD49501E2708C635A893B45",
+      "bytes": 24626
+    },
+    {
+      "rel": "data/contested_observables_closure.json",
+      "local": "benchmarks/contested_observables_closure.json",
+      "sha256": "E935DAA031910D0F7A393D826FCBC9BBBFBEC242DA54CC253E9212B8FCD05D38",
+      "bytes": 9937
+    },
+    {
+      "rel": "data/publication_claims_manifest.json",
+      "local": "benchmarks/publication_claims_manifest.json",
+      "sha256": "70AE86C39917930450B886FC3BDF6FEE002DDF71D18A7FD25181EEF6F3ED65B9",
+      "bytes": 8160
+    },
+    {
+      "rel": "data/benchmark_margin_audit.json",
+      "local": "benchmarks/benchmark_margin_audit.json",
+      "sha256": "E861C8AE50E950DA96F23EF94AA03CABEFC2CC51054A036D7070F217C9E2FB2E",
+      "bytes": 696759
+    }
+  ],
+  "missing": [],
+  "free_parameters": 0,
+  "authority_sha256": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
+  "authority_ok": true
+}

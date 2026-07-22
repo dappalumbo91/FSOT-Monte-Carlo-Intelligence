@@ -1,0 +1,54 @@
+{
+  "os": "realities-os",
+  "version": "0.2.0",
+  "run_id": "20260717T141018Z",
+  "generated_at": "2026-07-17T14:13:09.846011+00:00",
+  "host": {
+    "layer": "wsl2_ubuntu_or_linux",
+    "pid": 526
+  },
+  "law": {
+    "path": "/mnt/i/FSOT-Physical-Archive/02_FSOT-2.1-Lean-Full",
+    "present": true,
+    "note": "engine_online:fsot_wave_scalar_v2",
+    "authority": "FSOT-2.1-Lean",
+    "engine": "fsot_wave_scalar_v2"
+  },
+  "kernel": {
+    "tick": 1360,
+    "phase": 587.0910149185365,
+    "hz": 8.0,
+    "dt_s": 0.12512713499745587,
+    "uptime_s": 171.26805090904236,
+    "seed_scalar": -0.013632072703344525,
+    "mode": "fsot_2_1_engine",
+    "profile": "universe"
+  },
+  "reality": {
+    "physics_mode": "emergent",
+    "scene_kind": "abstract_field",
+    "active_visual_cluster": "04_periodic_superheavy",
+    "regulated_expansion_rate": 0.03473922,
+    "recirculation_strength": 0.00696741,
+    "wave_observable_count": 216,
+    "dominant_domains": [
+      "Biology",
+      "Ecology",
+      "Molecular_Chemistry"
+    ],
+    "simulation_tick": 1360,
+    "emergence": {
+      "policy": "dynamical_thresholds_from_field",
+      "events_total": 95,
+      "recent": []
+    }
+  },
+  "display": {
+    "attached": false,
+    "visual_state_path": "/mnt/i/FSOT-Physical-Archive/10_Realities-OS/data/runtime/visual_state.live.json"
+  },
+  "observer": {
+    "attached": false
+  },
+  "visual_state_ref": "visual_state.live.json"
+}

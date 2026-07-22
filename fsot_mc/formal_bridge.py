@@ -69,17 +69,19 @@ def formal_status() -> dict[str, Any]:
         "method": "fsot_formal_soft_bridge",
         "free_parameters": 0,
         "synced_bundle": BUNDLE.is_dir(),
+        "independent_local_court": cert is not None and cross is not None,
         "certificate_present": cert is not None,
         "certificate_proved_claims": len(cert.get("proved_claims") or []) if cert else 0,
         "cross_proof": cross,
-        "archive_hub": hub_lean,
+        "external_archive_hub_optional": hub_lean,
         "pending_obligations": pending_n,
         "promoted_obligations": promoted_n,
         "online_lean_per_path": False,
         "policy": "batch_court_not_per_path",
         "note": (
-            "Soft court: export leads, score against synced certificate/cross-proof, "
-            "optional archive batch. No per-path Lean rebuild."
+            "Soft court uses local vendor/archive_bundle certificates. "
+            "Optional external Lean batch only if archive hub present. "
+            "No per-path Lean rebuild."
         ),
     }
 

@@ -24,7 +24,11 @@ def test_pi_ring_and_eyes():
     assert r["interior_area_pi_r2"] > 1.0
     mc = run_universe_monte_carlo(n_paths=8, seed=1, scope="core", store_paths=2)
     eyes = eyes_with_mc(mc, text="FSOT")
-    assert eyes["ring"]["vision_backend"] in ("pflt_multilayer", "fsot_fallback_field")
+    assert eyes["ring"]["vision_backend"] in (
+        "pflt_multilayer_vendored",
+        "pflt_multilayer",
+        "fsot_fallback_field",
+    )
     assert eyes["n_domains_projected"] == 35
 
 

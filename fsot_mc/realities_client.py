@@ -1,9 +1,8 @@
 """
-Realities OS client — observe live universe ticks under FSOT law.
+Realities OS client — prefers **local snapshot** in data/realities_snapshot/.
 
-MC is a *client* of Realities runtime state. It never writes physics_field.
-Default root: I:\\FSOT-Physical-Archive\\10_Realities-OS
-Override: REALITIES_OS_ROOT or FSOT_REALITIES_ROOT
+Optional live root via REALITIES_OS_ROOT / FSOT_REALITIES_ROOT / I: path.
+Independent mode never requires a live kernel.
 """
 
 from __future__ import annotations
@@ -14,20 +13,23 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fsot_mc.pi_ring import PiRing
+from fsot_mc.paths import realities_snapshot_dir
 from fsot_mc.pathway_memory import PathwayMemory, pathway_quality
-
-DEFAULT_ROOTS = [
-    Path(r"I:\FSOT-Physical-Archive\10_Realities-OS"),
-    Path(os.environ.get("REALITIES_OS_ROOT", "")),
-    Path(os.environ.get("FSOT_REALITIES_ROOT", "")),
-]
+from fsot_mc.pi_ring import PiRing
 
 
 def realities_root() -> Path | None:
-    for p in DEFAULT_ROOTS:
-        if p and p.is_dir() and (p / "data" / "runtime").is_dir():
-            return p
+    """Prefer local snapshot; then optional external live OS."""
+    snap = realities_snapshot_dir()
+    if (snap / "runtime").is_dir():
+        return snap
+    for key in ("REALITIES_OS_ROOT", "FSOT_REALITIES_ROOT"):
+        env = os.environ.get(key)
+        if env and Path(env).is_dir():
+            return Path(env)
+    legacy = Path(r"I:\FSOT-Physical-Archive\10_Realities-OS")
+    if legacy.is_dir() and (legacy / "data" / "runtime").is_dir():
+        return legacy
     return None
 
 
@@ -35,7 +37,13 @@ def runtime_dir(root: Path | None = None) -> Path | None:
     root = root or realities_root()
     if root is None:
         return None
-    return root / "data" / "runtime"
+    # snapshot layout: data/realities_snapshot/runtime
+    # live layout: 10_Realities-OS/data/runtime
+    if (root / "runtime").is_dir():
+        return root / "runtime"
+    if (root / "data" / "runtime").is_dir():
+        return root / "data" / "runtime"
+    return None
 
 
 def _read_json(path: Path) -> Any | None:
@@ -73,12 +81,12 @@ def _tail_jsonl(path: Path, n: int = 20) -> list[dict[str, Any]]:
 
 
 def poll_runtime(root: Path | None = None) -> dict[str, Any]:
-    """Snapshot Realities OS runtime artifacts (read-only)."""
     rt = runtime_dir(root)
     if rt is None:
         return {
             "ok": False,
             "error": "realities_runtime_not_found",
+            "hint": "Expected data/realities_snapshot/runtime in workspace",
             "free_parameters": 0,
         }
 
@@ -89,23 +97,25 @@ def poll_runtime(root: Path | None = None) -> dict[str, Any]:
     ops = _read_json(rt / "ops_snapshot.json")
     pathway = _read_json(rt / "pathway_reason_last.json")
 
-    pid_path = rt / "kernel.pid"
+    is_snapshot = "realities_snapshot" in str(rt).replace("\\", "/")
     kernel_alive = False
-    if pid_path.is_file():
-        try:
-            pid = int(pid_path.read_text(encoding="utf-8").strip())
-            # Windows: check process exists lightly
-            import ctypes
+    if not is_snapshot:
+        pid_path = rt / "kernel.pid"
+        if pid_path.is_file():
+            try:
+                pid = int(pid_path.read_text(encoding="utf-8").strip())
+                import ctypes
 
-            kernel_alive = ctypes.windll.kernel32.OpenProcess(0x1000, False, pid) != 0  # type: ignore
-        except Exception:
-            kernel_alive = heartbeat is not None
+                kernel_alive = ctypes.windll.kernel32.OpenProcess(0x1000, False, pid) != 0  # type: ignore
+            except Exception:
+                kernel_alive = False
 
     return {
         "ok": True,
         "method": "fsot_realities_client_poll",
         "free_parameters": 0,
-        "root": str(rt.parent.parent),
+        "mode": "local_snapshot" if is_snapshot else "live_optional",
+        "root": str(rt.parent if is_snapshot else rt.parent.parent),
         "runtime": str(rt),
         "kernel_alive": kernel_alive,
         "heartbeat": heartbeat.strip() if heartbeat else None,
@@ -116,12 +126,11 @@ def poll_runtime(root: Path | None = None) -> dict[str, Any]:
         "ops_snapshot": ops,
         "pathway_reason_last": pathway,
         "polled_at": datetime.now(timezone.utc).isoformat(),
-        "note": "Read-only client. MC does not write physics_field.",
+        "note": "Read-only. Independent snapshot preferred; live OS optional.",
     }
 
 
 def emergence_to_path_proxy(events: list[dict[str, Any]]) -> dict[str, Any]:
-    """Map emergence events into a pathway-like dict for memory/MC coupling."""
     if not events:
         return {
             "emergence_fraction": 0.5,
@@ -135,12 +144,17 @@ def emergence_to_path_proxy(events: list[dict[str, Any]]) -> dict[str, Any]:
             "long_range_bridges": [],
             "global_phase": 0.0,
         }
-    # Heuristic vitality from event types
     types = [str(e.get("type") or e.get("kind") or e.get("event") or "") for e in events]
     expand = sum(1 for t in types if "expand" in t.lower() or "emerge" in t.lower())
     total = max(len(types), 1)
     ef = expand / total
-    mean_S = float(np_mean([float(e.get("S") or e.get("score") or 0.0) for e in events]))
+    vals = []
+    for e in events:
+        try:
+            vals.append(float(e.get("S") or e.get("score") or 0.0))
+        except Exception:
+            vals.append(0.0)
+    mean_S = sum(vals) / max(len(vals), 1)
     return {
         "emergence_fraction": ef,
         "collapse_true_fraction": 0.5 + 0.2 * ef,
@@ -156,18 +170,11 @@ def emergence_to_path_proxy(events: list[dict[str, Any]]) -> dict[str, Any]:
     }
 
 
-def np_mean(xs: list[float]) -> float:
-    return sum(xs) / max(len(xs), 1)
-
-
 def couple_to_intelligence(
     *,
     memory: PathwayMemory | None = None,
     project_ring: bool = True,
 ) -> dict[str, Any]:
-    """
-    Poll Realities → pathway memory observe → optional π-ring projection.
-    """
     poll = poll_runtime()
     if not poll.get("ok"):
         return poll
@@ -179,14 +186,12 @@ def couple_to_intelligence(
     ring_out = None
     if project_ring:
         ring = PiRing()
-        # Project pathway quality into interior
         ring.write_mc_state(
             d_eff=20.0,
             phase=float(path_proxy.get("global_phase") or 0.0),
             S=float(path_proxy.get("mean_S") or 0.0),
             mass=1.0 + pathway_quality(path_proxy),
         )
-        # Sensory: heartbeat string
         if poll.get("heartbeat"):
             ring.write_text_as_ring(str(poll["heartbeat"])[:64])
         ring.normalize_mc()
@@ -197,6 +202,7 @@ def couple_to_intelligence(
         "method": "fsot_realities_couple",
         "free_parameters": 0,
         "poll": {
+            "mode": poll.get("mode"),
             "kernel_alive": poll.get("kernel_alive"),
             "heartbeat": poll.get("heartbeat"),
             "n_emergence_tail": poll.get("n_emergence_tail"),
@@ -212,5 +218,5 @@ def couple_to_intelligence(
         },
         "pathway_memory": mem.summary(),
         "pi_ring": ring_out,
-        "note": "Realities → MC observer coupling. Law remains on archive/kernel.",
+        "note": "Realities snapshot/live → MC observer. Independent snapshot is default.",
     }

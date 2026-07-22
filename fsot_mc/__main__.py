@@ -26,6 +26,9 @@ def main(argv: list[str] | None = None) -> int:
             "formal",
             "realities",
             "apis",
+            "relay",
+            "polar-train",
+            "independent",
             "publish-check",
         ],
     )
@@ -200,10 +203,70 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  {name}: ok={res.get('ok')} source={res.get('source')} hint={res.get('domain_hint')}")
         return 0
 
+    if args.command == "independent":
+        from fsot_mc.paths import independence_status
+
+        st = independence_status()
+        if args.json:
+            print(json.dumps(st, indent=2))
+        else:
+            print(f"fsot_mc {__version__}  INDEPENDENCE")
+            print(f"  independent={st['independent']}")
+            for k, v in st["checks"].items():
+                print(f"  {'OK' if v else 'MISS'}  {k}")
+            print(f"  package_root={st['package_root']}")
+        return 0 if st["independent"] else 1
+
+    if args.command == "relay":
+        from fsot_mc import run_intelligence
+        from fsot_mc.language_relay import relay_discovery
+
+        intel = run_intelligence(
+            n_paths=min(args.n_paths, 48),
+            seed=args.seed,
+            scope="core",
+            with_eyes=False,
+            with_language_relay=True,
+        )
+        rel = intel.get("language_relay") or relay_discovery(intel.get("discovery") or {})
+        if args.json:
+            print(json.dumps(rel, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  LANGUAGE RELAY")
+            print(f"  pflt_core={rel.get('pflt_core_available')} n={rel.get('n_relayed')}")
+            print(f"  state: {(rel.get('universe_state') or '')[:200]}")
+            for r in (rel.get("relays") or [])[:5]:
+                print(f"  --- {r.get('id')} ---")
+                print(f"  {r.get('relay_text')[:220]}")
+                surf = r.get("pflt_surface") or {}
+                if surf.get("ok"):
+                    print(f"  pflt_surface meanings={str(surf.get('meanings'))[:120]}")
+        return 0
+
+    if args.command == "polar-train":
+        from fsot_mc.polar_student import train_polar_student
+
+        r = train_polar_student(n_paths=min(args.n_paths, 96), seed=args.seed, scope="core")
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  POLAR STUDENT")
+            if not r.get("ok"):
+                print("  ERROR", r.get("error"))
+                return 1
+            print(f"  samples={r.get('n_samples')} train_acc={r.get('train_acc'):.3f} test_acc={r.get('test_acc'):.3f}")
+            print(f"  backend={r.get('backend')} model={r.get('model_path')}")
+            if r.get("torch"):
+                print(f"  torch={r['torch']}")
+        return 0
+
     if args.command == "publish-check":
         from pathlib import Path
 
+        from fsot_mc.paths import independence_status
+
         root = Path(__file__).resolve().parents[1]
+        ind = independence_status()
         checks = {
             "README": (root / "README.md").is_file(),
             "LICENSE": (root / "LICENSE").is_file(),
@@ -213,6 +276,9 @@ def main(argv: list[str] | None = None) -> int:
             "architecture": (root / "docs" / "UNIVERSE_INTELLIGENCE_ARCHITECTURE.md").is_file(),
             "full_atlas": (root / "fsot_mc" / "full_atlas.json").is_file(),
             "authority_gate": verify_fsot_gate()["ok"],
+            "independent_workspace": ind["independent"],
+            "vendor_pflt": (root / "vendor" / "pflt" / "fsot_multilayer_vision.py").is_file(),
+            "vendor_bundle": (root / "vendor" / "archive_bundle" / "MANIFEST.json").is_file(),
         }
         if args.json:
             print(json.dumps(checks, indent=2))
@@ -234,15 +300,18 @@ def main(argv: list[str] | None = None) -> int:
         with_formal_promote=args.with_formal,
         with_realities=args.with_realities,
         with_apis=args.with_apis,
+        with_language_relay=True,
     )
     if args.json:
         slim = {
             "method": r.get("method"),
             "scope": r.get("scope"),
+            "independent": r.get("independent"),
             "atlas": r.get("atlas"),
             "canonical_universe": r.get("canonical_universe"),
             "top_ledger": (r.get("discovery") or {}).get("top_ledger"),
             "pathway_memory": (r.get("discovery") or {}).get("pathway_memory"),
+            "language_relay": r.get("language_relay"),
             "eyes": (r.get("eyes") or {}).get("ring"),
             "formal": r.get("formal"),
             "realities": r.get("realities"),
@@ -255,6 +324,8 @@ def main(argv: list[str] | None = None) -> int:
         if r.get("error"):
             print("ERROR", r["error"])
             return 1
+        ind = r.get("independent") or {}
+        print(f"  independent={ind.get('independent')}")
         can = r.get("canonical_universe") or {}
         meta = r.get("atlas") or {}
         print(
@@ -275,6 +346,11 @@ def main(argv: list[str] | None = None) -> int:
                 f"πr²={eyes.get('interior_area_pi_r2'):.3f} "
                 f"mc_mass={eyes.get('mc_mass_total')}"
             )
+        lang = r.get("language_relay") or {}
+        if lang:
+            print(f"  language_relay n={lang.get('n_relayed')} pflt={lang.get('pflt_core_available')}")
+            if lang.get("universe_state"):
+                print(f"  state: {lang['universe_state'][:160]}")
         top = disc.get("top_ledger") or []
         print(f"  discovery leads: {len(top)}")
         for lead in top[:6]:
@@ -285,7 +361,10 @@ def main(argv: list[str] | None = None) -> int:
         if r.get("formal"):
             print(f"  formal promoted={(r['formal'].get('court') or {}).get('n_promoted')}")
         if r.get("realities"):
-            print(f"  realities kernel={(r['realities'].get('poll') or {}).get('kernel_alive')}")
+            print(
+                f"  realities mode={(r['realities'].get('poll') or {}).get('mode')} "
+                f"kernel={(r['realities'].get('poll') or {}).get('kernel_alive')}"
+            )
         if r.get("apis"):
             print(f"  apis ok={r['apis'].get('n_ok')}")
         print("  purpose: pathways + physics under FSOT — not markets")
