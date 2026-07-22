@@ -16,6 +16,7 @@ from fsot_mc.formal_bridge import (
 )
 from fsot_mc.intelligence import run_intelligence, run_universe_scan
 from fsot_mc.language_relay import relay_discovery, relay_lead, relay_universe_state
+from fsot_mc.mind import FSOTMind, ask, get_mind
 from fsot_mc.paths import independence_status
 from fsot_mc.pi_ring import PiRing, demo_ring_from_mc
 from fsot_mc.pflt_bridge import eyes_with_mc, sample_scene_to_ring
@@ -35,7 +36,7 @@ from fsot_mc.fast import C_FACTOR as SEED_C
 from fsot_mc.fast import PHI as SEED_PHI
 from fsot_mc.fast import POOF as SEED_POOF
 
-__version__ = "0.6.0"
+__version__ = "0.7.0"
 __all__ = [
     "run_intelligence",
     "run_universe_scan",
@@ -55,6 +56,9 @@ __all__ = [
     "relay_discovery",
     "relay_lead",
     "relay_universe_state",
+    "FSOTMind",
+    "ask",
+    "get_mind",
     "train_polar_student",
     "export_lead_obligation",
     "formal_status",

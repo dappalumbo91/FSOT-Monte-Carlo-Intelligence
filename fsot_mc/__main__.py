@@ -28,12 +28,16 @@ def main(argv: list[str] | None = None) -> int:
             "apis",
             "relay",
             "polar-train",
+            "ask",
+            "chat",
             "independent",
             "publish-check",
         ],
     )
+    ap.add_argument("-q", "--query", default="", help="Question for ask/chat")
     ap.add_argument("--n-paths", type=int, default=128)
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--think", action="store_true", help="Show full thinking trace")
     ap.add_argument(
         "--scope",
         default="core",
@@ -45,7 +49,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--with-realities", action="store_true")
     ap.add_argument("--with-apis", action="store_true")
     ap.add_argument("--online", action="store_true", help="Allow network for APIs")
-    args = ap.parse_args(argv)
+    # Remainder so: fsot_mc ask --think What about cosmology?
+    args, rest = ap.parse_known_args(argv)
+    if rest:
+        # drop leading '--' if present
+        if rest and rest[0] == "--":
+            rest = rest[1:]
+        q_rest = " ".join(rest).strip()
+        if q_rest:
+            args.query = (str(args.query) + " " + q_rest).strip()
 
     from fsot_mc import __version__, verify_fsot_gate
 
@@ -258,6 +270,67 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  backend={r.get('backend')} model={r.get('model_path')}")
             if r.get("torch"):
                 print(f"  torch={r['torch']}")
+        return 0
+
+    if args.command == "ask":
+        from fsot_mc.mind import ask
+        from fsot_mc.language_relay import relay_mind_answer
+
+        q = (args.query or "").strip() or "What is the state of the FSOT universe?"
+        r = ask(q, n_paths=min(args.n_paths, 96), with_eyes=False)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+            return 0 if not r.get("error") else 1
+        print(f"fsot_mc {__version__}  ASK  (Monte Carlo mind)")
+        print(f"  Q: {q}")
+        print(f"  domains: {', '.join((r.get('thinking') or {}).get('routed_domains') or [])}")
+        print(f"  paths: {(r.get('thinking') or {}).get('n_paths')}")
+        if args.think:
+            print("  --- thinking (simulation) ---")
+            for step in ((r.get("thinking") or {}).get("steps") or []):
+                print(f"  [{step.get('step')}] {step.get('text')}")
+            print("  --- answer ---")
+        ans = relay_mind_answer(str(r.get("answer") or ""), r.get("thinking"))
+        print(f"  A: {ans}")
+        lang = r.get("language") or {}
+        if (lang.get("pflt_surface") or {}).get("ok"):
+            print(f"  pflt: {(lang.get('pflt_surface') or {}).get('meanings')}")
+        return 0
+
+    if args.command == "chat":
+        from fsot_mc.mind import FSOTMind
+        from fsot_mc.language_relay import relay_mind_answer
+
+        mind = FSOTMind(n_paths=min(args.n_paths, 64), seed=args.seed)
+        print(f"fsot_mc {__version__}  CHAT  (FSOT Monte Carlo mind)")
+        print("Thinking = multipath simulation. Type 'quit' to exit. Prefix ?think for traces.\n")
+        initial = (args.query or "").strip()
+
+        def _one(line: str) -> None:
+            show_think = args.think or line.lower().startswith("?think")
+            q = line[6:].strip() if line.lower().startswith("?think") else line
+            r = mind.think(q, n_paths=min(args.n_paths, 64))
+            if args.json:
+                print(json.dumps(r, indent=2, default=str))
+                return
+            print(f"you> {q}")
+            if show_think:
+                for step in ((r.get("thinking") or {}).get("steps") or []):
+                    print(f"  [{step.get('step')}] {step.get('text')}")
+            print("mind>", relay_mind_answer(str(r.get("answer") or ""), r.get("thinking")))
+            print()
+
+        if initial:
+            _one(initial)
+            return 0
+        try:
+            while True:
+                line = input("you> ").strip()
+                if not line or line.lower() in ("quit", "exit", "q"):
+                    break
+                _one(line)
+        except (EOFError, KeyboardInterrupt):
+            print()
         return 0
 
     if args.command == "publish-check":
