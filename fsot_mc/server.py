@@ -59,9 +59,10 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
         if path == "/api/graph" and method == "GET":
             from fsot_mc.graph_model import build_universe_graph
 
-            n_paths = int(q1("n_paths", "40"))
+            n_paths = int(q1("n_paths", "32"))
             seed = int(q1("seed", "0"))
-            scope = q1("scope", "core")
+            scope = q1("scope", "full")  # full archive connective tissue by default
+            force = q1("rebuild", "0") in ("1", "true", "yes")
             g = build_universe_graph(
                 n_paths=min(n_paths, 96),
                 seed=seed,
@@ -69,8 +70,42 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
                 with_memory=True,
                 with_predictions=True,
                 with_mc=True,
+                with_archive_connective=scope == "full",
+                force_rebuild_connective=force,
             )
             return _json_bytes(g)
+
+        if path == "/api/connective" and method == "GET":
+            from fsot_mc.archive_connective import get_connective_tissue
+
+            force = q1("rebuild", "0") in ("1", "true", "yes")
+            t = get_connective_tissue(force_rebuild=force)
+            # summary without full node dump unless requested
+            if q1("full", "0") not in ("1", "true", "yes"):
+                return _json_bytes(
+                    {
+                        k: t.get(k)
+                        for k in (
+                            "version",
+                            "method",
+                            "n_nodes",
+                            "n_edges",
+                            "n_core",
+                            "n_extension",
+                            "n_problem_routes",
+                            "n_with_error",
+                            "n_green_gate",
+                            "edge_type_counts",
+                            "coupling_raw_edge_count",
+                            "coupling_raw_node_count",
+                            "expansion_summary",
+                            "source",
+                            "note",
+                            "free_parameters",
+                        )
+                    }
+                )
+            return _json_bytes(t)
 
         if path == "/api/ask" and method == "POST":
             from fsot_mc.mind import ask

@@ -8,7 +8,15 @@ from fsot_mc.server import FRONTEND_DIR, handle_api
 
 
 def test_graph_has_seeds_and_domains():
-    g = build_universe_graph(n_paths=12, seed=1, with_mc=True, with_memory=False, with_predictions=True)
+    g = build_universe_graph(
+        n_paths=12,
+        seed=1,
+        scope="core",
+        with_mc=True,
+        with_memory=False,
+        with_predictions=True,
+        with_archive_connective=False,
+    )
     assert g.get("error") is None
     assert g["n_nodes"] > 20
     assert g["n_edges"] > 20
@@ -17,6 +25,36 @@ def test_graph_has_seeds_and_domains():
     assert "law" in kinds
     assert "domain" in kinds
     assert any(e["kind"] == "seed_to_law" for e in g["edges"])
+
+
+def test_full_archive_connective_graph():
+    from fsot_mc.archive_connective import get_connective_tissue
+
+    tissue = get_connective_tissue(force_rebuild=True)
+    assert tissue.get("n_nodes", 0) >= 100
+    assert tissue.get("n_edges", 0) >= 50
+    assert tissue.get("n_extension", 0) >= 50 or tissue.get("n_core", 0) >= 30
+
+    g = build_universe_graph(
+        n_paths=8,
+        seed=0,
+        scope="full",
+        with_mc=False,
+        with_memory=False,
+        with_predictions=False,
+        with_archive_connective=True,
+    )
+    assert g["n_nodes"] >= 100
+    kinds = {n["kind"] for n in g["nodes"]}
+    assert "seed" in kinds and "law" in kinds
+    # should include archive route or coupling edges
+    edge_kinds = {e.get("kind") for e in g["edges"]}
+    assert any(
+        k and ("route" in k or "coupling" in k or "problem" in k or k == "routes_to_core")
+        for k in edge_kinds
+    )
+    ac = (g.get("meta") or {}).get("archive_connective") or {}
+    assert ac.get("coupling_raw_edge_count") is None or ac.get("coupling_raw_edge_count") >= 1000 or ac.get("n_archive_edges", 0) >= 50
 
 
 def test_protocols():

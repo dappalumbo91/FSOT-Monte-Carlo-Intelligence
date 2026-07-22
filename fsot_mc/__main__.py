@@ -330,16 +330,27 @@ def main(argv: list[str] | None = None) -> int:
         g = build_universe_graph(
             n_paths=min(args.n_paths, 64),
             seed=args.seed,
-            scope="core",
+            scope=args.scope if args.scope in ("core", "full") else "full",
+            with_archive_connective=True,
+            force_rebuild_connective=bool(getattr(args, "online", False)),  # reuse flag no
         )
+        # allow --scope full|core already on argparse
         if args.json:
+            # omit huge node list summary mode unless user wants full - still dump full for API parity
             print(json.dumps(g, indent=2, default=str))
         else:
-            print(f"fsot_mc {__version__}  CONNECTIVE GRAPH")
+            m = g.get("meta") or {}
+            ac = m.get("archive_connective") or {}
+            print(f"fsot_mc {__version__}  CONNECTIVE GRAPH  scope={g.get('scope')}")
             print(f"  nodes={g.get('n_nodes')} edges={g.get('n_edges')}")
-            print(f"  map_emergence={(g.get('meta') or {}).get('map_emergence_mean')}")
+            print(f"  core={m.get('n_core_folds')} extension={m.get('n_extension_panels')} intents={m.get('n_problem_routes')}")
+            print(f"  map_emergence={m.get('map_emergence_mean')}")
+            if ac:
+                print(f"  archive tissue: nodes={ac.get('n_archive_nodes')} edges={ac.get('n_archive_edges')}")
+                print(f"  green_gate={ac.get('n_green_gate')}/{ac.get('n_with_error')}  raw_couples={ac.get('coupling_raw_edge_count')}")
+                print(f"  edge_types={ac.get('edge_type_counts')}")
             print(f"  aesthetic={g.get('aesthetic')}")
-            for line in ((g.get("meta") or {}).get("legend") or [])[:6]:
+            for line in (m.get("legend") or [])[:8]:
                 print(f"  · {line}")
         return 0
 

@@ -302,6 +302,12 @@
       n.cluster ? `<div>Cluster: <span class="chip">${esc(n.cluster)}</span></div>` : "",
       n.D_eff != null ? `<div>D<sub>eff</sub> = ${n.D_eff} · ring ${n.ring}</div>` : "",
       n.S != null ? `<div>S = ${Number(n.S).toFixed(4)} · ${esc(n.regime || "")}</div>` : "",
+      n.median_error_pct != null ? `<div class="chip gold">median_error ${Number(n.median_error_pct).toFixed(4)}% ${Number(n.median_error_pct) <= 0.5 ? "✓ green" : ""}</div>` : "",
+      n.coverage_tier ? `<div>coverage: ${esc(n.coverage_tier)}</div>` : "",
+      n.record_count != null ? `<div>records: ${n.record_count}</div>` : "",
+      n.routes_to_core ? `<div>routes_to_core → <code>${esc(n.routes_to_core)}</code></div>` : "",
+      n.lean_module ? `<div class="chip">Lean: ${esc(n.lean_module)}</div>` : "",
+      (n.maps_to_lean && n.maps_to_lean.length) ? `<div>maps_to_lean: ${esc((n.maps_to_lean || []).join(", "))}</div>` : "",
       n.value != null ? `<div>value = ${n.value}</div>` : "",
       n.role ? `<div class="muted">${esc(n.role)}</div>` : "",
       n.formula ? `<div><code>${esc(n.formula)}</code></div>` : "",
@@ -309,6 +315,9 @@
       n.name ? `<div>${esc(n.name)}</div>` : "",
       n.fsot_predicted != null ? `<div class="chip gold">FSOT ${n.fsot_predicted} ${esc(n.unit || "")}</div>` : "",
       n.flip_rate != null ? `<div>flip_rate = ${n.flip_rate}</div>` : "",
+      n.is_core ? `<div class="chip pink">core NeuroLab fold</div>` : "",
+      n.kind === "extension" ? `<div class="chip">extension panel</div>` : "",
+      n.kind === "problem_route" ? `<div class="chip pink">problem route intent</div>` : "",
     ].filter(Boolean);
     el.innerHTML = rows.join("");
   }
@@ -325,24 +334,46 @@
     return r.json();
   }
 
-  async function loadGraph() {
-    $("hud-status").textContent = "building multipath graph…";
+  async function loadGraph(opts = {}) {
+    const scope = ($("scope-select") && $("scope-select").value) || "full";
+    const rebuild = opts.rebuild ? "&rebuild=1" : "";
+    $("hud-status").textContent = scope === "full"
+      ? "loading full archive connective tissue…"
+      : "building core multipath graph…";
     try {
-      const g = await api("/api/graph?n_paths=40&seed=0");
+      const g = await api(`/api/graph?n_paths=32&seed=0&scope=${encodeURIComponent(scope)}${rebuild}`);
       nodes = g.nodes || [];
       edges = g.edges || [];
       meta = g.meta || {};
       initPositions();
-      cam = { x: 0, y: 0, scale: 0.85 };
+      cam = { x: 0, y: 0, scale: scope === "full" ? 0.55 : 0.85 };
       $("hud-nodes").innerHTML = `nodes <strong>${g.n_nodes}</strong>`;
       $("hud-edges").innerHTML = `axons <strong>${g.n_edges}</strong>`;
       const ef = meta.map_emergence_mean;
       $("hud-emerge").innerHTML = ef != null
         ? `map emerge <strong>${(100 * ef).toFixed(1)}%</strong>`
         : "map emerge —";
-      $("hud-status").textContent = "live · seeds→K→folds→bridges";
+      const ac = meta.archive_connective || {};
+      const green = ac.n_green_gate != null ? ` · green ${ac.n_green_gate}/${ac.n_with_error || "?"}≤0.5%` : "";
+      const raw = ac.coupling_raw_edge_count != null
+        ? ` · archive raw couples ${ac.coupling_raw_edge_count}`
+        : "";
+      $("hud-status").textContent =
+        `${scope} · core ${meta.n_core_folds || "—"} · ext ${meta.n_extension_panels || 0}${green}${raw}`;
       renderLegend(g);
       renderRings(meta);
+      // show archive connective summary in side panel
+      if (ac && Object.keys(ac).length) {
+        $("side-out").innerHTML = `
+          <div class="answer-block"><span class="label">Archive connective tissue</span>
+          <div>nodes ${ac.n_archive_nodes} · edges ${ac.n_archive_edges}</div>
+          <div>core ${ac.n_core} · extension ${ac.n_extension} · intents ${ac.n_problem_routes}</div>
+          <div class="chip gold">green gate ${ac.n_green_gate}/${ac.n_with_error}</div>
+          <div class="chip">raw coupling ${ac.coupling_raw_edge_count} edges / ${ac.coupling_raw_node_count} nodes</div>
+          <pre>${esc(JSON.stringify(ac.edge_type_counts || {}, null, 0))}</pre>
+          <div style="font-size:0.7rem;color:#8b95a8">Synced from Physical Archive domain coupling + navigator + expansion map</div>
+          </div>`;
+      }
       loadMemory();
     } catch (e) {
       $("hud-status").textContent = "error: " + e.message;
@@ -383,6 +414,8 @@
   }
 
   $("btn-reload").onclick = () => loadGraph();
+  if ($("btn-rebuild")) $("btn-rebuild").onclick = () => loadGraph({ rebuild: true });
+  if ($("scope-select")) $("scope-select").onchange = () => loadGraph();
   $("btn-ask").onclick = async () => {
     const q = $("ask-input").value.trim();
     if (!q) return;

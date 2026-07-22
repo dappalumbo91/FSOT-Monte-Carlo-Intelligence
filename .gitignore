@@ -22,4 +22,9 @@ data/exports/
 .vscode/
 
 data/memory/
+data/connective_tissue_compact.json
+
+
+# huge raw coupling (compact tissue is shipped instead)
+vendor/archive_bundle/data__domain_coupling_simulation_benchmark.json
 
