@@ -1,8 +1,9 @@
 """
 FSOT Monte Carlo Intelligence — universe discovery API (primary).
 
-Layers:
-  atlas (core+extensions) → multipath MC → pathway memory → contested probes → discovery
+Full stack:
+  atlas → multipath MC → pathway memory → contested → π-ring eyes
+  → formal soft court → optional Realities/API anchors
 """
 
 from __future__ import annotations
@@ -11,6 +12,8 @@ from typing import Any
 
 from fsot_mc.authority_gate import verify_fsot_gate
 from fsot_mc.discovery import run_discovery
+from fsot_mc.formal_bridge import promote_from_intelligence
+from fsot_mc.pflt_bridge import eyes_with_mc
 from fsot_mc.real_data import build_real_data_bundle
 from fsot_mc.universe_atlas import atlas_meta, domains_by_cluster, snapshot_universe
 from fsot_mc.universe_mc import run_universe_monte_carlo
@@ -23,13 +26,20 @@ def run_intelligence(
     use_real_data: bool = True,
     store_paths: int = 24,
     scope: str = "core",
+    with_eyes: bool = True,
+    with_formal_promote: bool = False,
+    with_realities: bool = False,
+    with_apis: bool = False,
+    vision_mode: str = "auto",
 ) -> dict[str, Any]:
     """
     Primary intelligence entrypoint — universe discovery under FSOT law.
 
     scope: "core" | "full" | "extensions"
-      - core: 35 NeuroLab folds (fast default)
-      - full: core + extension panels (requires full_atlas build)
+    with_eyes: π-ring + PFLT/fallback sensory projection
+    with_formal_promote: export top leads + soft court batch
+    with_realities: poll Realities OS runtime (if present)
+    with_apis: offline-first API anchors (FSOT_MC_ONLINE=1 for network)
     """
     gate = verify_fsot_gate(require_archive=False)
     if not gate["ok"]:
@@ -40,7 +50,22 @@ def run_intelligence(
         }
 
     real_bundle = build_real_data_bundle(use_archive=use_real_data) if use_real_data else None
-    anchors = (real_bundle or {}).get("anchors")
+    anchors = dict((real_bundle or {}).get("anchors") or {})
+
+    api_bundle = None
+    if with_apis:
+        from fsot_mc.api_adapters import run_api_bundle, seed_demo_cache
+
+        seed_demo_cache()  # ensure offline demos exist
+        api_bundle = run_api_bundle()
+        for k, v in (api_bundle.get("anchors") or {}).items():
+            anchors[k] = v
+
+    realities = None
+    if with_realities:
+        from fsot_mc.realities_client import couple_to_intelligence
+
+        realities = couple_to_intelligence(project_ring=True)
 
     discovery = run_discovery(
         n_paths=n_paths,
@@ -60,6 +85,21 @@ def run_intelligence(
 
         names = core_names()
     canonical = snapshot_universe(names=names)
+
+    eyes = None
+    if with_eyes:
+        eyes = eyes_with_mc(
+            {"domain_ensemble": discovery.get("domain_ensemble") or {}},
+            text="FSOT universe discovery",
+            vision_mode=vision_mode,
+        )
+
+    formal = None
+    if with_formal_promote:
+        formal = promote_from_intelligence(
+            {"discovery": discovery},
+            top_n=12,
+        )
 
     return {
         "error": None,
@@ -84,6 +124,10 @@ def run_intelligence(
             "pathway_memory": discovery.get("pathway_memory"),
             "contested_physics": discovery.get("contested_physics"),
         },
+        "eyes": eyes,
+        "formal": formal,
+        "realities": realities,
+        "apis": api_bundle,
         "domain_ensemble": discovery["domain_ensemble"],
         "long_range_bridges": discovery["long_range_bridges"],
         "real_data_meta": (real_bundle or {}).get("meta"),
@@ -99,7 +143,6 @@ def run_universe_scan(
     seed: int | None = 1,
     scope: str = "core",
 ) -> dict[str, Any]:
-    """Lighter scan: MC ensemble + pathway memory summary."""
     gate = verify_fsot_gate(require_archive=False)
     mc = run_universe_monte_carlo(
         n_paths=n_paths,

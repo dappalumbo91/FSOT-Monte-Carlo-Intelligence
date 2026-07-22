@@ -51,9 +51,13 @@ python -m venv .venv
 pip install -r requirements.txt
 python -m pytest tests/ -q
 python -m fsot_mc gate
-python -m fsot_mc atlas
-python -m fsot_mc scan --n-paths 128
-python -m fsot_mc intel --n-paths 256
+python -m fsot_mc build-atlas
+python -m fsot_mc intel --scope core --n-paths 128 --with-formal --with-apis
+python -m fsot_mc eyes
+python -m fsot_mc formal
+python -m fsot_mc realities
+python -m fsot_mc apis
+python -m fsot_mc publish-check
 ```
 
 ### API

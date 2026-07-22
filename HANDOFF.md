@@ -1,70 +1,72 @@
 # Handoff — FSOT Universe Monte Carlo Intelligence
 
 **Workspace:** `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence`  
-**Version:** 0.4.0  
+**Version:** 0.5.0  
 **Product:** Universe simulation + discovery under FSOT — **NOT markets**
 
 ## Vision (locked)
 
 Use FSOT to Monte-Carlo the universe: multipath observation histories across the
-35-domain map, discover new pathways, bridges, and physics candidates, align with
-real FSOT data, hand leads to Lean/lab verification.
+domain map, discover pathways/physics, see via π-ring, verify via soft formal court.
+
+## Stack status (all layers)
+
+| Layer | Status | Entry |
+|-------|--------|-------|
+| 1 Archive sync | Done | `scripts/sync_archive_bundle.py` |
+| 2 Full atlas 402 | Done | `python -m fsot_mc build-atlas` |
+| 3 Pathway memory | Done | automatic in MC |
+| 4 Contested physics | Done | in discovery |
+| 5 π-ring + PFLT eyes | Done | `python -m fsot_mc eyes` |
+| 6 Formal soft court | Done | `python -m fsot_mc formal` |
+| 7 Realities client | Done | `python -m fsot_mc realities` |
+| 8 Live APIs offline-first | Done | `python -m fsot_mc apis` |
+| 9 Publish check | Done | `python -m fsot_mc publish-check` |
 
 ## Primary API
 
 ```python
-from fsot_mc import run_intelligence, run_universe_monte_carlo, run_discovery, snapshot_universe
-intel = run_intelligence(n_paths=256)
+from fsot_mc import run_intelligence
+intel = run_intelligence(
+    n_paths=128,
+    scope="core",          # or "full"
+    with_eyes=True,
+    with_formal_promote=True,
+    with_realities=True,
+    with_apis=True,
+)
 ```
 
 ## CLI
 
 ```text
 python -m fsot_mc gate
-python -m fsot_mc atlas
-python -m fsot_mc scan --n-paths 128
-python -m fsot_mc intel --n-paths 256
+python -m fsot_mc build-atlas
+python -m fsot_mc intel --scope core --n-paths 128 --with-formal --with-apis --with-realities
+python -m fsot_mc eyes
+python -m fsot_mc formal
+python -m fsot_mc realities
+python -m fsot_mc apis          # offline demo cache; --online for network
+python -m fsot_mc publish-check
 ```
 
-## Core modules
+## Publish (needs your auth)
 
-| Module | Role |
-|--------|------|
-| universe_atlas | 35-domain FSOT map |
-| universe_mc | multipath universe simulation |
-| discovery | candidate ledger |
-| real_data | archive anchors |
-| intelligence | primary entry |
-| authority_gate | D1D38A |
-
-## Legacy (ignore for product)
-
-`monte_carlo.py`, `intrinsic.py`, `bhs_engine.py`, `pattern_memory.py` — market extract.
+```powershell
+gh auth login
+.\scripts\publish_github.ps1
+huggingface-cli login
+.\scripts\publish_huggingface.ps1
+# kaggle.json then:
+.\scripts\publish_kaggle.ps1
+```
 
 ## Foundation
 
-`I:\FSOT-Physical-Archive` — law court, public data, Realities OS.
+- Law: `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full`
+- PFLT eyes: `C:\Users\damia\Desktop\pflt`
+- Realities: `I:\FSOT-Physical-Archive\10_Realities-OS`
 
-## Done (v0.4)
+## Doctrine
 
-1. Archive sync → `vendor/archive_bundle/`  
-2. Full atlas **35 core + 367 ext = 402** (`python -m fsot_mc build-atlas`)  
-3. Pathway memory (domain-signature solidify)  
-4. Contested physics pack (H0 dual-anchor + archive closure + flip hotspots)  
-
-## CLI
-
-```text
-python -m fsot_mc build-atlas
-python -m fsot_mc atlas --scope core|full
-python -m fsot_mc scan --scope full --n-paths 32
-python -m fsot_mc intel --scope core --n-paths 128
-```
-
-## Next layers
-
-5. π-ring + PFLT multilayer eyes  
-6. Formal promote/batch court loop  
-7. Realities OS client ticks  
-8. Live APIs (offline-first caches)  
-9. Publish as universe discovery  
+Python discovers · π-ring sees · PFLT senses · Lean judges (batch) · archive remembers · APIs only feed · seeds never move.

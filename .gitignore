@@ -19,4 +19,9 @@ data/ohlcv/
 .vscode/
 
 vendor/archive_bundle/
+data/obligations_pending/
+data/obligations_promoted/
+data/api_cache/
+data/formal_promotion_ledger.jsonl
+data/pathways/
 

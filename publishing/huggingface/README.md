@@ -1,5 +1,5 @@
 ---
-title: FSOT Monte Carlo Intelligence
+title: FSOT Universe Monte Carlo Intelligence
 emoji: 🌊
 colorFrom: blue
 colorTo: purple
@@ -9,35 +9,42 @@ license: apache-2.0
 tags:
   - FSOT
   - monte-carlo
-  - physics-informed
+  - universe-simulation
+  - fluid-spacetime
+  - discovery
   - zero-free-parameters
-  - time-series
+  - physics
   - research
 ---
 
-# FSOT Monte Carlo Intelligence
+# FSOT Universe Monte Carlo Intelligence
 
-**Fluid Spacetime Omni-Theory (FSOT 2.1)** multipath intelligence — observer collapse + pattern solidification.
+**Simulate the universe under Fluid Spacetime Omni-Theory — discover pathways and physics.**
+
+This is **not** a market product.
 
 - **Author:** Damian Arthur Palumbo  
-- **Authority pin:** `D1D38A` (`vendor/fsot_compute.py`)  
-- **Theory hub:** https://github.com/dappalumbo91/FSOT-2.1-Lean  
-- **Code:** https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence  
+- **Authority pin:** `D1D38A`  
+- **Theory:** https://github.com/dappalumbo91/FSOT-2.1-Lean  
+- **Code:** FSOT-Monte-Carlo-Intelligence  
 
-## Dataset contents
+## What it does
 
-| File | Description |
-|------|-------------|
-| `*_intelligence.json` | Full intelligence snapshot (MC + multi-horizon + optional BHS) |
-| `*_summary.csv` | Compact signal table |
-| `*_meta.json` | Authority gate + version |
+1. **402-domain atlas** (35 core + 367 extension panels)  
+2. **Multipath Monte Carlo** with observer collapse  
+3. **Pathway memory** (domain signatures solidify)  
+4. **Contested physics probes** (H0 dual-anchor, bridges)  
+5. **π-ring eyes** (polar visual/symbolic field — not U-Net)  
+6. **Formal soft court** (export leads; batch verify — not per-path Lean)  
+7. Optional **Realities OS** client + offline-first **APIs**
 
-## Method (short)
+## Quickstart
 
-1. Seed engine `S = K·(T1+T2+T3)` from π, e, φ, γ, Catalan  
-2. Finance/Economics preregistered folds (`D_eff`, δψ, observed)  
-3. Monte Carlo paths collapse via consciousness-weighted observation  
-4. Pattern signatures solidify when φ-EWMA accuracy > 0.5+Poof  
-5. Only solidified patterns may commit LONG/SHORT  
+```bash
+pip install -r requirements.txt
+python -m fsot_mc gate
+python -m fsot_mc build-atlas
+python -m fsot_mc intel --scope core --n-paths 128
+```
 
-**free_parameters = 0** · Research only · Not financial advice
+`free_parameters = 0` · Research only
