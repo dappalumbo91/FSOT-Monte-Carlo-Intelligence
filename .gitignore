@@ -17,3 +17,6 @@ data/ohlcv/
 .DS_Store
 .idea/
 .vscode/
+
+vendor/archive_bundle/
+

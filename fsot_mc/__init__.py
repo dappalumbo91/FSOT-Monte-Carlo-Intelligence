@@ -23,13 +23,15 @@ from fsot_mc.universe_atlas import (
 )
 from fsot_mc.universe_mc import run_universe_monte_carlo, simulate_universe_path
 from fsot_mc.real_data import build_real_data_bundle
+from fsot_mc.pi_ring import PiRing, demo_ring_from_mc
+from fsot_mc.formal_bridge import export_lead_obligation, formal_status
 
 # Seed exports (shared)
 from fsot_mc.fast import C_FACTOR as SEED_C
 from fsot_mc.fast import PHI as SEED_PHI
 from fsot_mc.fast import POOF as SEED_POOF
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 __all__ = [
     # Universe intelligence (primary)
     "run_intelligence",
@@ -43,6 +45,11 @@ __all__ = [
     "domains_by_cluster",
     "atlas_meta",
     "build_real_data_bundle",
+    # π-ring vision + formal soft bridge
+    "PiRing",
+    "demo_ring_from_mc",
+    "export_lead_obligation",
+    "formal_status",
     # Authority
     "verify_fsot_gate",
     "AUTHORITY_SHA256",
