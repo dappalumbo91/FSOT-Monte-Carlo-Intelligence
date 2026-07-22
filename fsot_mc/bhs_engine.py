@@ -1,16 +1,8 @@
 """
-FSOT Buy / Hold / Sell engine — quality over frequency.
+LEGACY — Buy/Hold/Sell market layer (not the product).
 
-Philosophy (user target ~70–80% when committed, not always-in):
-  HOLD is the default. BUY or SELL only when multiple FSOT gates lock:
-    1) Dual-scale agreement (As Above So Below)
-    2) Pattern memory solidified on *horizon-aligned* history
-    3) Edge |μ|/σ and field consciousness gate
-    4) Optional MC lean agrees with direction (when ensemble available)
-
-Training feedback horizon = Fib 5 (hold period matches learning period).
-Solidify bar stays seed-based: acc_φ ≥ 0.5+Poof, trials ≥ Fib(13), raw acc same.
-No free LSQ. Research only.
+Primary product is universe Monte Carlo discovery (see fsot_mc.intelligence).
+This file is retained only as a historical extract from an early market experiment.
 """
 
 from __future__ import annotations

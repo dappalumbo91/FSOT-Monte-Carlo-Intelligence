@@ -1,0 +1,389 @@
+{
+  "version": "1.0",
+  "authority_sha256": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
+  "source": "FSOT 2.1 vendor/fsot_compute.py 35-domain table",
+  "free_parameters": 0,
+  "S_cosm": -0.5024559462100433,
+  "S_quant": 0.9555063001027196,
+  "domains": {
+    "Particle_Physics": {
+      "D_eff": 5,
+      "hits": 0,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.9504134401245242,
+      "regime": "emergence",
+      "cluster": "quantum_particle"
+    },
+    "Quantum_Mechanics": {
+      "D_eff": 6,
+      "hits": 0,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.9555063001027196,
+      "regime": "emergence",
+      "cluster": "quantum_particle"
+    },
+    "Atomic_Physics": {
+      "D_eff": 7,
+      "hits": 0,
+      "delta_psi": 0.85,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.7358238658627416,
+      "regime": "emergence",
+      "cluster": "quantum_particle"
+    },
+    "Physical_Chemistry": {
+      "D_eff": 8,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.33401327040170914,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Chemistry": {
+      "D_eff": 8,
+      "hits": 0,
+      "delta_psi": 0.6,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.4078840642307454,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Electromagnetism": {
+      "D_eff": 9,
+      "hits": 0,
+      "delta_psi": 0.7,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.5188655207983146,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Molecular_Chemistry": {
+      "D_eff": 9,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.3345733830778106,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Optics": {
+      "D_eff": 10,
+      "hits": 0,
+      "delta_psi": 0.6,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.4080624712153455,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Acoustics": {
+      "D_eff": 10,
+      "hits": 0,
+      "delta_psi": 0.3,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.3115907970863415,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Quantum_Computing": {
+      "D_eff": 11,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.14767310363368644,
+      "regime": "dispersal",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Quantum_Optics": {
+      "D_eff": 11,
+      "hits": 0,
+      "delta_psi": 0.6,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.4081705381715019,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Biology": {
+      "D_eff": 12,
+      "hits": 0,
+      "delta_psi": 0.08,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": 0.4447250077038459,
+      "regime": "emergence",
+      "cluster": "life_matter_energy"
+    },
+    "Thermodynamics": {
+      "D_eff": 15,
+      "hits": 1,
+      "delta_psi": 0.9,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.7869745016115727,
+      "regime": "emergence",
+      "cluster": "life_matter_energy"
+    },
+    "Biochemistry": {
+      "D_eff": 13,
+      "hits": 1,
+      "delta_psi": 0.35,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.3062212293865662,
+      "regime": "emergence",
+      "cluster": "life_matter_energy"
+    },
+    "Neuroscience": {
+      "D_eff": 14,
+      "hits": 1,
+      "delta_psi": 0.7,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.5143619629083619,
+      "regime": "emergence",
+      "cluster": "life_matter_energy"
+    },
+    "Condensed_Matter": {
+      "D_eff": 14,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.3384059955797751,
+      "regime": "emergence",
+      "cluster": "life_matter_energy"
+    },
+    "Fluid_Dynamics": {
+      "D_eff": 15,
+      "hits": 1,
+      "delta_psi": 0.9,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.562733806256851,
+      "regime": "dispersal",
+      "cluster": "life_matter_energy"
+    },
+    "Nuclear_Physics": {
+      "D_eff": 15,
+      "hits": 1,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.9213094330291355,
+      "regime": "emergence",
+      "cluster": "life_matter_energy"
+    },
+    "Ecology": {
+      "D_eff": 15,
+      "hits": 1,
+      "delta_psi": 0.2,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": 0.3003170815488647,
+      "regime": "emergence",
+      "cluster": "life_matter_energy"
+    },
+    "Meteorology": {
+      "D_eff": 16,
+      "hits": 2,
+      "delta_psi": 0.8,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.4849970208468799,
+      "regime": "dispersal",
+      "cluster": "earth_complex_systems"
+    },
+    "Materials_Science": {
+      "D_eff": 10,
+      "hits": 0,
+      "delta_psi": 0.5,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.33525988073638374,
+      "regime": "emergence",
+      "cluster": "atomic_molecular_optical"
+    },
+    "Psychology": {
+      "D_eff": 16,
+      "hits": 1,
+      "delta_psi": 1.15,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 1.050205640397955,
+      "regime": "emergence",
+      "cluster": "earth_complex_systems"
+    },
+    "Atmospheric_Physics": {
+      "D_eff": 17,
+      "hits": 2,
+      "delta_psi": 0.8,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.47643190542960023,
+      "regime": "dispersal",
+      "cluster": "earth_complex_systems"
+    },
+    "Oceanography": {
+      "D_eff": 17,
+      "hits": 1,
+      "delta_psi": 0.7,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.37715907584612024,
+      "regime": "dispersal",
+      "cluster": "earth_complex_systems"
+    },
+    "Seismology": {
+      "D_eff": 18,
+      "hits": 2,
+      "delta_psi": 1.2,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.4459015721103038,
+      "regime": "dispersal",
+      "cluster": "earth_complex_systems"
+    },
+    "Sociology": {
+      "D_eff": 18,
+      "hits": 3,
+      "delta_psi": 1.5,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.6501466524159132,
+      "regime": "emergence",
+      "cluster": "earth_complex_systems"
+    },
+    "High_Energy_Physics": {
+      "D_eff": 7,
+      "hits": 1,
+      "delta_psi": 0.95,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.8862640566467022,
+      "regime": "emergence",
+      "cluster": "quantum_particle"
+    },
+    "Geophysics": {
+      "D_eff": 19,
+      "hits": 2,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.5490942927204095,
+      "regime": "dispersal",
+      "cluster": "earth_complex_systems"
+    },
+    "Astronomy": {
+      "D_eff": 20,
+      "hits": 1,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.8984595681660628,
+      "regime": "emergence",
+      "cluster": "astro_planetary"
+    },
+    "Economics": {
+      "D_eff": 20,
+      "hits": 3,
+      "delta_psi": 1.5,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.6460045206857493,
+      "regime": "emergence",
+      "cluster": "astro_planetary"
+    },
+    "Planetary_Science": {
+      "D_eff": 21,
+      "hits": 1,
+      "delta_psi": 0.9,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.7671791385407586,
+      "regime": "emergence",
+      "cluster": "astro_planetary"
+    },
+    "Quantum_Gravity": {
+      "D_eff": 22,
+      "hits": 0,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.5255977531899868,
+      "regime": "dispersal",
+      "cluster": "astro_planetary"
+    },
+    "Particle_Astrophysics": {
+      "D_eff": 24,
+      "hits": 0,
+      "delta_psi": 0.8,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.424411720028886,
+      "regime": "dispersal",
+      "cluster": "cosmo_unification"
+    },
+    "Astrophysics": {
+      "D_eff": 24,
+      "hits": 1,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": true,
+      "S_canonical": 0.8824107984181293,
+      "regime": "emergence",
+      "cluster": "cosmo_unification"
+    },
+    "Cosmology": {
+      "D_eff": 25,
+      "hits": 0,
+      "delta_psi": 1.0,
+      "delta_theta": 1.0,
+      "observed": false,
+      "S_canonical": -0.5024559462100433,
+      "regime": "dispersal",
+      "cluster": "cosmo_unification"
+    }
+  },
+  "wave1_anchors": {
+    "alpha_s(M_Z)": {
+      "formula": "1/(e\u00b7\u03c0)",
+      "computed": 0.11709966304863832,
+      "measured": 0.1179
+    },
+    "H0": {
+      "formula": "100\u00b7(1 + S_cosm\u00b7A_bleed/A_in)",
+      "computed": 68.44005682979427,
+      "measured": 67.4
+    },
+    "T_CMB": {
+      "formula": "\u03c6\u00b2 + P_base\u00b7|S_cosm|",
+      "computed": 2.724728386673958,
+      "measured": 2.72548
+    },
+    "n_s": {
+      "formula": "1 + S_cosm\u00b7C_cosm\u00b7\u03c6^(1/\u03c0)",
+      "computed": 0.9638062833678815,
+      "measured": 0.9649
+    },
+    "Omega_b_h2": {
+      "formula": "|S_cosm|\u00b7(1 \u2212 S_quant)",
+      "computed": 0.0223561240822737,
+      "measured": 0.02237
+    }
+  },
+  "epistemic_tier": "measured_application",
+  "purpose": "Universe Monte Carlo discovery atlas \u2014 not markets"
+}

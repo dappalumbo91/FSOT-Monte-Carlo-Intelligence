@@ -1,57 +1,26 @@
-"""python -m fsot_mc — CLI for FSOT Monte Carlo Intelligence."""
+"""python -m fsot_mc — Universe Monte Carlo intelligence CLI."""
 
 from __future__ import annotations
 
 import argparse
 import json
 import sys
-from pathlib import Path
-
-import numpy as np
-import pandas as pd
-
-
-def _load_df(symbol: str | None, history: bool, n: int) -> tuple[pd.DataFrame, str]:
-    if history and symbol:
-        from fsot_mc.paths import ohlcv_csv
-
-        p = ohlcv_csv(symbol)
-        if not p.exists():
-            raise SystemExit(f"OHLCV not found: {p}")
-        df = pd.read_csv(p, index_col=0, parse_dates=True)
-        df = df.rename(columns={c: str(c).lower() for c in df.columns}).reset_index()
-        df = df.rename(columns={df.columns[0]: "time"})
-        for c in ("open", "high", "low", "close", "volume"):
-            if c not in df.columns:
-                df[c] = df["close"] if c != "volume" else 0
-        if len(df) > 1500:
-            df = df.iloc[-1500:].copy()
-        return df, symbol.upper()
-
-    rng = np.random.default_rng(0)
-    r = rng.normal(0.0004, 0.012, size=n)
-    close = 100.0 * np.cumprod(1.0 + r)
-    df = pd.DataFrame(
-        {
-            "time": pd.date_range("2020-01-01", periods=n, freq="B"),
-            "open": close,
-            "high": close * 1.01,
-            "low": close * 0.99,
-            "close": close,
-            "volume": rng.uniform(1e6, 2e6, size=n),
-        }
-    )
-    return df, symbol or "SYN"
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description="FSOT Monte Carlo Intelligence")
-    ap.add_argument("command", nargs="?", default="gate", choices=["gate", "intel", "mc", "journal", "bhs"])
-    ap.add_argument("--symbol", default="SYN")
-    ap.add_argument("--history", action="store_true")
+    ap = argparse.ArgumentParser(
+        description="FSOT Universe Monte Carlo Intelligence — discovery, not markets"
+    )
+    ap.add_argument(
+        "command",
+        nargs="?",
+        default="gate",
+        choices=["gate", "atlas", "scan", "discover", "intel"],
+    )
     ap.add_argument("--n-paths", type=int, default=128)
-    ap.add_argument("--horizon", type=int, default=13)
+    ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--no-archive", action="store_true", help="Skip archive real-data hooks")
     args = ap.parse_args(argv)
 
     from fsot_mc import __version__, verify_fsot_gate
@@ -61,61 +30,91 @@ def main(argv: list[str] | None = None) -> int:
         if args.json:
             print(json.dumps(g, indent=2))
         else:
-            print(f"fsot_mc {__version__}")
+            print(f"fsot_mc {__version__}  [UNIVERSE DISCOVERY]")
             print(f"authority_ok={g['ok']}  sha={g['authority_sha256'][:12]}…")
             print(f"float_engine={g['float_engine']['ok']}  bytes={g['authority_bytes']['local_matches']}")
         return 0 if g["ok"] else 2
 
-    df, sym = _load_df(args.symbol, args.history, n=400)
+    if args.command == "atlas":
+        from fsot_mc import atlas_meta, domains_by_cluster, snapshot_universe
 
-    if args.command == "mc":
-        from fsot_mc import run_dynamic_fsot_monte_carlo
+        meta = atlas_meta()
+        snap = snapshot_universe()
+        clusters = {k: len(v) for k, v in domains_by_cluster().items()}
+        if args.json:
+            print(json.dumps({"meta": meta, "snapshot": {
+                "emergence_fraction": snap["emergence_fraction"],
+                "mean_S": snap["mean_S"],
+                "n_emergence": snap["n_emergence"],
+            }, "clusters": clusters}, indent=2))
+        else:
+            print(f"fsot_mc {__version__}  atlas domains={meta['domain_count']}")
+            print(f"  emergence={snap['emergence_fraction']:.3f}  mean_S={snap['mean_S']:+.4f}")
+            print(f"  clusters={clusters}")
+            print(f"  authority={str(meta.get('authority_sha256'))[:12]}…")
+        return 0
 
-        r = run_dynamic_fsot_monte_carlo(
-            df, horizon=args.horizon, n_paths=args.n_paths, symbol=sym, persist=False
-        )
-    elif args.command == "bhs":
-        from fsot_mc import run_bhs_backtest
+    if args.command == "scan":
+        from fsot_mc import run_universe_scan
 
-        r = run_bhs_backtest(df, symbol=sym)
-    elif args.command == "journal":
-        from fsot_mc import run_forward_journal_walk
+        r = run_universe_scan(n_paths=args.n_paths, seed=args.seed)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            ens = r.get("ensemble") or {}
+            print(f"fsot_mc {__version__}  universe scan  paths={args.n_paths}")
+            ef = ens.get("emergence_fraction") or {}
+            print(f"  emergence_frac mean={ef.get('mean'):.3f} p50={ef.get('p50'):.3f}")
+            hints = r.get("discovery_hints") or {}
+            flips = hints.get("top_flip_domains") or []
+            if flips:
+                print("  top flip domains:")
+                for row in flips[:5]:
+                    print(f"    {row['domain']}: flip_rate={row['flip_rate']:.3f}")
+        return 0 if not r.get("error") else 1
 
-        r = run_forward_journal_walk(
-            df, symbol=sym, horizon=5, n_paths=min(args.n_paths, 64), max_steps=24
-        )
-    else:  # intel
-        from fsot_mc import run_intelligence
+    # discover / intel
+    from fsot_mc import run_intelligence
 
-        r = run_intelligence(
-            df, symbol=sym, horizon=args.horizon, n_paths=args.n_paths, include_bhs=args.history
-        )
-
+    r = run_intelligence(
+        n_paths=args.n_paths,
+        seed=args.seed,
+        use_real_data=not args.no_archive,
+    )
     if args.json:
-        # compact non-curve dump
-        print(json.dumps(r, indent=2, default=str))
+        # slim
+        slim = {
+            "method": r.get("method"),
+            "purpose": r.get("purpose"),
+            "authority_ok": (r.get("authority_gate") or {}).get("ok"),
+            "canonical_universe": r.get("canonical_universe"),
+            "top_ledger": (r.get("discovery") or {}).get("top_ledger"),
+            "candidates_summary": {
+                k: len(v) for k, v in ((r.get("discovery") or {}).get("candidates") or {}).items()
+            },
+            "ensemble": (r.get("discovery") or {}).get("ensemble"),
+            "free_parameters": 0,
+        }
+        print(json.dumps(slim, indent=2, default=str))
     else:
-        print(f"fsot_mc {__version__}  symbol={sym}  bars={len(df)}")
+        print(f"fsot_mc {__version__}  UNIVERSE INTELLIGENCE")
         if r.get("error"):
             print("ERROR", r["error"])
             return 1
-        if args.command == "intel":
-            print(f"primary={r.get('primary_signal')} conf={r.get('primary_confidence')}")
-            mc = r.get("monte_carlo") or {}
-            print(f"mc={mc.get('signal')} conf={mc.get('confidence')}")
-            if r.get("bhs"):
-                print(f"bhs_commit_acc={r['bhs'].get('commit_directional_accuracy')}")
-            print(f"authority_ok={r.get('authority_gate', {}).get('ok')}")
-        elif args.command == "journal":
-            print(f"decisions={r.get('n_decisions')} acc={r.get('directional_accuracy')}")
-            print(f"solid_acc={r.get('solid_directional_accuracy')} conf_acc={r.get('solid_confident_accuracy')}")
-        elif args.command == "bhs":
-            print(f"commit_acc={r.get('commit_directional_accuracy')} progress={r.get('progress_to_70_80')}")
-            print(f"ret={r.get('total_return')} trades={r.get('trades')}")
-        else:
-            print(f"signal={r.get('signal')} conf={r.get('confidence')}")
-            ens = r.get("ensemble") or {}
-            print(f"p_up_obs={ens.get('p_up_observed_branch')}")
+        can = r.get("canonical_universe") or {}
+        print(f"  canonical emergence={can.get('emergence_fraction'):.3f} mean_S={can.get('mean_S'):+.4f}")
+        print(f"  authority_ok={(r.get('authority_gate') or {}).get('ok')}")
+        disc = r.get("discovery") or {}
+        top = disc.get("top_ledger") or []
+        print(f"  discovery leads: {len(top)}")
+        for lead in top[:8]:
+            print(
+                f"    [{lead.get('class')}] {lead.get('id')}: score={float(lead.get('score') or 0):.3f}"
+                f"  — {lead.get('title') or lead.get('domain') or lead.get('hypothesis', '')[:60]}"
+            )
+        csum = {k: len(v) for k, v in (disc.get("candidates") or {}).items()}
+        print(f"  candidate counts: {csum}")
+        print("  purpose: pathways + physics under FSOT — not markets")
     return 0
 
 

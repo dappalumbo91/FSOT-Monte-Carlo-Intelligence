@@ -1,21 +1,13 @@
 """
-FSOT Monte Carlo path ensemble with observer collapse + intelligent pattern memory.
+LEGACY — market OHLCV Monte Carlo (not the product).
 
-Ontology:
-  - Many futures exist as fluid possibilities until observation couples.
-  - quirk_mod + consciousness_factor set collapse strength (observed True vs False).
-  - Market value (price path) + fluctuation + sentiment update δψ each step.
-  - Collapse TRUE  → path locks to FSOT μ branch (engine + γ-vol).
-  - Collapse FALSE → unobserved/chaotic branch (noise scaled by Poof; weaker drift).
+The project is **universe discovery** under FSOT. Use:
+  fsot_mc.universe_mc.run_universe_monte_carlo
+  fsot_mc.discovery.run_discovery
+  fsot_mc.intelligence.run_intelligence
 
-Intelligent / dynamic layer:
-  - Causal walk over history builds PatternMemory (FSOT discrete signatures).
-  - When a signature's φ-EWMA accuracy clears 0.5+Poof for ≥Fib(8) trials → solidify.
-  - Subsequent MC paths bias μ, collapse, and bootstrap shocks from solidified anchors.
-  - Refinement is online: accuracy patterns lock; misses soften via φ/Poof — no free fits.
-
-Seeds only (no free LSQ):
-  γ vol persistence, K, C, Poof, φ, ψ_con, Finance/Economics D_eff folds.
+This module remains as a historical extract (observer-collapse paths on price series).
+Do not extend it for the main product roadmap.
 """
 
 from __future__ import annotations

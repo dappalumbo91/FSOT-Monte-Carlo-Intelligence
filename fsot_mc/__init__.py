@@ -1,56 +1,53 @@
 """
-FSOT Monte Carlo Intelligence — standalone package.
+FSOT Monte Carlo Intelligence — universe discovery under Fluid Spacetime Omni-Theory.
 
-Fluid Spacetime Omni-Theory (FSOT 2.1) applied as observer-collapse multipath
-Monte Carlo intelligence with pattern solidification.
+Primary product:
+  Simulate the universe via FSOT domain folds + multipath observer collapse.
+  Discover new pathways, bridges, and physics candidates against real data.
 
-Authority: vendor/fsot_compute.py pin D1D38A (I: archive / GitHub FSOT-2.1-Lean)
-Zero free parameters: seeds π, e, φ, γ, Catalan + preregistered folds only.
+Not markets. Market/OHLCV modules are legacy extract only.
+
+Authority pin: D1D38A (FSOT 2.1 vendor/fsot_compute.py)
+free_parameters = 0
 """
 
 from fsot_mc.authority_gate import AUTHORITY_SHA256, verify_fsot_gate
-from fsot_mc.bhs_engine import HOLD_HORIZON, decide_bhs, dual_scale_state, run_bhs_backtest
-from fsot_mc.forward_journal import ForwardJournal, run_forward_journal_walk
-from fsot_mc.intelligence import multi_horizon_mc, run_intelligence
-from fsot_mc.intrinsic import (
-    SEED_C,
-    SEED_PHI,
-    SEED_POOF,
-    evaluate_market_bar,
-    spine_scalars,
+from fsot_mc.discovery import run_discovery
+from fsot_mc.intelligence import run_intelligence, run_universe_scan
+from fsot_mc.universe_atlas import (
+    atlas_meta,
+    domain_names,
+    domains_by_cluster,
+    evaluate_domain,
+    snapshot_universe,
 )
-from fsot_mc.monte_carlo import (
-    collapse_probability,
-    mc_walkforward_hit,
-    run_dynamic_fsot_monte_carlo,
-    run_fsot_monte_carlo,
-    train_pattern_memory,
-)
-from fsot_mc.pattern_memory import SOLIDIFY_ACC, PatternMemory
+from fsot_mc.universe_mc import run_universe_monte_carlo, simulate_universe_path
+from fsot_mc.real_data import build_real_data_bundle
 
-__version__ = "0.2.0"
+# Seed exports (shared)
+from fsot_mc.fast import C_FACTOR as SEED_C
+from fsot_mc.fast import PHI as SEED_PHI
+from fsot_mc.fast import POOF as SEED_POOF
+
+__version__ = "0.3.0"
 __all__ = [
-    "run_fsot_monte_carlo",
-    "run_dynamic_fsot_monte_carlo",
-    "train_pattern_memory",
-    "mc_walkforward_hit",
-    "collapse_probability",
-    "PatternMemory",
-    "SOLIDIFY_ACC",
-    "decide_bhs",
-    "run_bhs_backtest",
-    "dual_scale_state",
-    "HOLD_HORIZON",
-    "evaluate_market_bar",
-    "spine_scalars",
+    # Universe intelligence (primary)
+    "run_intelligence",
+    "run_universe_scan",
+    "run_discovery",
+    "run_universe_monte_carlo",
+    "simulate_universe_path",
+    "snapshot_universe",
+    "evaluate_domain",
+    "domain_names",
+    "domains_by_cluster",
+    "atlas_meta",
+    "build_real_data_bundle",
+    # Authority
+    "verify_fsot_gate",
+    "AUTHORITY_SHA256",
     "SEED_C",
     "SEED_PHI",
     "SEED_POOF",
-    "verify_fsot_gate",
-    "AUTHORITY_SHA256",
-    "run_intelligence",
-    "multi_horizon_mc",
-    "ForwardJournal",
-    "run_forward_journal_walk",
     "__version__",
 ]

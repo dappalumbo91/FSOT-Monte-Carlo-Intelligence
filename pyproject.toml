@@ -1,12 +1,12 @@
 [project]
 name = "fsot-monte-carlo-intelligence"
-version = "0.2.0"
-description = "FSOT 2.1 Monte Carlo intelligence — observer collapse, pattern solidification, zero free parameters"
+version = "0.3.0"
+description = "FSOT Universe Monte Carlo intelligence — multipath fluid spacetime discovery (not markets)"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Damian Arthur Palumbo" }]
-keywords = ["FSOT", "Monte Carlo", "fluid spacetime", "zero free parameters", "intelligence"]
+keywords = ["FSOT", "Monte Carlo", "universe simulation", "fluid spacetime", "discovery", "zero free parameters"]
 dependencies = [
   "numpy>=1.26.0",
   "pandas>=2.2.0",
@@ -36,4 +36,4 @@ build-backend = "setuptools.build_meta"
 include = ["fsot_mc*"]
 
 [tool.setuptools.package-data]
-fsot_mc = ["PIN.json"]
+fsot_mc = ["PIN.json", "universe_atlas.json"]
