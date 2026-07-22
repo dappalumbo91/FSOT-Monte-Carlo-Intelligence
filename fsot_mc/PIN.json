@@ -1,0 +1,40 @@
+{
+  "source": "I:\\FSOT-Physical-Archive\\02_FSOT-2.1-Lean-Full\\vendor\\fsot_compute.py",
+  "github_authority": "https://github.com/dappalumbo91/FSOT-2.1-Lean",
+  "authority_sha256": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
+  "formula": "S = K * (T1 + T2 + T3)",
+  "free_parameters": 0,
+  "method": "fsot_intrinsic_zero_free",
+  "epistemic_tier": "measured_application",
+  "epistemic_note": "Market Monte Carlo intelligence is an application of the FSOT 2.1 seed engine at Finance/Economics folds. It does not replace the multi-prover Lean hub; constants must match authority D1D38A.",
+  "domain_economics": {
+    "D_eff": 20,
+    "hits": 3,
+    "delta_psi": 1.5,
+    "observed": true,
+    "source": "vendor/fsot_compute.py DomainConfig Economics"
+  },
+  "domain_finance_markets": {
+    "D_eff": 19,
+    "hits": 2,
+    "delta_psi": 0.75,
+    "observed": true,
+    "source": "extension_domains_manifest Finance_Markets"
+  },
+  "domain_factor_economics": 0.0004,
+  "forbidden": [
+    "invented_rsi_volume_coefficients",
+    "per_ticker_D_eff_fit",
+    "S_times_multiplier_plus_base",
+    "least_squares_per_symbol"
+  ],
+  "pinned_at": "2026-07-22T20:30:00+00:00",
+  "canonical_constants": {
+    "K": 0.4202216641606967,
+    "consciousness_factor": 0.28760015181918397,
+    "poof": 0.1534822148944508,
+    "phi": 1.618033988749895,
+    "psi_con": 0.6321205588285577,
+    "S_economics": 0.6460045206857493
+  }
+}

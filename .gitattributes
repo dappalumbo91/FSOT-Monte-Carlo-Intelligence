@@ -1,0 +1,2 @@
+# Keep authority engine byte-identical to FSOT archive pin D1D38A
+fsot_mc/compute_authority.py -text
