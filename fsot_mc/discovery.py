@@ -204,11 +204,21 @@ def run_discovery(
     seed: int | None = 0,
     real_data: dict[str, Any] | None = None,
     store_paths: int = 24,
+    scope: str = "core",
+    train_pathway_memory: bool = True,
 ) -> dict[str, Any]:
     """
-    Full discovery pipeline: universe MC → candidate ledgers.
+    Full discovery pipeline: universe MC → pathway memory → contested pack → ledgers.
     """
-    mc = run_universe_monte_carlo(n_paths=n_paths, seed=seed, store_paths=store_paths)
+    from fsot_mc.contested_physics import run_contested_physics_pack
+
+    mc = run_universe_monte_carlo(
+        n_paths=n_paths,
+        seed=seed,
+        store_paths=store_paths,
+        scope=scope,
+        train_pathway_memory=train_pathway_memory,
+    )
     if mc.get("error"):
         return mc
 
@@ -216,33 +226,45 @@ def run_discovery(
     flips = classify_flip_hotspots(mc)
     pathways = classify_pathway_novelty(mc)
     real_align = align_real_data(mc, real_data)
+    contested = run_contested_physics_pack(mc)
+    contested_leads = contested.get("probes") or []
+
+    pathway_mem = mc.get("pathway_memory") or {}
 
     # Master ranked ledger (mixed classes)
-    ledger = physics + flips + pathways + real_align
+    ledger = contested_leads + physics + flips + pathways + real_align
     ledger.sort(key=lambda x: -float(x.get("score") or 0.0))
+
+    # Drop internal object if present
+    mc_public = {k: v for k, v in mc.items() if not k.startswith("_")}
 
     return {
         "error": None,
         "method": "fsot_universe_discovery",
         "free_parameters": 0,
         "purpose": "Discover new pathways and physics under FSOT law — not markets",
+        "scope": mc_public.get("scope"),
+        "n_domains": mc_public.get("n_domains"),
         "monte_carlo": {
-            "n_paths": mc["n_paths"],
-            "ensemble": mc["ensemble"],
-            "canonical_snapshot": mc["canonical_snapshot"],
-            "atlas": mc["atlas"],
+            "n_paths": mc_public["n_paths"],
+            "ensemble": mc_public["ensemble"],
+            "canonical_snapshot": mc_public["canonical_snapshot"],
+            "atlas": mc_public["atlas"],
         },
+        "pathway_memory": pathway_mem,
+        "contested_physics": contested,
         "candidates": {
+            "contested": contested_leads[:15],
             "physics": physics[:15],
             "bridges": [c for c in physics if c["class"] == "bridge_candidate"][:15],
             "flip_hotspots": flips[:15],
             "novel_pathways": pathways[:12],
             "real_data": real_align[:20],
         },
-        "top_ledger": ledger[:25],
-        "domain_ensemble": mc["domain_ensemble"],
-        "long_range_bridges": mc["long_range_bridges"],
-        "sample_paths": mc.get("sample_paths"),
+        "top_ledger": ledger[:30],
+        "domain_ensemble": mc_public["domain_ensemble"],
+        "long_range_bridges": mc_public["long_range_bridges"],
+        "sample_paths": mc_public.get("sample_paths"),
         "epistemic_note": (
             "Candidates are discovery *leads* for formal verification and lab panels. "
             "Proved claims still live in FSOT-2.1-Lean. Tag every lead with epistemic_tier."

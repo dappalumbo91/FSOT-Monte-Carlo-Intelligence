@@ -31,7 +31,7 @@ from fsot_mc.fast import C_FACTOR as SEED_C
 from fsot_mc.fast import PHI as SEED_PHI
 from fsot_mc.fast import POOF as SEED_POOF
 
-__version__ = "0.3.1"
+__version__ = "0.4.0"
 __all__ = [
     # Universe intelligence (primary)
     "run_intelligence",

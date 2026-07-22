@@ -21,7 +21,9 @@ def test_authority_gate():
 
 
 def test_atlas_35():
-    names = domain_names()
+    from fsot_mc.universe_atlas import core_names
+
+    names = core_names()
     assert len(names) == 35
     assert "Cosmology" in names
     assert "Quantum_Mechanics" in names
@@ -34,7 +36,9 @@ def test_atlas_35():
 
 
 def test_snapshot():
-    snap = snapshot_universe()
+    from fsot_mc.universe_atlas import core_names
+
+    snap = snapshot_universe(names=core_names())
     assert snap["n_domains"] == 35
     assert 0.0 < snap["emergence_fraction"] < 1.0
     assert snap["free_parameters"] == 0

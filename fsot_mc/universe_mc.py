@@ -225,22 +225,50 @@ def run_universe_monte_carlo(
     domains: list[str] | None = None,
     shared_phase_scale: float = 1.0,
     store_paths: int = 16,
+    scope: str = "core",
+    train_pathway_memory: bool = False,
+    pathway_memory: Any | None = None,
+    phase_bias: float = 0.0,
 ) -> dict[str, Any]:
     """
     Ensemble of universe pathways under FSOT law.
 
-    Returns:
-      - ensemble statistics over domains and bridges
-      - discovery hooks (flip rates, bridge distributions, contested probes)
-      - canonical baseline snapshot for comparison
+    scope:
+      - "core" — 35 NeuroLab folds (default, fast)
+      - "full" — core + extension panels from full atlas
+      - "extensions" — extension panels only
+      - or pass explicit `domains` list
+
+    train_pathway_memory: observe full paths into PathwayMemory
+    phase_bias: optional solidified pathway preferred phase (added to global phase noise)
     """
+    from fsot_mc.universe_atlas import core_names, extension_names
+
     rng = np.random.default_rng(seed)
     n_paths = int(max(n_paths, 8))
     store_paths = int(min(store_paths, n_paths))
 
-    canonical = snapshot_universe()
+    requested_scope = scope
+    if domains is None:
+        if scope == "full":
+            domains = domain_names()
+        elif scope == "extensions":
+            domains = extension_names() or domain_names()
+        else:
+            domains = core_names() or domain_names()
+    else:
+        requested_scope = "custom"
+
+    names = list(domains)
+    # Cap extreme full-atlas path cost for default store (still allow full evaluate)
+    canonical = snapshot_universe(names=names)
     paths: list[dict[str, Any]] = []
     stored: list[dict[str, Any]] = []
+    mem = pathway_memory
+    if train_pathway_memory and mem is None:
+        from fsot_mc.pathway_memory import PathwayMemory
+
+        mem = PathwayMemory()
 
     # Accumulators
     emerge_fracs: list[float] = []
@@ -250,10 +278,9 @@ def run_universe_monte_carlo(
     agree_fracs: list[float] = []
     flip_counts: list[int] = []
     h0_proxies: list[float] = []
-    flip_hist: dict[str, int] = {n: 0 for n in (domains or domain_names())}
+    flip_hist: dict[str, int] = {n: 0 for n in names}
 
     # Domain mean S across paths
-    names = domains or domain_names()
     S_sum = {n: 0.0 for n in names}
     S_obs_sum = {n: 0.0 for n in names}
     S_unobs_sum = {n: 0.0 for n in names}
@@ -272,12 +299,20 @@ def run_universe_monte_carlo(
     lr_strength: dict[tuple[str, str], list[float]] = {k: [] for k in lr_keys}
 
     for p in range(n_paths):
+        # Optional solidified pathway phase bias (intelligence memory)
+        if abs(phase_bias) > 0:
+            # inject as shared scale modulation via rng offset — reseed step
+            pass
         path = simulate_universe_path(
             rng,
             domains=names,
             shared_phase_scale=shared_phase_scale,
         )
+        if abs(phase_bias) > 0:
+            path["global_phase"] = float(path["global_phase"]) + float(phase_bias) * SEED_C
         paths.append(path)
+        if train_pathway_memory and mem is not None:
+            mem.observe_path(path, path_index=p)
         if p < store_paths:
             # store compact
             stored.append(
@@ -286,11 +321,13 @@ def run_universe_monte_carlo(
                     "emergence_fraction": path["emergence_fraction"],
                     "collapse_true_fraction": path["collapse_true_fraction"],
                     "n_regime_flips": path["n_regime_flips"],
-                    "regime_flips": path["regime_flips"],
+                    "regime_flips": path["regime_flips"][:12],
                     "mean_bridge_strength": path["mean_bridge_strength"],
                     "ladder_agree_fraction": path["ladder_agree_fraction"],
                     "contested": path["contested"],
                     "long_range_bridges": path["long_range_bridges"],
+                    "global_phase": path.get("global_phase"),
+                    "pathway_key": None,
                 }
             )
 
@@ -371,11 +408,23 @@ def run_universe_monte_carlo(
         key=lambda x: -x[1],
     )[:10]
 
-    return {
+    # Annotate stored pathway keys
+    if stored:
+        from fsot_mc.pathway_memory import pathway_signature
+
+        for s in stored:
+            try:
+                s["pathway_key"] = pathway_signature(s)
+            except Exception:
+                s["pathway_key"] = None
+
+    out: dict[str, Any] = {
         "error": None,
         "method": "fsot_universe_monte_carlo",
         "free_parameters": 0,
         "n_paths": n_paths,
+        "n_domains": len(names),
+        "scope": requested_scope,
         "seed": seed,
         "atlas": atlas_meta(),
         "canonical_snapshot": {
@@ -383,6 +432,7 @@ def run_universe_monte_carlo(
             "mean_S": canonical["mean_S"],
             "n_emergence": canonical["n_emergence"],
             "n_dispersal": canonical["n_dispersal"],
+            "n_domains": canonical["n_domains"],
         },
         "ensemble": {
             "emergence_fraction": _stats(emerge_fracs),
@@ -402,8 +452,11 @@ def run_universe_monte_carlo(
         },
         "sample_paths": stored,
         "note": (
-            "FSOT universe multipath: one fluid, 35 domain folds, observer collapse, "
-            "cross-scale bridges. Discovers pathway sensitivity and regime flips — "
-            "not market signals. free_parameters=0."
+            "FSOT universe multipath: one fluid, domain folds (core and/or extensions), "
+            "observer collapse, cross-scale bridges. Discovery only — not markets. free_parameters=0."
         ),
     }
+    if mem is not None:
+        out["pathway_memory"] = mem.summary()
+        out["_pathway_memory_obj"] = mem  # internal; stripped in public API if needed
+    return out

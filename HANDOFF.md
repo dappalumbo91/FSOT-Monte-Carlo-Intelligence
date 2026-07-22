@@ -1,7 +1,7 @@
 # Handoff — FSOT Universe Monte Carlo Intelligence
 
 **Workspace:** `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence`  
-**Version:** 0.3.0  
+**Version:** 0.4.0  
 **Product:** Universe simulation + discovery under FSOT — **NOT markets**
 
 ## Vision (locked)
@@ -45,10 +45,26 @@ python -m fsot_mc intel --n-paths 256
 
 `I:\FSOT-Physical-Archive` — law court, public data, Realities OS.
 
-## Next
+## Done (v0.4)
 
-1. Expand atlas beyond 35 core → extension panel folds from navigator  
-2. Deeper contested-physics probes (H0, σ8, hierarchy) with archive benchmarks  
-3. Pathway solidification memory for *domain signatures* (not tickers)  
-4. Couple to Realities OS kernel ticks as live universe substrate  
-5. Publish GitHub/HF/Kaggle as **universe discovery** product  
+1. Archive sync → `vendor/archive_bundle/`  
+2. Full atlas **35 core + 367 ext = 402** (`python -m fsot_mc build-atlas`)  
+3. Pathway memory (domain-signature solidify)  
+4. Contested physics pack (H0 dual-anchor + archive closure + flip hotspots)  
+
+## CLI
+
+```text
+python -m fsot_mc build-atlas
+python -m fsot_mc atlas --scope core|full
+python -m fsot_mc scan --scope full --n-paths 32
+python -m fsot_mc intel --scope core --n-paths 128
+```
+
+## Next layers
+
+5. π-ring + PFLT multilayer eyes  
+6. Formal promote/batch court loop  
+7. Realities OS client ticks  
+8. Live APIs (offline-first caches)  
+9. Publish as universe discovery  

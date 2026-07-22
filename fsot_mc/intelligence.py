@@ -1,15 +1,8 @@
 """
 FSOT Monte Carlo Intelligence — universe discovery API (primary).
 
-This project simulates the **universe** under Fluid Spacetime Omni-Theory:
-  - 35 domain folds (quantum → cosmos)
-  - multipath observer collapse
-  - cross-scale bridges (As Above, So Below)
-  - discovery of novel pathways and physics candidates
-  - optional real-data alignment from the FSOT archive
-
-Market / OHLCV modules remain under the package for historical extract only.
-They are **not** the product.
+Layers:
+  atlas (core+extensions) → multipath MC → pathway memory → contested probes → discovery
 """
 
 from __future__ import annotations
@@ -29,9 +22,14 @@ def run_intelligence(
     seed: int | None = 0,
     use_real_data: bool = True,
     store_paths: int = 24,
+    scope: str = "core",
 ) -> dict[str, Any]:
     """
     Primary intelligence entrypoint — universe discovery under FSOT law.
+
+    scope: "core" | "full" | "extensions"
+      - core: 35 NeuroLab folds (fast default)
+      - full: core + extension panels (requires full_atlas build)
     """
     gate = verify_fsot_gate(require_archive=False)
     if not gate["ok"]:
@@ -49,29 +47,42 @@ def run_intelligence(
         seed=seed,
         real_data=anchors,
         store_paths=store_paths,
+        scope=scope,
+        train_pathway_memory=True,
     )
     if discovery.get("error"):
         return discovery
 
-    canonical = snapshot_universe()
+    meta = atlas_meta()
+    names = None
+    if scope == "core" and meta.get("n_core"):
+        from fsot_mc.universe_atlas import core_names
+
+        names = core_names()
+    canonical = snapshot_universe(names=names)
+
     return {
         "error": None,
         "method": "fsot_universe_monte_carlo_intelligence",
         "free_parameters": 0,
         "purpose": "Simulate the universe under FSOT; discover pathways and physics — not markets",
+        "scope": scope,
         "authority_gate": gate,
-        "atlas": atlas_meta(),
+        "atlas": meta,
         "clusters": {k: len(v) for k, v in domains_by_cluster().items()},
         "canonical_universe": {
             "emergence_fraction": canonical["emergence_fraction"],
             "mean_S": canonical["mean_S"],
             "n_emergence": canonical["n_emergence"],
             "n_dispersal": canonical["n_dispersal"],
+            "n_domains": canonical["n_domains"],
         },
         "discovery": {
             "top_ledger": discovery["top_ledger"],
             "candidates": discovery["candidates"],
             "ensemble": discovery["monte_carlo"]["ensemble"],
+            "pathway_memory": discovery.get("pathway_memory"),
+            "contested_physics": discovery.get("contested_physics"),
         },
         "domain_ensemble": discovery["domain_ensemble"],
         "long_range_bridges": discovery["long_range_bridges"],
@@ -86,46 +97,27 @@ def run_universe_scan(
     *,
     n_paths: int = 128,
     seed: int | None = 1,
+    scope: str = "core",
 ) -> dict[str, Any]:
-    """Lighter scan: MC ensemble only (no full discovery classification)."""
+    """Lighter scan: MC ensemble + pathway memory summary."""
     gate = verify_fsot_gate(require_archive=False)
-    mc = run_universe_monte_carlo(n_paths=n_paths, seed=seed, store_paths=8)
+    mc = run_universe_monte_carlo(
+        n_paths=n_paths,
+        seed=seed,
+        store_paths=8,
+        scope=scope,
+        train_pathway_memory=True,
+    )
+    public = {k: v for k, v in mc.items() if not k.startswith("_")}
     return {
-        "error": mc.get("error"),
+        "error": public.get("error"),
         "method": "fsot_universe_scan",
         "free_parameters": 0,
+        "scope": public.get("scope"),
+        "n_domains": public.get("n_domains"),
         "authority_gate": gate,
-        "ensemble": mc.get("ensemble"),
-        "discovery_hints": mc.get("discovery_hints"),
-        "canonical_snapshot": mc.get("canonical_snapshot"),
-    }
-
-
-# ---------------------------------------------------------------------------
-# Legacy market API (deprecated — not the project direction)
-# ---------------------------------------------------------------------------
-
-def run_market_intelligence_legacy(*args: Any, **kwargs: Any) -> dict[str, Any]:
-    """
-    DEPRECATED: former OHLCV / market intelligence.
-    Kept for reference only. Prefer run_intelligence() universe discovery.
-    """
-    from fsot_mc.monte_carlo import run_dynamic_fsot_monte_carlo  # local import
-
-    # Accept df as first positional for old signature compatibility
-    if args:
-        df = args[0]
-        symbol = kwargs.get("symbol", "")
-        return {
-            "error": None,
-            "deprecated": True,
-            "method": "legacy_market_mc",
-            "note": "Market MC is legacy extract — project is universe discovery.",
-            "result": run_dynamic_fsot_monte_carlo(df, persist=False, **{k: v for k, v in kwargs.items() if k != "include_bhs"}),
-            "free_parameters": 0,
-        }
-    return {
-        "error": "legacy_requires_ohlcv_dataframe",
-        "deprecated": True,
-        "free_parameters": 0,
+        "ensemble": public.get("ensemble"),
+        "discovery_hints": public.get("discovery_hints"),
+        "pathway_memory": public.get("pathway_memory"),
+        "canonical_snapshot": public.get("canonical_snapshot"),
     }
