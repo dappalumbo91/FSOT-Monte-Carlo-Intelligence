@@ -1,6 +1,11 @@
 /**
  * FSOT connective visual — Obsidian graph × neural growth.
- * Force-directed layout with ring bias by D_eff; axon pulse animation.
+ *
+ * Full archive graphs (~500 nodes / 3k edges) stay chaotic if every edge is a
+ * hard spring forever. We:
+ *  1) pin multi-scale home positions on D_eff shells (the "solidified" pattern)
+ *  2) anneal temperature so motion settles (like the small core graph did)
+ *  3) only strong-spring structural axons; dense lean-overlap is visual only
  */
 (() => {
   const canvas = document.getElementById("graph");
@@ -10,15 +15,39 @@
   let W = 0, H = 0, dpr = 1;
   let nodes = [];
   let edges = [];
+  let structuralEdges = []; // springs that actually move layout
+  let structuralIds = new Set();
   let meta = {};
   let selected = null;
   let hover = null;
   let sim = true;
   let t0 = performance.now();
+  let temp = 1.0;           // anneal 1 → 0
+  let settled = false;
+  let frame = 0;
+  let ringScale = 1.0;      // grows for dense graphs
+  let isFull = false;
 
   // camera
   let cam = { x: 0, y: 0, scale: 1 };
   let drag = null; // { mode: 'pan'|'node', id, ox, oy, nx, ny }
+
+  // Edge kinds that may tug layout (everything else is display-only axon)
+  const STRUCTURAL_KINDS = new Set([
+    "seed_to_law",
+    "law_to_domain",
+    "routes_to_core",
+    "problem_route",
+    "long_range",
+    "ladder",
+    "cluster",
+    "coupling_crosswalk_module",
+    "coupling_magnetosphere_cluster",
+    "coupling_fsot_prediction_cross_ratio",
+    "coupling_fluidlink_fpc_timing",
+    "memory_link",
+    "prediction_link",
+  ]);
 
   function resize() {
     const rect = canvas.parentElement.getBoundingClientRect();
@@ -34,78 +63,218 @@
 
   function ringRadius(ring) {
     const r = Number(ring) || 0;
-    return 40 + r * 72;
+    // wider shells when full atlas so extensions don't crush cores
+    const step = isFull ? 95 : 72;
+    return (40 + r * step) * ringScale;
+  }
+
+  function homeFor(n) {
+    const R = ringRadius(n.ring);
+    const a = n.angle != null ? n.angle : 0;
+    // seeds/law near origin with small fixed constellation
+    if (n.kind === "law") return { x: 0, y: 0 };
+    if (n.kind === "seed") {
+      const i = ["seed_pi", "seed_e", "seed_phi", "seed_gamma", "seed_catalan"].indexOf(n.id);
+      const ang = (i >= 0 ? i : 0) * (Math.PI * 2 / 5) - Math.PI / 2;
+      return { x: Math.cos(ang) * 28 * ringScale, y: Math.sin(ang) * 28 * ringScale };
+    }
+    return { x: Math.cos(a) * R, y: Math.sin(a) * R };
+  }
+
+  function classifyEdges() {
+    structuralEdges = [];
+    structuralIds = new Set();
+    const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+    for (const e of edges) {
+      const k = e.kind || "";
+      let take = false;
+      if (k === "law_to_domain") {
+        const tgt = byId[e.target];
+        // only law → core (not every extension) so full graph can solidify
+        take = !!(tgt && (tgt.is_core || (tgt.kind === "domain" && tgt.kind !== "extension" && tgt.atlas_kind !== "extension_panel")));
+        if (tgt && tgt.kind === "extension") take = false;
+      } else if (
+        STRUCTURAL_KINDS.has(k) ||
+        k.startsWith("coupling_crosswalk") ||
+        k.startsWith("coupling_magnetosphere") ||
+        k.startsWith("coupling_fsot_prediction") ||
+        k.startsWith("coupling_fluidlink") ||
+        k === "routes_to_core" ||
+        k === "problem_route"
+      ) {
+        take = true;
+      }
+      // never structural: dense lean overlap / membership spam
+      if (k === "coupling_lean_overlap" || k === "by_core_membership") take = false;
+      if (take) structuralEdges.push(e);
+    }
+    // cap structural springs for stability
+    if (structuralEdges.length > 900) {
+      structuralEdges = structuralEdges
+        .slice()
+        .sort((a, b) => (b.strength || 0) - (a.strength || 0))
+        .slice(0, 900);
+    }
+    for (const e of structuralEdges) structuralIds.add(e.id || `${e.source}->${e.target}`);
   }
 
   function initPositions() {
-    const cx = 0, cy = 0;
+    const N = nodes.length;
+    isFull = N > 80;
+    ringScale = isFull ? Math.max(1.15, Math.sqrt(N / 120)) : 1.0;
+    temp = 1.0;
+    settled = false;
+    frame = 0;
+    sim = true;
+
+    // assign stable angles if missing (by kind then label)
+    const byRing = {};
     for (const n of nodes) {
-      const R = ringRadius(n.ring);
-      const a = n.angle != null ? n.angle : Math.random() * Math.PI * 2;
-      // slight noise so force can settle
-      n.x = cx + Math.cos(a) * R + (Math.random() - 0.5) * 20;
-      n.y = cy + Math.sin(a) * R + (Math.random() - 0.5) * 20;
+      const r = Number(n.ring) || 0;
+      (byRing[r] || (byRing[r] = [])).push(n);
+    }
+    for (const r of Object.keys(byRing)) {
+      const g = byRing[r].sort((a, b) =>
+        String(a.domain || a.label || a.id).localeCompare(String(b.domain || b.label || b.id))
+      );
+      g.forEach((n, i) => {
+        if (n.angle == null || isFull) {
+          // even spacing on shell — critical for solidifying a readable pattern
+          n.angle = (2 * Math.PI * i) / Math.max(g.length, 1);
+        }
+      });
+    }
+
+    for (const n of nodes) {
+      const h = homeFor(n);
+      n.homeX = h.x;
+      n.homeY = h.y;
+      // tiny jitter only while hot — pattern is the home shell
+      const j = isFull ? 4 : 12;
+      n.x = h.x + (Math.random() - 0.5) * j;
+      n.y = h.y + (Math.random() - 0.5) * j;
       n.vx = 0;
       n.vy = 0;
+      // pin strength by role: cores/seeds firmer; extensions softer local wiggle
+      if (n.kind === "seed" || n.kind === "law") n.pin = 0.95;
+      else if (n.is_core || (n.kind === "domain" && n.atlas_kind !== "extension_panel")) n.pin = 0.72;
+      else if (n.kind === "problem_route") n.pin = 0.8;
+      else if (n.kind === "extension") n.pin = 0.88; // keep shells clean
+      else n.pin = 0.75;
     }
+    classifyEdges();
   }
 
   function stepPhysics() {
-    if (!sim) return;
+    if (!sim || settled) return;
     const N = nodes.length;
     if (!N) return;
-    const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+    frame++;
 
-    // repulsion
+    // anneal: hotter early "growth", then solidify
+    const coolFrames = isFull ? 220 : 140;
+    temp = Math.max(0, 1 - frame / coolFrames);
+    if (temp <= 0.02) {
+      // snap home and freeze — pattern solidified
+      for (const n of nodes) {
+        n.x = n.homeX;
+        n.y = n.homeY;
+        n.vx = 0;
+        n.vy = 0;
+      }
+      settled = true;
+      sim = false;
+      if ($("hud-status")) {
+        const prev = $("hud-status").textContent || "";
+        if (!prev.includes("solidified")) {
+          $("hud-status").textContent = prev.replace(/ · solidifying…$/, "") + " · pattern solidified";
+        }
+      }
+      return;
+    }
+
+    const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+    const T = temp; // scale forces
+
+    // local repulsion only (grid bins) — full O(N^2) thrashes large graphs
+    const cell = (isFull ? 55 : 70) * ringScale;
+    const grid = new Map();
     for (let i = 0; i < N; i++) {
-      for (let j = i + 1; j < N; j++) {
-        const a = nodes[i], b = nodes[j];
-        let dx = b.x - a.x, dy = b.y - a.y;
-        let d2 = dx * dx + dy * dy + 0.01;
-        let d = Math.sqrt(d2);
-        const minD = (a.size || 8) + (b.size || 8) + 18;
-        if (d < minD * 3) {
-          const f = 420 / d2;
-          const fx = (dx / d) * f, fy = (dy / d) * f;
-          a.vx -= fx; a.vy -= fy;
-          b.vx += fx; b.vy += fy;
+      const n = nodes[i];
+      const cx = Math.floor(n.x / cell);
+      const cy = Math.floor(n.y / cell);
+      const key = cx + "," + cy;
+      if (!grid.has(key)) grid.set(key, []);
+      grid.get(key).push(i);
+    }
+    const repulse = (isFull ? 180 : 420) * T;
+    for (let i = 0; i < N; i++) {
+      const a = nodes[i];
+      const cx = Math.floor(a.x / cell);
+      const cy = Math.floor(a.y / cell);
+      for (let ox = -1; ox <= 1; ox++) {
+        for (let oy = -1; oy <= 1; oy++) {
+          const bucket = grid.get((cx + ox) + "," + (cy + oy));
+          if (!bucket) continue;
+          for (const j of bucket) {
+            if (j <= i) continue;
+            const b = nodes[j];
+            let dx = b.x - a.x, dy = b.y - a.y;
+            let d2 = dx * dx + dy * dy + 0.01;
+            let d = Math.sqrt(d2);
+            const minD = ((a.size || 8) + (b.size || 8)) * 0.7 + (isFull ? 10 : 16);
+            if (d < minD * 2.2) {
+              const f = repulse / d2;
+              const fx = (dx / d) * f, fy = (dy / d) * f;
+              a.vx -= fx; a.vy -= fy;
+              b.vx += fx; b.vy += fy;
+            }
+          }
         }
       }
     }
 
-    // springs
-    for (const e of edges) {
+    // structural springs only (not the 2k lean-overlap spaghetti)
+    for (const e of structuralEdges) {
       const a = byId[e.source], b = byId[e.target];
       if (!a || !b) continue;
       let dx = b.x - a.x, dy = b.y - a.y;
       let d = Math.sqrt(dx * dx + dy * dy) + 0.01;
-      const ideal = e.kind === "law_to_domain" ? 160 : e.kind === "long_range" ? 220 : 90;
-      const k = 0.012 * (e.strength || 0.5);
+      let ideal = 90 * ringScale;
+      const knd = e.kind || "";
+      if (knd === "seed_to_law") ideal = 36 * ringScale;
+      else if (knd === "law_to_domain") ideal = Math.abs(ringRadius(b.ring || 2) - 10);
+      else if (knd === "routes_to_core") ideal = 70 * ringScale;
+      else if (knd === "long_range") ideal = 160 * ringScale;
+      else if (knd === "problem_route") ideal = 55 * ringScale;
+      else if (knd.startsWith("coupling_")) ideal = 100 * ringScale;
+      const k = (isFull ? 0.006 : 0.014) * (e.strength || 0.5) * T;
       const f = k * (d - ideal);
       const fx = (dx / d) * f, fy = (dy / d) * f;
       a.vx += fx; a.vy += fy;
       b.vx -= fx; b.vy -= fy;
     }
 
-    // ring gravity (neural shells by D_eff)
+    // HOME PIN — this is what solidifies the multi-scale shell pattern
     for (const n of nodes) {
-      const R = ringRadius(n.ring);
-      const dist = Math.sqrt(n.x * n.x + n.y * n.y) + 0.01;
-      const pull = 0.02 * (R - dist);
-      n.vx += (n.x / dist) * pull;
-      n.vy += (n.y / dist) * pull;
-      // center seed/law slightly
-      if (n.kind === "seed" || n.kind === "law") {
-        n.vx -= n.x * 0.04;
-        n.vy -= n.y * 0.04;
-      }
+      const pin = (n.pin || 0.7) * (0.35 + 0.65 * (1 - T)); // stronger as we cool
+      n.vx += (n.homeX - n.x) * pin * 0.18;
+      n.vy += (n.homeY - n.y) * pin * 0.18;
     }
 
     // integrate
+    const damp = isFull ? 0.78 : 0.82;
+    const maxV = 8 * T + 0.4;
     for (const n of nodes) {
       if (drag && drag.mode === "node" && drag.id === n.id) continue;
-      n.vx *= 0.82;
-      n.vy *= 0.82;
+      n.vx *= damp;
+      n.vy *= damp;
+      // velocity clamp prevents explosions on dense graphs
+      const sp = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+      if (sp > maxV) {
+        n.vx = (n.vx / sp) * maxV;
+        n.vy = (n.vy / sp) * maxV;
+      }
       n.x += n.vx;
       n.y += n.vy;
     }
@@ -145,41 +314,65 @@
 
     const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
 
-    // edges = neural axons
-    for (const e of edges) {
+    // edges = neural axons (dense lean-overlap drawn faint; structural pulse)
+    const maxDraw = isFull ? 2200 : edges.length;
+    const drawEdges = isFull && edges.length > maxDraw
+      ? edges.filter((e) => {
+          const k = e.kind || "";
+          return k !== "coupling_lean_overlap" && k !== "by_core_membership";
+        }).concat(
+          edges.filter((e) => e.kind === "coupling_lean_overlap").slice(0, 400)
+        )
+      : edges;
+
+    for (const e of drawEdges) {
       const a = byId[e.source], b = byId[e.target];
       if (!a || !b) continue;
       const sa = worldToScreen(a.x, a.y);
       const sb = worldToScreen(b.x, b.y);
+      // skip offscreen for speed
+      if ((sa.x < -80 && sb.x < -80) || (sa.x > W + 80 && sb.x > W + 80)) continue;
+      if ((sa.y < -80 && sb.y < -80) || (sa.y > H + 80 && sb.y > H + 80)) continue;
+
       const midX = (sa.x + sb.x) / 2;
       const midY = (sa.y + sb.y) / 2;
-      // slight curve
       const dx = sb.x - sa.x, dy = sb.y - sa.y;
-      const nx = -dy * 0.08, ny = dx * 0.08;
+      const nx = -dy * 0.06, ny = dx * 0.06;
+      const knd = e.kind || "";
+      const isDense = knd === "coupling_lean_overlap" || knd === "by_core_membership";
+      const isStruct = structuralIds.has(e.id || `${e.source}->${e.target}`) || knd === "seed_to_law" || knd === "routes_to_core" || knd === "long_range" || knd === "problem_route";
 
       ctx.beginPath();
       ctx.moveTo(sa.x, sa.y);
       ctx.quadraticCurveTo(midX + nx, midY + ny, sb.x, sb.y);
-      const alpha = e.kind === "law_to_domain" ? 0.12 : 0.35 + 0.25 * (e.strength || 0.5);
-      ctx.strokeStyle = e.color || `rgba(103,232,249,${alpha})`;
-      if (e.kind === "law_to_domain") {
-        ctx.strokeStyle = `rgba(196,181,253,${0.08 + 0.1 * (e.strength || 0.2)})`;
+      if (knd === "law_to_domain") {
+        ctx.strokeStyle = `rgba(196,181,253,${isFull ? 0.06 : 0.12})`;
+        ctx.lineWidth = 0.7;
+      } else if (isDense) {
+        ctx.strokeStyle = `rgba(34,211,238,${settled ? 0.06 : 0.04})`;
+        ctx.lineWidth = 0.5;
+      } else if (knd === "routes_to_core") {
+        ctx.strokeStyle = `rgba(163,230,53,${settled ? 0.45 : 0.3})`;
+        ctx.lineWidth = 1.1;
+      } else {
+        ctx.strokeStyle = e.color || `rgba(103,232,249,${0.25 + 0.25 * (e.strength || 0.5)})`;
+        ctx.lineWidth = knd === "long_range" ? 1.6 : 0.9;
       }
-      ctx.lineWidth = e.kind === "long_range" ? 1.8 : e.kind === "ladder" ? 1.2 : 0.9;
       ctx.globalAlpha = 1;
       ctx.stroke();
 
-      // pulse along axon (neural growth vibe)
-      if (e.animated !== false && e.kind !== "law_to_domain") {
-        const phase = (t * 0.35 + (e.strength || 0.5)) % 1;
+      // pulses only on structural axons (readable signal, not chaos)
+      const pulse = !isDense && e.animated !== false && knd !== "law_to_domain" && (isStruct || knd === "seed_to_law" || knd === "routes_to_core" || knd === "long_range" || knd === "problem_route");
+      if (pulse) {
+        const phase = (t * (settled ? 0.22 : 0.4) + (e.strength || 0.5) * 1.7) % 1;
         const px = (1 - phase) * (1 - phase) * sa.x + 2 * (1 - phase) * phase * (midX + nx) + phase * phase * sb.x;
         const py = (1 - phase) * (1 - phase) * sa.y + 2 * (1 - phase) * phase * (midY + ny) + phase * phase * sb.y;
-        const g = ctx.createRadialGradient(px, py, 0, px, py, 6);
+        const g = ctx.createRadialGradient(px, py, 0, px, py, settled ? 5 : 7);
         g.addColorStop(0, "rgba(200, 240, 255, 0.95)");
         g.addColorStop(1, "rgba(103, 232, 249, 0)");
         ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.arc(px, py, settled ? 4.5 : 6, 0, Math.PI * 2);
         ctx.fill();
       }
     }
@@ -215,18 +408,27 @@
         ctx.stroke();
       }
 
-      // labels for important / selected / zoomed
+      // labels: seeds/law always; cores when zoomed; extensions only on hover/select
       const showLabel =
         isSel || isHov ||
         n.kind === "seed" || n.kind === "law" ||
-        (cam.scale > 0.85 && (n.kind === "domain" || n.kind === "prediction")) ||
-        (n.kind === "domain" && Math.abs(n.S || 0) > 0.5);
+        n.kind === "problem_route" ||
+        (cam.scale > (isFull ? 1.1 : 0.85) && (n.is_core || n.kind === "domain") && n.kind !== "extension") ||
+        (n.is_core && Math.abs(n.S || 0) > 0.45);
       if (showLabel) {
         ctx.font = `${n.kind === "seed" || n.kind === "law" ? 12 : 10}px Segoe UI, system-ui`;
         ctx.fillStyle = "rgba(230,236,244,0.9)";
         ctx.textAlign = "center";
         ctx.fillText(n.label || n.id, s.x, s.y + r + 12);
       }
+    }
+
+    // settle progress ring
+    if (!settled && temp < 1) {
+      ctx.fillStyle = "rgba(167,139,250,0.85)";
+      ctx.font = "11px Segoe UI, system-ui";
+      ctx.textAlign = "left";
+      ctx.fillText(`solidifying pattern… ${Math.round((1 - temp) * 100)}%`, 12, H - 14);
     }
   }
 
@@ -278,6 +480,9 @@
       if (n) {
         const w = screenToWorld(sx, sy);
         n.x = w.x; n.y = w.y; n.vx = 0; n.vy = 0;
+        // dragging updates home so pattern re-solidifies around user move
+        n.homeX = w.x; n.homeY = w.y;
+        if (settled) { sim = true; settled = false; temp = 0.25; frame = Math.floor(0.75 * (isFull ? 220 : 140)); }
       }
     }
   });
@@ -346,7 +551,7 @@
       edges = g.edges || [];
       meta = g.meta || {};
       initPositions();
-      cam = { x: 0, y: 0, scale: scope === "full" ? 0.55 : 0.85 };
+      cam = { x: 0, y: 0, scale: scope === "full" ? 0.42 : 0.85 };
       $("hud-nodes").innerHTML = `nodes <strong>${g.n_nodes}</strong>`;
       $("hud-edges").innerHTML = `axons <strong>${g.n_edges}</strong>`;
       const ef = meta.map_emergence_mean;
@@ -359,7 +564,7 @@
         ? ` · archive raw couples ${ac.coupling_raw_edge_count}`
         : "";
       $("hud-status").textContent =
-        `${scope} · core ${meta.n_core_folds || "—"} · ext ${meta.n_extension_panels || 0}${green}${raw}`;
+        `${scope} · core ${meta.n_core_folds || "—"} · ext ${meta.n_extension_panels || 0}${green}${raw} · solidifying…`;
       renderLegend(g);
       renderRings(meta);
       // show archive connective summary in side panel
