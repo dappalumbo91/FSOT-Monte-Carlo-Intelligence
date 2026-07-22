@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FSOT Monte Carlo Intelligence — Connective Mind</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">◈</span>
+        <div>
+          <h1>FSOT Monte Carlo Intelligence</h1>
+          <p class="tag">Neural second-brain · multi-scale connective fluid · D1D38A · free_parameters=0</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="btn-reload" title="Rebuild graph">↻ Graph</button>
+        <button id="btn-readings" title="Accuracy readings">◎ Accuracy</button>
+        <button id="btn-solidify" title="Chew → LTM">⊙ Solidify</button>
+        <button id="btn-protocols" title="Experiment protocols">⚗ Protocols</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar left">
+        <section>
+          <h2>Mind</h2>
+          <textarea id="ask-input" rows="3" placeholder="Ask the multipath mind… seeds never move"></textarea>
+          <div class="row">
+            <label><input type="checkbox" id="ask-chew" /> chew literature</label>
+            <button id="btn-ask">Think</button>
+          </div>
+          <div id="ask-out" class="panel scroll"></div>
+        </section>
+        <section>
+          <h2>Legend</h2>
+          <ul class="legend" id="legend-list"></ul>
+        </section>
+      </aside>
+
+      <section class="stage">
+        <canvas id="graph"></canvas>
+        <div class="hud">
+          <span id="hud-nodes">—</span>
+          <span id="hud-edges">—</span>
+          <span id="hud-emerge">—</span>
+          <span id="hud-status">loading…</span>
+        </div>
+        <div class="hint">Drag · scroll zoom · click node · neural axons pulse along bridges</div>
+      </section>
+
+      <aside class="sidebar right">
+        <section>
+          <h2>Selection</h2>
+          <div id="sel-out" class="panel scroll empty">Click a seed, fold, memory, or prediction</div>
+        </section>
+        <section>
+          <h2>Scales (D<sub>eff</sub>)</h2>
+          <div id="rings-out" class="panel"></div>
+        </section>
+        <section>
+          <h2>Memory</h2>
+          <div id="mem-out" class="panel scroll"></div>
+        </section>
+        <section>
+          <h2>Readings / Protocols</h2>
+          <div id="side-out" class="panel scroll"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

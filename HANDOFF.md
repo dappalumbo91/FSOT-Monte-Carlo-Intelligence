@@ -1,7 +1,7 @@
 # Handoff — FSOT Universe Monte Carlo Intelligence
 
 **Workspace:** `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence`  
-**Version:** 0.9.0  
+**Version:** 1.0.0  
 **Mode:** **Independent** — no I:/D:/Desktop required at runtime
 
 ## Independence
@@ -40,7 +40,18 @@ python -m fsot_mc ask --chew --online -q "Compare FSOT to general relativity"
 python -m fsot_mc ask -q "What FSOT fuels should we experiment on?"
 python -m fsot_mc readings --n-paths 64
 python -m fsot_mc accuracy --json
+python -m fsot_mc serve --port 8765
+python -m fsot_mc graph
+python -m fsot_mc solidify
+python -m fsot_mc protocols
 ```
+
+## Visual stack (v1.0)
+
+- Frontend: `frontend/` (canvas neural graph + side panels)
+- API: `python -m fsot_mc serve` → `http://127.0.0.1:8765/`
+- Graph model: seeds → K → domains → bridges → memory → predictions
+- Aesthetic: Obsidian second-brain × neural growth connective tissue
 
 ## Accuracy / margins (v0.9)
 

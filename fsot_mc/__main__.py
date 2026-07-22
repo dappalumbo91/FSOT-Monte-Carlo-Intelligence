@@ -35,8 +35,14 @@ def main(argv: list[str] | None = None) -> int:
             "readings",
             "accuracy",
             "memory-status",
+            "serve",
+            "graph",
+            "solidify",
+            "protocols",
         ],
     )
+    ap.add_argument("--host", default="127.0.0.1", help="serve host")
+    ap.add_argument("--port", type=int, default=8765, help="serve port")
     ap.add_argument("-q", "--query", default="", help="Question for ask/chat")
     ap.add_argument("--n-paths", type=int, default=128)
     ap.add_argument("--seed", type=int, default=0)
@@ -310,6 +316,57 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  solidify_bar={s.get('solidify_acc_bar'):.4f}  soften={s.get('soften_acc_bar'):.4f}")
             print(f"  path={s.get('ltm_path')}")
             print(f"  doctrine: {s.get('doctrine')}")
+        return 0
+
+    if args.command == "serve":
+        from fsot_mc.server import serve
+
+        serve(host=args.host, port=args.port)
+        return 0
+
+    if args.command == "graph":
+        from fsot_mc.graph_model import build_universe_graph
+
+        g = build_universe_graph(
+            n_paths=min(args.n_paths, 64),
+            seed=args.seed,
+            scope="core",
+        )
+        if args.json:
+            print(json.dumps(g, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  CONNECTIVE GRAPH")
+            print(f"  nodes={g.get('n_nodes')} edges={g.get('n_edges')}")
+            print(f"  map_emergence={(g.get('meta') or {}).get('map_emergence_mean')}")
+            print(f"  aesthetic={g.get('aesthetic')}")
+            for line in ((g.get("meta") or {}).get("legend") or [])[:6]:
+                print(f"  · {line}")
+        return 0
+
+    if args.command == "solidify":
+        from fsot_mc.chew_solidify import solidify_corpus
+
+        r = solidify_corpus(n_paths=min(args.n_paths, 24), seed=args.seed)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            s = r.get("memory_summary") or {}
+            print(f"fsot_mc {__version__}  CHEW→LTM SOLIDIFY")
+            print(f"  topics={r.get('n_topics')} LTM={s.get('ltm_size')} solid={s.get('n_solidified')}")
+            print(f"  {r.get('note')}")
+        return 0
+
+    if args.command == "protocols":
+        from fsot_mc.experiment_protocols import list_protocol_cards
+
+        r = list_protocol_cards(query=args.query or "", limit=12)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  EXPERIMENT PROTOCOLS")
+            for c in r.get("cards") or []:
+                print(f"  {c.get('id')}: {c.get('title')}")
+                print(f"    FSOT={c.get('fsot_predicted')} {c.get('unit')}  disc={c.get('discriminant')}")
         return 0
 
     if args.command == "ask":

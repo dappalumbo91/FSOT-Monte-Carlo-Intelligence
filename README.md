@@ -5,7 +5,7 @@
 | | |
 |--|--|
 | **Author** | Damian Arthur Palumbo |
-| **Version** | 0.9.1 |
+| **Version** | 1.0.0 |
 | **Authority pin** | **D1D38A** · `free_parameters = 0` |
 | **Theory law court** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | **Product** | Universe multipath intelligence (**not** markets) |
@@ -41,6 +41,8 @@ python -m fsot_mc gate
 python -m fsot_mc independent
 python -m fsot_mc readings --n-paths 64
 python -m fsot_mc ask --think -q "What does multipath emergence mean?"
+python -m fsot_mc serve --port 8765
+# open http://127.0.0.1:8765/  — neural / Obsidian multi-scale graph UI
 ```
 
 ### Requirements
@@ -67,8 +69,31 @@ python -m fsot_mc discover
 python -m fsot_mc readings          # cross-domain accuracy vs ≤0.5% / 15% baselines
 python -m fsot_mc ask | chat        # multipath mind
 python -m fsot_mc memory-status     # STM/LTM adaptive memory
+python -m fsot_mc graph             # multi-scale connective graph JSON summary
+python -m fsot_mc solidify          # chew corpus → LTM
+python -m fsot_mc protocols         # experiment protocol cards
+python -m fsot_mc serve --port 8765 # full-stack visual UI + API
 python -m fsot_mc eyes | relay | formal | realities | apis
 ```
+
+---
+
+## Visual full stack (v1.0)
+
+Neural connective map × Obsidian second-brain aesthetic:
+
+- **Seeds** (π, e, φ, γ, G) feed **law K** at the hub  
+- **Domain folds** on D_eff rings (cluster colors, size ∝ |S|)  
+- **Ladder + long-range bridges** as pulsing neural axons  
+- **Memory engrams** + **preregistered predictions** as satellites  
+- Sidebar: multipath mind ask, accuracy readings, solidify, experiment protocols  
+
+```powershell
+python -m fsot_mc serve
+# → http://127.0.0.1:8765/
+```
+
+API: `/api/graph` `/api/ask` `/api/readings` `/api/memory` `/api/protocols` `/api/solidify` `/api/mc`
 
 ---
 

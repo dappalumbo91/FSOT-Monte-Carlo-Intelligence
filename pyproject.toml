@@ -1,6 +1,6 @@
 [project]
 name = "fsot-monte-carlo-intelligence"
-version = "0.9.1"
+version = "1.0.0"
 description = "FSOT Universe Monte Carlo intelligence — multipath fluid spacetime discovery (not markets)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -36,4 +36,4 @@ build-backend = "setuptools.build_meta"
 include = ["fsot_mc*"]
 
 [tool.setuptools.package-data]
-fsot_mc = ["PIN.json", "universe_atlas.json"]
+fsot_mc = ["PIN.json", "universe_atlas.json", "full_atlas.json"]
