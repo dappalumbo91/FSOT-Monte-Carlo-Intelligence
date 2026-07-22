@@ -5,8 +5,11 @@ All required law/data/PFLT eyes live under this folder (vendor/ + fsot_mc/).
 External I:/D:/Desktop paths are optional refresh only.
 """
 
+from fsot_mc.accuracy_gate import format_readings_text, run_accuracy_readings
+from fsot_mc.adaptive_memory import AdaptiveMemory
 from fsot_mc.api_adapters import run_api_bundle, seed_demo_cache
 from fsot_mc.authority_gate import AUTHORITY_SHA256, verify_fsot_gate
+from fsot_mc.bio_emergence import analyze_biological_emergence
 from fsot_mc.discovery import run_discovery
 from fsot_mc.formal_bridge import (
     export_lead_obligation,
@@ -36,7 +39,7 @@ from fsot_mc.fast import C_FACTOR as SEED_C
 from fsot_mc.fast import PHI as SEED_PHI
 from fsot_mc.fast import POOF as SEED_POOF
 
-__version__ = "0.7.0"
+__version__ = "0.9.1"
 __all__ = [
     "run_intelligence",
     "run_universe_scan",

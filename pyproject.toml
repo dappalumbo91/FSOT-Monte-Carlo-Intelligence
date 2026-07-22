@@ -1,6 +1,6 @@
 [project]
 name = "fsot-monte-carlo-intelligence"
-version = "0.7.0"
+version = "0.9.1"
 description = "FSOT Universe Monte Carlo intelligence — multipath fluid spacetime discovery (not markets)"
 readme = "README.md"
 requires-python = ">=3.11"

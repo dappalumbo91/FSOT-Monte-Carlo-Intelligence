@@ -200,6 +200,200 @@ def fetch_usgs_earthquake_count() -> dict[str, Any]:
     }
 
 
+def fetch_arxiv_search(query: str, *, max_results: int = 3) -> dict[str, Any]:
+    """arXiv Atom API — scientific abstract chew (no key)."""
+    import urllib.parse
+    import xml.etree.ElementTree as ET
+
+    q = urllib.parse.quote(query[:200])
+    url = (
+        f"http://export.arxiv.org/api/query?search_query=all:{q}"
+        f"&start=0&max_results={max_results}"
+    )
+    cache_key = f"arxiv:{query[:80]}:{max_results}"
+    # raw fetch may be XML
+    if not online_allowed():
+        hit = cache_get(cache_key, max_age_s=None)
+        if hit is not None:
+            return {"ok": True, "source": "stale_cache", "domain_hint": "Cosmology", "data": hit, "query": query}
+        # offline demo stub
+        demo = {
+            "entries": [
+                {
+                    "title": "Offline demo: fluid spacetime and multipath observation",
+                    "summary": (
+                        "Demo abstract for FSOT-MC chew without network. "
+                        "Unified scalar engines and cross-domain emergence."
+                    ),
+                    "id": "demo:arxiv:offline",
+                }
+            ]
+        }
+        cache_put(cache_key, demo, meta={"demo": True})
+        return {
+            "ok": True,
+            "source": "demo_offline",
+            "domain_hint": "Cosmology",
+            "data": demo,
+            "query": query,
+            "title": demo["entries"][0]["title"],
+            "excerpt": demo["entries"][0]["summary"],
+            "n_chars": len(demo["entries"][0]["summary"]),
+            "free_parameters": 0,
+        }
+
+    try:
+        req = urllib.request.Request(
+            url,
+            headers={"User-Agent": "FSOT-Monte-Carlo-Intelligence/0.7 (research)"},
+        )
+        with urllib.request.urlopen(req, timeout=25) as resp:
+            xml_bytes = resp.read()
+        root = ET.fromstring(xml_bytes)
+        ns = {"a": "http://www.w3.org/2005/Atom"}
+        entries = []
+        for ent in root.findall("a:entry", ns):
+            title = (ent.findtext("a:title", default="", namespaces=ns) or "").strip()
+            summary = (ent.findtext("a:summary", default="", namespaces=ns) or "").strip()
+            eid = (ent.findtext("a:id", default="", namespaces=ns) or "").strip()
+            entries.append({"title": title, "summary": summary[:1200], "id": eid})
+        payload = {"entries": entries}
+        cache_put(cache_key, payload, meta={"url": url})
+        excerpt = " ".join(e["summary"] for e in entries)[:1500]
+        title = entries[0]["title"] if entries else query
+        return {
+            "ok": True,
+            "source": "network",
+            "domain_hint": "Cosmology",
+            "data": payload,
+            "query": query,
+            "title": title,
+            "excerpt": excerpt,
+            "n_chars": len(excerpt),
+            "free_parameters": 0,
+        }
+    except Exception as exc:
+        hit = cache_get(cache_key, max_age_s=None)
+        if hit is not None:
+            entries = hit.get("entries") or []
+            excerpt = " ".join(e.get("summary", "") for e in entries)[:1500]
+            return {
+                "ok": True,
+                "source": "stale_cache_after_error",
+                "error": str(exc),
+                "domain_hint": "Cosmology",
+                "data": hit,
+                "query": query,
+                "title": (entries[0].get("title") if entries else query),
+                "excerpt": excerpt,
+                "n_chars": len(excerpt),
+                "free_parameters": 0,
+            }
+        return {"ok": False, "error": str(exc), "query": query, "domain_hint": "Cosmology"}
+
+
+def fetch_wikipedia_summary(title: str) -> dict[str, Any]:
+    """Wikipedia REST summary — natural language structural chew (no key)."""
+    import urllib.parse
+
+    t = urllib.parse.quote(title.replace(" ", "_")[:120])
+    url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{t}"
+    cache_key = f"wiki:{title[:80]}"
+    r = fetch(cache_key, url, max_age_s=86400 * 7)
+    if not r.get("ok"):
+        # offline demo
+        if not online_allowed():
+            demo = {
+                "title": title,
+                "extract": (
+                    f"Offline Wikipedia demo extract for '{title}'. "
+                    "General relativity describes gravity as spacetime curvature; "
+                    "quantum field theory describes particles and forces. "
+                    "FSOT proposes a single fluid scalar architecture across domains."
+                ),
+            }
+            cache_put(cache_key, demo, meta={"demo": True})
+            return {
+                "ok": True,
+                "source": "demo_offline",
+                "domain_hint": "Cosmology",
+                "data": demo,
+                "query": title,
+                "title": title,
+                "excerpt": demo["extract"],
+                "n_chars": len(demo["extract"]),
+                "free_parameters": 0,
+            }
+        return {**r, "domain_hint": "Cosmology", "query": title}
+    data = r["data"] if isinstance(r["data"], dict) else {}
+    extract = data.get("extract") or data.get("description") or ""
+    return {
+        **r,
+        "domain_hint": "Cosmology",
+        "query": title,
+        "title": data.get("title") or title,
+        "excerpt": str(extract)[:2000],
+        "n_chars": len(str(extract)),
+        "free_parameters": 0,
+    }
+
+
+def chew_science_text(query: str) -> dict[str, Any]:
+    """
+    Chew natural + structural science language for the mind.
+    Prefers arXiv; falls back to Wikipedia summary of a key phrase.
+    """
+    q = (query or "").strip()
+    if not q:
+        return {"ok": False, "error": "empty_query"}
+
+    # Prefer arXiv for science-y queries
+    arx = fetch_arxiv_search(q, max_results=2)
+    if arx.get("ok") and arx.get("excerpt"):
+        return {
+            "ok": True,
+            "source": f"arxiv:{arx.get('source')}",
+            "title": arx.get("title"),
+            "excerpt": arx.get("excerpt"),
+            "n_chars": arx.get("n_chars"),
+            "query": q,
+            "domain_hint": arx.get("domain_hint"),
+            "free_parameters": 0,
+        }
+
+    # Wikipedia: pick a topic keyword
+    topic = q
+    for key in (
+        "general relativity",
+        "quantum mechanics",
+        "cosmology",
+        "biology",
+        "fluid",
+        "spacetime",
+    ):
+        if key in q.lower():
+            topic = key.title() if key != "spacetime" else "Spacetime"
+            break
+    else:
+        # first 3 significant words
+        words = [w for w in q.replace("?", "").split() if len(w) > 3][:3]
+        topic = " ".join(words) if words else "Spacetime"
+
+    wiki = fetch_wikipedia_summary(topic)
+    if wiki.get("ok"):
+        return {
+            "ok": True,
+            "source": f"wikipedia:{wiki.get('source')}",
+            "title": wiki.get("title"),
+            "excerpt": wiki.get("excerpt"),
+            "n_chars": wiki.get("n_chars"),
+            "query": q,
+            "domain_hint": wiki.get("domain_hint"),
+            "free_parameters": 0,
+        }
+    return {"ok": False, "error": "chew_failed", "arxiv": arx, "wikipedia": wiki}
+
+
 ADAPTERS: dict[str, Callable[[], dict[str, Any]]] = {
     "nasa_apod": fetch_nasa_apod,
     "open_meteo": fetch_open_meteo_sample,

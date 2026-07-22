@@ -1,4 +1,10 @@
+# FSOT Monte Carlo Intelligence — runtime + tests
+# Python >= 3.11
 numpy>=1.26.0
 pandas>=2.2.0
 mpmath>=1.3.0
 pytest>=8.3.0
+
+# Optional (not required for gate / multipath / mind offline):
+# torch>=2.0.0          # GPU polar student: FSOT_MC_USE_TORCH=1
+# huggingface_hub>=0.23  # publish helpers only

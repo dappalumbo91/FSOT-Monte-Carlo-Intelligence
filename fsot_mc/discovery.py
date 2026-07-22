@@ -198,6 +198,45 @@ def align_real_data(mc: dict[str, Any], real: dict[str, Any] | None) -> list[dic
     return out
 
 
+def classify_engineering_leads(
+    mc: dict[str, Any],
+    *,
+    query: str = "",
+    limit: int = 12,
+) -> list[dict[str, Any]]:
+    """
+    Archive preregistered engineering / fuel / technology predictions as discovery leads.
+
+    FSOT is treated as a ToE that already produces design-level predictions (fuels,
+    thermochemistry, machine-molecule catalog, etc.). These are discovery *targets*
+    for experiment — not free invention — and sit on the same seed engine as multipath MC.
+    """
+    from fsot_mc.archive_predictions import engineering_leads_for_mc, predictions_summary
+
+    leads = engineering_leads_for_mc(mc, query=query, limit=limit)
+    summary = predictions_summary()
+    # Attach summary as a meta lead so mind/CLI can report inventory
+    if summary.get("n_predictions"):
+        leads.append(
+            {
+                "id": "ENG-ARCHIVE-INVENTORY",
+                "class": "engineering_inventory",
+                "title": "FSOT archive preregistered prediction inventory",
+                "n_predictions": summary["n_predictions"],
+                "n_engineering_fuel_related": summary.get("n_engineering_fuel_related"),
+                "source": summary.get("source"),
+                "score": 0.15,
+                "hypothesis": (
+                    f"{summary['n_predictions']} preregistered predictions loaded from archive bundle; "
+                    f"{summary.get('n_engineering_fuel_related', 0)} fuel/thermo-related. "
+                    "Each carries FSOT value, SOTA baseline, and kill discriminant."
+                ),
+                "epistemic_tier": "preregistered_design",
+            }
+        )
+    return leads
+
+
 def run_discovery(
     *,
     n_paths: int = 256,
@@ -206,9 +245,11 @@ def run_discovery(
     store_paths: int = 24,
     scope: str = "core",
     train_pathway_memory: bool = True,
+    query: str = "",
 ) -> dict[str, Any]:
     """
-    Full discovery pipeline: universe MC → pathway memory → contested pack → ledgers.
+    Full discovery pipeline: universe MC → pathway memory → contested pack →
+    archive engineering predictions → ledgers.
     """
     from fsot_mc.contested_physics import run_contested_physics_pack
 
@@ -226,13 +267,23 @@ def run_discovery(
     flips = classify_flip_hotspots(mc)
     pathways = classify_pathway_novelty(mc)
     real_align = align_real_data(mc, real_data)
+    engineering = classify_engineering_leads(mc, query=query, limit=12)
     contested = run_contested_physics_pack(mc)
     contested_leads = contested.get("probes") or []
+
+    from fsot_mc.bio_emergence import analyze_biological_emergence
+
+    bio = analyze_biological_emergence(mc, query=query)
+    bio_leads = []
+    if bio.get("hypothesis"):
+        h = dict(bio["hypothesis"])
+        h["class"] = "biological_emergence"
+        bio_leads.append(h)
 
     pathway_mem = mc.get("pathway_memory") or {}
 
     # Master ranked ledger (mixed classes)
-    ledger = contested_leads + physics + flips + pathways + real_align
+    ledger = contested_leads + physics + flips + pathways + real_align + engineering + bio_leads
     ledger.sort(key=lambda x: -float(x.get("score") or 0.0))
 
     # Drop internal object if present
@@ -260,17 +311,23 @@ def run_discovery(
             "flip_hotspots": flips[:15],
             "novel_pathways": pathways[:12],
             "real_data": real_align[:20],
+            "engineering": engineering[:15],
+            "biological_emergence": bio_leads[:5],
         },
+        "biological_emergence": bio,
         "top_ledger": ledger[:30],
         "domain_ensemble": mc_public["domain_ensemble"],
         "long_range_bridges": mc_public["long_range_bridges"],
         "sample_paths": mc_public.get("sample_paths"),
         "epistemic_note": (
             "Candidates are discovery *leads* for formal verification and lab panels. "
-            "Proved claims still live in FSOT-2.1-Lean. Tag every lead with epistemic_tier."
+            "Engineering predictions (fuels, devices) are FSOT-derived designs with preregistered "
+            "discriminants — high precision raises prior confidence; physical build still required. "
+            "Biological ~69% map occupancy is dual-framed: operational co-emergence + paradigm "
+            "natural complexity/energy window for life folds. Proved claims live in FSOT-2.1-Lean."
         ),
         "note": (
-            "Universe Monte Carlo intelligence under Fluid Spacetime Omni-Theory. "
-            "Maps domains → pathways → bridges → physics candidates. free_parameters=0."
+            "Universe Monte Carlo intelligence under Fluid Spacetime Omni-Theory (ToE paradigm shift). "
+            "Maps domains → pathways → bridges → physics + engineering + bio-emergence. free_parameters=0."
         ),
     }

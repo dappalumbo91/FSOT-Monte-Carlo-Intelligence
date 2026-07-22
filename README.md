@@ -1,66 +1,93 @@
 # FSOT Monte Carlo Intelligence
 
-**Simulate the universe under Fluid Spacetime Omni-Theory — discover new pathways and physics.**
+**Simulate the universe under Fluid Spacetime Omni-Theory — discover pathways, physics, and engineering leads.**
 
-Author: **Damian Arthur Palumbo**  
-Authority pin: **D1D38A** · `free_parameters = 0`  
-Theory law court: [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)  
-Physical archive: `I:\FSOT-Physical-Archive`
+| | |
+|--|--|
+| **Author** | Damian Arthur Palumbo |
+| **Version** | 0.9.1 |
+| **Authority pin** | **D1D38A** · `free_parameters = 0` |
+| **Theory law court** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
+| **Product** | Universe multipath intelligence (**not** markets) |
 
-> This is **not** a market or metrics product.  
-> An early extract briefly reused FSOT folds for OHLCV experiments; that is **legacy only**.  
-> The product is **universe-scale Monte Carlo intelligence** for discovery.
-
----
-
-## Vision
-
-Use FSOT’s single seed engine and domain map to:
-
-1. **Simulate** multipath histories of the fluid spacetime (observer collapse)
-2. **Walk** the D_eff ladder (quantum → life → earth → cosmos)
-3. **Discover** novel pathways, regime flips, and long-range bridges
-4. **Probe** contested physics structure (e.g. dual-anchor cosmology readouts)
-5. **Align** pathways against real FSOT data / archive anchors when available
-6. **Hand off** leads to Lean formal panels and lab verification
-
-As Above, So Below is operational: the same scalar field, different folds.
+> Paradigm: one seed-derived fluid engine; domains are folds; multipath observation histories **are** thought.  
+> Seeds never move. Discovery proposes; formal/empirical spine accepts or rejects.
 
 ---
 
-## Ontology
+## Docs
 
-| Idea | In this engine |
-|------|----------------|
-| One medium | 25D fluid; one `S = K·(T1+T2+T3)` |
-| Domain map | 35 preregistered NeuroLab folds (portable atlas) |
-| Observation | `quirk_mod` + consciousness factor → collapse probability |
-| Emergence / dispersal | sign of `S` per domain on each path |
-| Pathways | MC paths = possible observation histories of the universe |
-| Discovery | flip hotspots, novel vitality landscapes, bridge candidates |
-| Truth | Authority gate D1D38A + archive real-data optional |
+| Document | Purpose |
+|----------|---------|
+| [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the system works scientifically |
+| [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | Clone → gate → tests → readings |
+| [docs/ACHIEVEMENTS.md](docs/ACHIEVEMENTS.md) | What we achieved and why |
+| [docs/MEMORY_ARCHITECTURE.md](docs/MEMORY_ARCHITECTURE.md) | FSOT-derived STM/LTM adaptive memory |
+| [docs/UNIVERSE_INTELLIGENCE_ARCHITECTURE.md](docs/UNIVERSE_INTELLIGENCE_ARCHITECTURE.md) | Full stack architecture |
+| [HANDOFF.md](HANDOFF.md) | Maintainer handoff |
 
 ---
 
 ## Quick start
 
 ```powershell
-cd C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence
+git clone https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence.git
+cd FSOT-Monte-Carlo-Intelligence
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python -m pytest tests/ -q
 python -m fsot_mc gate
-python -m fsot_mc build-atlas
-python -m fsot_mc intel --scope core --n-paths 128 --with-formal --with-apis
-python -m fsot_mc eyes
-python -m fsot_mc formal
-python -m fsot_mc realities
-python -m fsot_mc apis
-python -m fsot_mc publish-check
+python -m fsot_mc independent
+python -m fsot_mc readings --n-paths 64
+python -m fsot_mc ask --think -q "What does multipath emergence mean?"
 ```
 
-### API
+### Requirements
+
+See [`requirements.txt`](requirements.txt):
+
+- numpy ≥ 1.26  
+- pandas ≥ 2.2  
+- mpmath ≥ 1.3  
+- pytest ≥ 8.3  
+
+Optional: network for live arXiv/Wikipedia (`FSOT_MC_ONLINE=1`); Torch for GPU polar student.
+
+---
+
+## Core commands
+
+```text
+python -m fsot_mc gate              # D1D38A authority
+python -m fsot_mc independent       # local vendor integrity
+python -m fsot_mc atlas | build-atlas
+python -m fsot_mc intel --n-paths 128 --with-formal --with-apis
+python -m fsot_mc discover
+python -m fsot_mc readings          # cross-domain accuracy vs ≤0.5% / 15% baselines
+python -m fsot_mc ask | chat        # multipath mind
+python -m fsot_mc memory-status     # STM/LTM adaptive memory
+python -m fsot_mc eyes | relay | formal | realities | apis
+```
+
+---
+
+## Ontology (short)
+
+| Idea | Engine |
+|------|--------|
+| One medium | 25D fluid; \(S = K\cdot(T_1+T_2+T_3)\) from \(\pi,e,\varphi,\gamma,G\) |
+| Domains | 35 core + 367 extension folds |
+| Observation | quirk_mod → multipath collapse histories |
+| Emergence % | mean over paths of (folds with \(S>0\))/n — map co-emergence |
+| Empirical gate | archive pooled median **≤ 0.5%** |
+| Contested baseline | often ~**15%** current models without unified spine |
+| Memory | STM working fluid + LTM solidify (φ-EWMA, Poof bars) |
+| Truth | pin D1D38A; Lean hub; experiment closes engineering |
+
+---
+
+## Python API
 
 ```python
 from fsot_mc import (
@@ -68,91 +95,68 @@ from fsot_mc import (
     run_intelligence,
     run_universe_monte_carlo,
     run_discovery,
-    snapshot_universe,
-    evaluate_domain,
+    run_accuracy_readings,
+    AdaptiveMemory,
+    ask,
 )
 
 assert verify_fsot_gate()["ok"]
+readings = run_accuracy_readings(n_paths=32, write=False)
+print(readings["headline"])
 
-# Canonical universe vitality map (35 domains)
-snap = snapshot_universe()
-print(snap["emergence_fraction"], snap["mean_S"])
+r = ask("Compare FSOT to general relativity", n_paths=32)
+print(r["answer"][:500])
 
-# Multipath universe simulation
-mc = run_universe_monte_carlo(n_paths=256, seed=0)
-
-# Full discovery intelligence
-intel = run_intelligence(n_paths=256, seed=0)
-for lead in intel["discovery"]["top_ledger"][:10]:
-    print(lead["class"], lead["id"], lead.get("score"), lead.get("hypothesis", "")[:80])
+mem = AdaptiveMemory()
+mem.observe_text("Priority: PRED-034 fuel panel experiment", source="user", domains=["Chemistry"])
+print(mem.recall("fuel experiment"))
 ```
 
 ---
 
-## Package layout
+## Accuracy (acceptable margins)
 
-| Module | Role |
-|--------|------|
-| `universe_atlas.py` + `universe_atlas.json` | 35-domain map from FSOT 2.1 authority |
-| `universe_mc.py` | Multipath universe Monte Carlo |
-| `discovery.py` | Pathway / physics / bridge candidate ledger |
-| `real_data.py` | Optional archive anchors |
-| `intelligence.py` | Primary universe intelligence API |
-| `authority_gate.py` | D1D38A fail-closed gate |
-| `fast.py` / `compute_authority.py` | Scalar engine (hot + mpmath) |
-| `monte_carlo.py`, `intrinsic.py`, `bhs_engine.py` | **Legacy market extract** (not product) |
+| Gate | Acceptable range |
+|------|------------------|
+| Archive green (pooled median) | ≤ **0.5%** |
+| Strict scalar max | ≤ **0.5%** |
+| Contested open panel vs current models | FSOT ≪ **~15%** baseline |
+| Core S recompute vs atlas | ~**0%** |
+| Multipath map occupancy | exploratory ~55–78% band (**not** the 0.5% gate) |
+
+Regenerate: `python -m fsot_mc readings`
 
 ---
 
-## Discovery outputs
+## Adaptive memory (not LLM fine-tunes)
 
-```text
-physics_candidate   — contested / unification style probes
-bridge_candidate    — long-range As Above So Below couplings
-flip_hotspot        — domains whose regime flips under observation
-pathway_novelty     — paths that rewrite multi-domain vitality
-real_data_alignment — ensemble vs archive/portable anchors
+LLMs update weights. This intelligence **must not** move seeds.
+
+- **STM** — session working buffer (Fib capacity 21)  
+- **LTM** — engrams solidify when φ-EWMA accuracy clears \(0.5+\mathrm{Poof}\) after Fib trial floors  
+- Chew (arXiv/Wiki) and multipath results **observe** into memory; they densify routing and recall  
+
+Details: [docs/MEMORY_ARCHITECTURE.md](docs/MEMORY_ARCHITECTURE.md)
+
+---
+
+## Independence
+
+All required law/data/PFLT assets live under this tree (`vendor/`, `fsot_mc/`).  
+Physical Archive path is **optional refresh only**.
+
+```powershell
+python -m fsot_mc independent
+python scripts\bootstrap_independent.py
 ```
-
-Every lead carries an **epistemic_tier** (`measured` / `scaffold` / …).  
-Proved claims still live in the Lean hub — this engine **finds leads**.
-
----
-
-## FSOT fidelity
-
-| Check | Status |
-|-------|--------|
-| Seeds only (π, e, φ, γ, Catalan) | Yes |
-| `S = K·(T1+T2+T3)` authority D1D38A | Gated |
-| 35-domain folds match archive table | Portable atlas |
-| Quantum emergence / Cosmology dispersal | Canonical signs |
-| No market LSQ / ticker D_eff fits | Product path free of them |
-
----
-
-## Publishing
-
-| Platform | Script |
-|----------|--------|
-| GitHub | `scripts/publish_github.ps1` (`gh auth login` first) |
-| Hugging Face | `scripts/publish_huggingface.ps1` |
-| Kaggle | `scripts/publish_kaggle.ps1` |
-
----
-
-## Relation to FSOT foundation
-
-| Layer | Location |
-|-------|----------|
-| Law / proofs / 400+ panels | `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full` |
-| Public data caches | `03_FSOT-PublicData` |
-| Runtime OS experiment | `10_Realities-OS` |
-| **This project** | Universe MC **intelligence & discovery** |
 
 ---
 
 ## License
 
-Apache-2.0 · Copyright 2026 Damian Arthur Palumbo  
-Research software — discovery leads are not automatic physical law.
+Apache-2.0 — see [LICENSE](LICENSE).
+
+## Related
+
+- [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) — formal multi-prover law court  
+- Physical Archive — full empirical + formal corpus (synced subset in `vendor/archive_bundle/`)

@@ -32,12 +32,16 @@ def main(argv: list[str] | None = None) -> int:
             "chat",
             "independent",
             "publish-check",
+            "readings",
+            "accuracy",
+            "memory-status",
         ],
     )
     ap.add_argument("-q", "--query", default="", help="Question for ask/chat")
     ap.add_argument("--n-paths", type=int, default=128)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--think", action="store_true", help="Show full thinking trace")
+    ap.add_argument("--chew", action="store_true", help="Chew arXiv/Wikipedia into mind (FSOT_MC_ONLINE=1 for live)")
     ap.add_argument(
         "--scope",
         default="core",
@@ -272,26 +276,72 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  torch={r['torch']}")
         return 0
 
+    if args.command in ("readings", "accuracy"):
+        from fsot_mc.accuracy_gate import format_readings_text, run_accuracy_readings
+
+        r = run_accuracy_readings(
+            n_paths=min(args.n_paths, 96),
+            seed=args.seed,
+            with_multipath=True,
+            write=True,
+        )
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  CROSS-DOMAIN ACCURACY READINGS")
+            print(format_readings_text(r))
+        # Exit 0 if integrity authority + core recompute OK (archive green is evidence load)
+        ok = bool((r.get("integrity_checks") or {}).get("authority_ok")) and bool(
+            (r.get("integrity_checks") or {}).get("core_recompute_ok")
+        )
+        return 0 if ok and not r.get("error") else 1
+
+    if args.command == "memory-status":
+        from fsot_mc.adaptive_memory import AdaptiveMemory
+
+        mem = AdaptiveMemory()
+        s = mem.summary()
+        if args.json:
+            print(json.dumps(s, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  ADAPTIVE MEMORY (STM/LTM)")
+            print(f"  STM: {s.get('stm_size')}/{s.get('stm_capacity')}")
+            print(f"  LTM: {s.get('ltm_size')}  solidified={s.get('n_solidified')}")
+            print(f"  solidify_bar={s.get('solidify_acc_bar'):.4f}  soften={s.get('soften_acc_bar'):.4f}")
+            print(f"  path={s.get('ltm_path')}")
+            print(f"  doctrine: {s.get('doctrine')}")
+        return 0
+
     if args.command == "ask":
         from fsot_mc.mind import ask
         from fsot_mc.language_relay import relay_mind_answer
 
         q = (args.query or "").strip() or "What is the state of the FSOT universe?"
-        r = ask(q, n_paths=min(args.n_paths, 96), with_eyes=False)
+        r = ask(
+            q,
+            n_paths=min(args.n_paths, 96),
+            with_eyes=False,
+            with_chew=args.chew,
+        )
         if args.json:
             print(json.dumps(r, indent=2, default=str))
             return 0 if not r.get("error") else 1
-        print(f"fsot_mc {__version__}  ASK  (Monte Carlo mind)")
+        print(f"fsot_mc {__version__}  ASK  (FSOT Monte Carlo mind · ToE)")
         print(f"  Q: {q}")
-        print(f"  domains: {', '.join((r.get('thinking') or {}).get('routed_domains') or [])}")
-        print(f"  paths: {(r.get('thinking') or {}).get('n_paths')}")
+        th = r.get("thinking") or {}
+        print(f"  domains: {', '.join(th.get('routed_domains') or [])}")
+        print(f"  paths: {th.get('n_paths')}  folds_sim: {th.get('n_domains_simulated')}")
+        print(f"  emergence_def: {th.get('emergence_fraction_definition')}")
         if args.think:
             print("  --- thinking (simulation) ---")
-            for step in ((r.get("thinking") or {}).get("steps") or []):
+            for step in th.get("steps") or []:
                 print(f"  [{step.get('step')}] {step.get('text')}")
             print("  --- answer ---")
         ans = relay_mind_answer(str(r.get("answer") or ""), r.get("thinking"))
+        # wrap answer for readability
         print(f"  A: {ans}")
+        if th.get("chew") and th["chew"].get("ok"):
+            print(f"  chew: {th['chew'].get('source')} | {th['chew'].get('title')}")
         lang = r.get("language") or {}
         if (lang.get("pflt_surface") or {}).get("ok"):
             print(f"  pflt: {(lang.get('pflt_surface') or {}).get('meanings')}")
@@ -309,7 +359,11 @@ def main(argv: list[str] | None = None) -> int:
         def _one(line: str) -> None:
             show_think = args.think or line.lower().startswith("?think")
             q = line[6:].strip() if line.lower().startswith("?think") else line
-            r = mind.think(q, n_paths=min(args.n_paths, 64))
+            r = mind.think(
+                q,
+                n_paths=min(args.n_paths, 64),
+                with_chew=args.chew,
+            )
             if args.json:
                 print(json.dumps(r, indent=2, default=str))
                 return
