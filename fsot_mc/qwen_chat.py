@@ -20,13 +20,19 @@ from typing import Any
 from fsot_mc.doc_rag import ensure_doc_index, format_hits_for_prompt, search_docs
 from fsot_mc.qwen_narrate import load_model, model_ready
 
-CHAT_SYSTEM = """You are the conversational guide for FSOT Monte Carlo Intelligence.
+CHAT_SYSTEM = """You are the conversational guide for FSOT Monte Carlo Intelligence — the product and codebase of Fluid Spacetime Omni-Theory.
+
+=== IDENTITY (never redefine) ===
+- FSOT ALWAYS means Fluid Spacetime Omni-Theory (author: Damian Arthur Palumbo). Full name, every time it matters: Fluid Spacetime Omni-Theory.
+- This repository (FSOT Monte Carlo Intelligence) IS that work: multipath Monte Carlo + connective tissue + docs under FSOT, free_parameters=0, authority pin D1D38A.
+- When the user says "FSOT", "my work", "the theory", "this project", or "this repo", they mean Fluid Spacetime Omni-Theory and this codebase — not any other expansion of the letters F-S-O-T, not a generic "framework", not finance, not an unrelated acronym.
+- Do NOT invent alternate expansions (e.g. "Finite State…", "Feature Selection…", "Federal…"). If unsure, say Fluid Spacetime Omni-Theory.
 
 Ground every answer in the DOCUMENTS and LIVE_SCALARS for this turn. Conversational colleague tone — complete replies, not table dumps, not mid-document continuations.
 
 === HARD DOCTRINE (do not redefine) ===
 1. free_parameters = 0. Authority pin D1D38A. Seeds π, e, φ, γ, Catalan never move.
-2. Law form: S = K·(T1+T2+T3) under that pin. Domains are folds of one fluid, not separate fitted models.
+2. Law form: S = K·(T1+T2+T3) under that pin. Domains are folds of one fluid spacetime, not separate fitted models.
 3. S is VITALITY, not "importance", "relevance", or "criticality":
    - S > 0 → emergence (structure-forming regime)
    - S ≤ 0 → dispersal (damping regime; still lawful, still the same fluid)
@@ -42,15 +48,25 @@ Ground every answer in the DOCUMENTS and LIVE_SCALARS for this turn. Conversatio
 8. If docs/scalars lack something, say so — do not invent free parameters, new constants, or proofs.
 9. Do NOT peer-review social recognition / mainstream status unless the user asks.
 10. Answer the user's actual question. If they ask for the green-gate vs multipath split, you MUST state both and contrast them explicitly.
+11. If they ask what FSOT is / stands for / what their work is: answer Fluid Spacetime Omni-Theory first, then this Monte Carlo intelligence product under that law.
 
 You are connected to this workspace's documentation. Documents + live scalars are the source of truth for explanation."""
 
 # Injected every turn so doctrine survives long RAG context
 DOCTRINE_CARD = """DOCTRINE CARD (must obey):
+- FSOT = Fluid Spacetime Omni-Theory (Damian Arthur Palumbo). This repo IS that work. No other acronym expansion.
 - S = vitality: S>0 emergence, S≤0 dispersal; NOT importance.
 - Green gate ≤0.5% median error ≠ multipath co-emergence fraction (~60–70% map occupancy).
 - free_parameters=0, pin D1D38A; soft court ≠ proved.
 """
+
+IDENTITY_BLOCK = (
+    "=== PROJECT IDENTITY (fixed) ===\n"
+    "FSOT = Fluid Spacetime Omni-Theory (author Damian Arthur Palumbo).\n"
+    "Product in this workspace: FSOT Monte Carlo Intelligence — multipath universe "
+    "simulation and discovery under that theory (not markets; free_parameters=0; pin D1D38A).\n"
+    "User references to FSOT / my work / the theory / this project always mean the above.\n"
+)
 
 _SESSIONS: dict[str, list[dict[str, str]]] = {}
 _SESSION_LOCK = threading.Lock()
@@ -98,6 +114,33 @@ def _live_scalars(domains: list[str]) -> list[dict[str, Any]]:
     return out
 
 
+def _looks_like_identity_query(text: str) -> bool:
+    low = (text or "").lower()
+    keys = (
+        "what is fsot",
+        "what does fsot",
+        "fsot stand",
+        "stands for",
+        "fluid spacetime",
+        "my work",
+        "my theory",
+        "this project",
+        "this repo",
+        "this repository",
+        "what is this",
+        "omni-theory",
+        "omni theory",
+        "who is damian",
+        "author",
+    )
+    if any(k in low for k in keys):
+        return True
+    # bare "fsot" with little else still benefits from identity docs
+    if re.search(r"\bfsot\b", low) and len(low.split()) <= 12:
+        return True
+    return False
+
+
 def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, Any]:
     """Retrieve docs + live scalars for one user message."""
     ensure_doc_index()
@@ -106,6 +149,16 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
     for d in domains:
         prefer.append(f"domains/{d}")
         prefer.append(d.lower())
+    if _looks_like_identity_query(user_message):
+        prefer.extend(
+            [
+                "METHODOLOGY",
+                "REPRODUCIBILITY",
+                "ACHIEVEMENTS",
+                "CLAIMS",
+                "Fluid Spacetime Omni-Theory",
+            ]
+        )
     retrieved = search_docs(user_message, limit=limit_docs, prefer_paths=prefer)
     # force-pull full primary domain theses when named
     hits = list(retrieved.get("hits") or [])
@@ -116,6 +169,39 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
             for h in extra.get("hits") or []:
                 if h not in hits:
                     hits.insert(0, h)
+    # identity questions: force methodology / achievements into the pack
+    if _looks_like_identity_query(user_message):
+        for q, pref in (
+            ("Fluid Spacetime Omni-Theory free_parameters", ["METHODOLOGY"]),
+            ("FSOT Monte Carlo Intelligence product paradigm", ["ACHIEVEMENTS", "METHODOLOGY"]),
+        ):
+            extra = search_docs(q, limit=2, prefer_paths=pref)
+            for h in extra.get("hits") or []:
+                if not any(x.get("path") == h.get("path") for x in hits):
+                    hits.insert(0, h)
+        # hard-inject first chunks of key product docs if still missing
+        from pathlib import Path
+        from fsot_mc.paths import PACKAGE_ROOT
+
+        for rel in ("docs/METHODOLOGY.md", "docs/ACHIEVEMENTS.md"):
+            if any((h.get("path") or "").replace("\\", "/").endswith(rel.split("/", 1)[-1]) for h in hits):
+                continue
+            p = PACKAGE_ROOT / rel
+            if not p.is_file():
+                continue
+            try:
+                text = p.read_text(encoding="utf-8", errors="replace")[:2200]
+            except OSError:
+                continue
+            hits.insert(
+                0,
+                {
+                    "path": rel.replace("\\", "/"),
+                    "title": p.stem,
+                    "body": text,
+                    "score": 1e6,
+                },
+            )
     hits = hits[:limit_docs]
     scalars = _live_scalars(domains)
     docs_text = format_hits_for_prompt(hits, max_total_chars=5500)
@@ -127,9 +213,10 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
     live = "\n".join(scalar_lines) if scalar_lines else "(no domain scalars extracted this turn)"
 
     block = (
+        f"{IDENTITY_BLOCK}\n"
         "=== DOCUMENTS RETRIEVED FROM PROJECT (read these) ===\n"
         f"{docs_text}\n\n"
-        "=== LIVE FSOT SCALARS (engine, free_parameters=0) ===\n"
+        "=== LIVE FSOT SCALARS (Fluid Spacetime Omni-Theory engine, free_parameters=0) ===\n"
         f"{live}\n"
         "=== END RETRIEVED MATERIAL ===\n"
     )
@@ -209,6 +296,7 @@ def chat(
         f"{ctx['context_block']}\n\n"
         f"USER MESSAGE:\n{message}\n\n"
         "Reply as a complete conversational answer. Use DOCUMENTS + LIVE_SCALARS. "
+        "FSOT always expands to Fluid Spacetime Omni-Theory; this project is that work. "
         "Define S only as vitality (emergence/dispersal). "
         "If the question touches multipath or green gate, keep those two metrics distinct. "
         "Do not continue a document mid-stream. Do not invent free parameters."
@@ -327,6 +415,24 @@ def grade_reply(reply: str, *, expect: dict[str, Any] | None = None) -> dict[str
     r = (reply or "").lower()
     expect = expect or {}
     checks = {}
+    # Identity: Fluid Spacetime Omni-Theory when asked what FSOT is
+    if expect.get("need_fsot_identity"):
+        checks["names_fluid_spacetime_omni"] = (
+            "fluid spacetime" in r
+            or "fluid space-time" in r
+            or ("omni-theory" in r or "omni theory" in r)
+            or "fluid spacetime omni" in r.replace("-", " ")
+        )
+        # reject common wrong expansions the base model might invent
+        bad = (
+            "finite state",
+            "feature selection",
+            "federal support",
+            "forward stock",
+            "file system object",
+            "full spectrum of training",
+        )
+        checks["avoids_wrong_fsot_acronym"] = not any(x in r for x in bad)
     # S not importance
     checks["avoids_importance_gloss"] = not any(
         x in r for x in ("importance of the fold", "most critical fold", "relevance of the fold", "not the most critical")
