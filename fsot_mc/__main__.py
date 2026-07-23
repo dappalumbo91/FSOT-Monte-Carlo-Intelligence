@@ -43,6 +43,7 @@ def main(argv: list[str] | None = None) -> int:
             "literature-index",
             "literature-search",
             "literature-status",
+            "scientific-audit",
         ],
     )
     ap.add_argument("--host", default="127.0.0.1", help="serve host")
@@ -455,6 +456,25 @@ def main(argv: list[str] | None = None) -> int:
         if args.json:
             print(json.dumps(results, indent=2, default=str))
         return 0 if all((v or {}).get("ok", True) for v in results.values()) else 1
+
+    if args.command == "scientific-audit":
+        from fsot_mc.scientific_audit import format_audit_markdown, run_scientific_audit
+
+        r = run_scientific_audit(write=True, include_self=True)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  SCIENTIFIC INTELLIGENCE AUDIT")
+            print(f"  grade={r.get('grade')} score={r.get('overall_score')}")
+            print(f"  pass={r.get('n_pass')}/{r.get('n_checks')}  critical_fail={r.get('critical_failures')}")
+            print(f"  high_fail={r.get('high_failures')}")
+            for c in r.get("checks") or []:
+                flag = "PASS" if c.get("ok") else "FAIL"
+                print(f"  [{flag}] {c.get('id')} {c.get('score'):.2f}  {c.get('title')}")
+                print(f"         {c.get('finding')}")
+            print(f"  report: {(r.get('written') or {}).get('markdown')}")
+            print(f"  json:   {(r.get('written') or {}).get('latest')}")
+        return 0 if not r.get("critical_failures") else 2
 
     if args.command == "literature-search":
         from fsot_mc.literature_corpus import literature_search
