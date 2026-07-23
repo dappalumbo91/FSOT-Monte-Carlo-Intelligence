@@ -35,3 +35,7 @@ vendor/models/**
 # Optional full coupling is now shipped via Git LFS (see .gitattributes)
 # vendor/archive_bundle/data__domain_coupling_simulation_benchmark.json
 
+
+.hf_token
+*.hf_token
+
