@@ -594,8 +594,9 @@
     const rows = [
       `<div class="answer-block"><span class="label">Node</span><div><strong>${esc(n.label)}</strong> <span class="chip">${esc(n.kind)}</span></div></div>`,
       n.domain ? `<div>Domain: <code>${esc(n.domain)}</code></div>` : "",
-      n.cluster ? `<div>Science family: <span class="chip" style="border-color:${esc(n.color || "#8892a4")}">${esc(n.cluster)}</span></div>` : "",
-      n.D_eff != null ? `<div>D<sub>eff</sub> = ${n.D_eff} · ring ${n.ring}</div>` : "",
+      n.physics_spine ? `<div>Physics spine: <span class="chip" style="border-color:${esc(n.color || "#8892a4")}">${esc(n.physics_spine)}</span> <span style="opacity:.7">(As Above So Below hue)</span></div>` : "",
+      n.cluster ? `<div>Archive cluster: <span class="chip">${esc(n.cluster)}</span></div>` : "",
+      n.D_eff != null ? `<div>D<sub>eff</sub> = ${n.D_eff} · ring ${n.ring}${n.scale_band ? ` · band <code>${esc(n.scale_band)}</code>` : ""} <span style="opacity:.7">(dimensional interface)</span></div>` : "",
       n.S != null ? `<div>S = ${Number(n.S).toFixed(4)} · ${esc(n.regime || "")} <span style="opacity:.65">(canonical)</span></div>` : "",
       n.S_path_mean != null ? `<div>S<sub>path</sub> = ${Number(n.S_path_mean).toFixed(4)} <span style="opacity:.65">(multipath)</span></div>` : "",
       n.median_error_pct != null ? `<div class="chip gold">median_error ${Number(n.median_error_pct).toFixed(4)}% ${Number(n.median_error_pct) <= 0.5 ? "✓ green gate" : ""}</div>` : "",
@@ -681,11 +682,25 @@
     const items = (g.meta && g.meta.legend) || [];
     const colors = (g.meta && g.meta.cluster_colors) || {};
     ul.innerHTML = items.map((t) => `<li><span class="swatch" style="background:${colors.seed || '#fff'};color:${colors.seed || '#fff'}"></span>${esc(t)}</li>`).join("");
-    // cluster swatches
-    const clusters = Object.keys(colors).filter((k) => !["seed", "law", "memory", "prediction", "bridge"].includes(k));
-    ul.innerHTML += clusters.map((c) =>
-      `<li><span class="swatch" style="background:${colors[c]};color:${colors[c]}"></span>${esc(c)}</li>`
-    ).join("");
+    // physics spine swatches (As Above So Below)
+    const spines = (g.meta && g.meta.physics_spine_hues) || {};
+    const spineNames = Object.keys(spines).filter((k) =>
+      ["particle_quantum", "atomic_optical", "matter_energy", "life_mind", "earth_complex", "astro_structure", "cosmo_unification", "formal_math"].includes(k)
+    );
+    if (spineNames.length) {
+      ul.innerHTML += `<li style="margin-top:0.35rem;opacity:0.75">Physics spines (hue) · D_eff = ring depth</li>`;
+      ul.innerHTML += spineNames.map((c) => {
+        const h = spines[c];
+        // approx mid-scale sample color from hue
+        const sample = `hsl(${h} 70% 52%)`;
+        return `<li><span class="swatch" style="background:${sample};color:${sample}"></span>${esc(c)}</li>`;
+      }).join("");
+    } else {
+      const clusters = Object.keys(colors).filter((k) => !["seed", "law", "memory", "prediction", "bridge"].includes(k));
+      ul.innerHTML += clusters.map((c) =>
+        `<li><span class="swatch" style="background:${colors[c]};color:${colors[c]}"></span>${esc(c)}</li>`
+      ).join("");
+    }
   }
 
   function renderRings(m) {

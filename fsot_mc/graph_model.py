@@ -28,9 +28,7 @@ from fsot_mc.universe_mc import run_universe_monte_carlo
 SEED_PHI = float(PHI)
 SEED_POOF = float(POOF)
 
-# Cluster → hue for frontend (CSS-friendly)
-# Scientific families color BOTH core folds and their extension panels.
-# (Old bug: green-gate extensions were painted flat slate → looked "unknown".)
+# Cluster → hue for frontend (CSS-friendly) — kept for legend / backward compat
 CLUSTER_COLORS: dict[str, str] = {
     "quantum_particle": "#7c5cff",
     "atomic_molecular_optical": "#3ecf8e",
@@ -38,7 +36,7 @@ CLUSTER_COLORS: dict[str, str] = {
     "earth_complex_systems": "#f0b429",
     "astro_planetary": "#4cc9f0",
     "cosmo_unification": "#ff8c42",
-    "extension": "#5b6b8a",  # only when no scientific cluster is known
+    "extension": "#5b6b8a",
     "problem_route": "#f472b6",
     "unknown": "#8892a4",
     "seed": "#ffffff",
@@ -60,6 +58,74 @@ SCIENCE_CLUSTERS: tuple[str, ...] = (
     "astro_planetary",
     "cosmo_unification",
 )
+
+# ── As Above, So Below color doctrine ─────────────────────────────────────
+# Same *physics spine* → same hue family (shared law across scales).
+# D_eff dimensional interface → ring (layout) + lightness (depth in that spine).
+# Low D_eff = micro/bright; high D_eff = macro/deep. Seeds never move.
+
+PHYSICS_SPINE_HUE: dict[str, float] = {
+    # degrees on the color wheel
+    "particle_quantum": 265.0,  # violet — particle / QM / nuclear
+    "atomic_optical": 155.0,  # teal-green — AMO / spectroscopy
+    "matter_energy": 340.0,  # rose — materials / chem / fluid / energy
+    "life_mind": 320.0,  # magenta — bio / neural / consciousness
+    "earth_complex": 42.0,  # gold — earth systems / ecology / socio
+    "astro_structure": 195.0,  # cyan — stars / planets / galaxies
+    "cosmo_unification": 24.0,  # orange — cosmology / BH / CMB / QG
+    "formal_math": 210.0,  # steel-blue — formal priors / pure math
+    "problem_route": 330.0,
+    "seed": 0.0,
+    "law": 270.0,
+    "prediction": 45.0,
+    "memory": 210.0,
+    "unknown": 220.0,
+}
+
+# maps_to_lean / routes / name cues → physics spine (As Above So Below kinship)
+_SPINE_TAG_MAP: list[tuple[str, tuple[str, ...]]] = [
+    ("particle_quantum", ("particle", "quantum", "nuclear", "higgs", "muon", "lepton", "hadron", "electron", "plasma", "fusion")),
+    ("atomic_optical", ("atomic", "optical", "photon", "laser", "spectro", "acoustical", "acoustics")),
+    ("matter_energy", ("material", "chemical", "energy", "fluid", "fuel", "thermo", "condensed")),
+    ("life_mind", ("biological", "neural", "consciousness", "medical", "genetics", "codon", "bio", "neuro", "psychology")),
+    ("earth_complex", ("ecological", "economic", "earth", "climate", "ocean", "seismo", "meteo", "socio", "ionosph")),
+    ("astro_structure", ("astronomical", "galactic", "stellar", "planet", "solar", "astro")),
+    ("cosmo_unification", ("cosmological", "blackhole", "cmb", "hubble", "dark", "inflation", "string", "quantum_gravity")),
+    ("formal_math", ("mathematical", "ai", "formal", "lean", "linguistic", "computer")),
+]
+
+_CLUSTER_TO_SPINE: dict[str, str] = {
+    "quantum_particle": "particle_quantum",
+    "atomic_molecular_optical": "atomic_optical",
+    "life_matter_energy": "matter_energy",  # refined further by lean tags when bio
+    "earth_complex_systems": "earth_complex",
+    "astro_planetary": "astro_structure",
+    "cosmo_unification": "cosmo_unification",
+}
+
+
+def _hsl_to_hex(h: float, s: float, light: float) -> str:
+    """h in [0,360), s,l in [0,1] → #rrggbb"""
+    h = h % 360.0
+    s = max(0.0, min(1.0, s))
+    light = max(0.0, min(1.0, light))
+    c = (1 - abs(2 * light - 1)) * s
+    x = c * (1 - abs((h / 60.0) % 2 - 1))
+    m = light - c / 2
+    if h < 60:
+        rp, gp, bp = c, x, 0.0
+    elif h < 120:
+        rp, gp, bp = x, c, 0.0
+    elif h < 180:
+        rp, gp, bp = 0.0, c, x
+    elif h < 240:
+        rp, gp, bp = 0.0, x, c
+    elif h < 300:
+        rp, gp, bp = x, 0.0, c
+    else:
+        rp, gp, bp = c, 0.0, x
+    r, g, b = int((rp + m) * 255), int((gp + m) * 255), int((bp + m) * 255)
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 
 def _blend_hex(hex_color: str, toward: str = "#1a2230", t: float = 0.35) -> str:
@@ -90,6 +156,101 @@ def _resolve_cluster(n: dict[str, Any]) -> str:
         if c and c not in ("extension", "unknown", ""):
             return c
     return "extension"
+
+
+def resolve_physics_spine(n: dict[str, Any]) -> str:
+    """
+    Physics kinship for As Above, So Below coloring.
+    Same spine ⇒ same hue; D_eff places the node on the dimensional interface.
+    """
+    kind = n.get("kind") or ""
+    if kind == "problem_route":
+        return "problem_route"
+    if kind == "seed":
+        return "seed"
+    if kind == "law":
+        return "law"
+    if kind == "prediction":
+        return "prediction"
+    if kind == "memory":
+        return "memory"
+
+    blob_parts: list[str] = []
+    for t in n.get("maps_to_lean") or []:
+        blob_parts.append(str(t).lower())
+    for t in n.get("tags") or []:
+        blob_parts.append(str(t).lower())
+    blob_parts.append(str(n.get("routes_to_core") or "").lower())
+    blob_parts.append(str(n.get("domain") or n.get("label") or "").lower().replace("_", " "))
+    blob_parts.append(str(n.get("lean_module") or "").lower())
+    blob = " ".join(blob_parts)
+
+    # life_matter cluster is dual: bio vs materials
+    cluster = _resolve_cluster(n)
+    if cluster == "life_matter_energy":
+        if any(k in blob for k in ("bio", "neuro", "conscious", "medical", "gene", "codon", "psych", "life")):
+            return "life_mind"
+        if any(k in blob for k in ("material", "chem", "fluid", "energy", "fuel", "thermo")):
+            return "matter_energy"
+
+    for spine, keys in _SPINE_TAG_MAP:
+        if any(k in blob for k in keys):
+            return spine
+
+    if cluster in _CLUSTER_TO_SPINE:
+        return _CLUSTER_TO_SPINE[cluster]
+    return "unknown"
+
+
+def scale_band(d_eff: float | int | None) -> str:
+    """Dimensional interface band (As Above So Below ladder)."""
+    try:
+        d = float(d_eff if d_eff is not None else 12)
+    except (TypeError, ValueError):
+        d = 12.0
+    if d <= 8:
+        return "micro"  # particle / atomic interface
+    if d <= 16:
+        return "meso"  # life / earth / lab scale
+    return "macro"  # astro / cosmo interface
+
+
+def color_as_above_so_below(
+    *,
+    spine: str,
+    d_eff: float | int | None,
+    is_core: bool = False,
+    is_extension: bool = False,
+) -> dict[str, Any]:
+    """
+    Hue  = physics spine (shared law / kinship)
+    Light = D_eff (micro bright → macro deep)
+    Sat   = slightly lower for extensions
+    """
+    hue = PHYSICS_SPINE_HUE.get(spine, PHYSICS_SPINE_HUE["unknown"])
+    try:
+        d = float(d_eff if d_eff is not None else 12.0)
+    except (TypeError, ValueError):
+        d = 12.0
+    # normalize D_eff ~1..25 → t in 0..1
+    t = max(0.0, min(1.0, (d - 1.0) / 24.0))
+    # micro: light ~0.62; macro: light ~0.38 (still visible on dark UI)
+    light = 0.62 - 0.24 * t
+    sat = 0.72 if is_core else (0.55 if is_extension else 0.65)
+    if spine in ("seed", "law"):
+        sat, light = 0.15, 0.92
+    if spine == "prediction":
+        sat, light = 0.78, 0.55
+    hex_c = _hsl_to_hex(hue, sat, light)
+    return {
+        "color": hex_c,
+        "physics_spine": spine,
+        "scale_band": scale_band(d),
+        "hue": hue,
+        "lightness": light,
+        "saturation": sat,
+        "D_eff": d,
+    }
 
 
 LAYER_EDGE_COLORS: dict[str, str] = {
@@ -192,7 +353,7 @@ def build_domain_nodes(*, scope: str = "core", mc: dict[str, Any] | None = None)
         by_d.setdefault(d, []).append(n)
 
     for D, group in sorted(by_d.items()):
-        # Build rows first so we can order each shell by signed S (not A–Z)
+        # Build rows first so we can order each shell by physics spine then S
         rows: list[dict[str, Any]] = []
         for name in group:
             try:
@@ -205,7 +366,19 @@ def build_domain_nodes(*, scope: str = "core", mc: dict[str, Any] | None = None)
                     S_path = float(de[name].get("S_path_mean", S_can))
                     flip = float(de[name].get("flip_rate") or 0)
                 cluster = base.get("cluster") or "unknown"
-                color = CLUSTER_COLORS.get(cluster, CLUSTER_COLORS["unknown"])
+                draft = {
+                    "domain": name,
+                    "label": name.replace("_", " "),
+                    "kind": "domain",
+                    "cluster": cluster,
+                    "maps_to_lean": base.get("maps_to_lean") or [],
+                    "tags": base.get("tags") or [],
+                    "routes_to_core": base.get("routes_to_core"),
+                    "is_core": True,
+                    "D_eff": D,
+                }
+                spine = resolve_physics_spine(draft)
+                paint = color_as_above_so_below(spine=spine, d_eff=D, is_core=True)
                 size = 6 + min(16, abs(S_can) * 14)
                 rows.append(
                     {
@@ -213,8 +386,8 @@ def build_domain_nodes(*, scope: str = "core", mc: dict[str, Any] | None = None)
                         "label": name.replace("_", " "),
                         "domain": name,
                         "kind": "domain",
-                        "group": cluster,
-                        "color": color,
+                        "group": spine,
+                        "color": paint["color"],
                         "size": float(size),
                         "D_eff": D,
                         "S": S_can,
@@ -224,7 +397,11 @@ def build_domain_nodes(*, scope: str = "core", mc: dict[str, Any] | None = None)
                         "flip_rate": flip,
                         "ring": max(1, min(6, int(1 + D / 5))),
                         "cluster": cluster,
+                        "physics_spine": spine,
+                        "scale_band": paint["scale_band"],
+                        "color_family": spine,
                         "is_core": True,
+                        "layout_mode": "deff_ring_physics_s",
                     }
                 )
             except Exception:
@@ -454,21 +631,42 @@ def build_prediction_nodes() -> tuple[list[dict[str, Any]], list[dict[str, Any]]
 
 
 def _s_sort_key(n: dict[str, Any]) -> tuple:
-    """Order within a D_eff ring: cores first, then by signed S, then name."""
+    """
+    Order within a D_eff ring (dimensional shell):
+      1) physics spine (As Above So Below kinship clump)
+      2) cores before extensions
+      3) signed S (vitality)
+      4) name
+    """
+    spine = str(n.get("physics_spine") or resolve_physics_spine(n))
+    # stable order around the wheel matching hue families roughly
+    spine_order = {
+        "particle_quantum": 0,
+        "atomic_optical": 1,
+        "matter_energy": 2,
+        "life_mind": 3,
+        "earth_complex": 4,
+        "astro_structure": 5,
+        "cosmo_unification": 6,
+        "formal_math": 7,
+        "problem_route": 8,
+        "unknown": 9,
+    }
     is_core = 0 if (n.get("is_core") or n.get("atlas_kind") == "core") else 1
     s = float(n["S"]) if n.get("S") is not None else 0.0
     name = str(n.get("domain") or n.get("label") or n.get("id") or "")
-    return (is_core, s, name)
+    return (spine_order.get(spine, 9), is_core, s, name)
 
 
 def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """
-    Classic multi-scale layout (original visual):
-      ring  = f(D_eff) shells around law K
-      angle = even spacing on shell, ordered by signed S (not alphabet)
+    Classic multi-scale layout + As Above So Below color doctrine:
 
-    Color = scientific cluster family for cores AND extensions.
-    Extensions are slightly muted so cores still pop; green-gate is a badge, not slate.
+      ring  = f(D_eff) shells — dimensional interface around law K
+      angle = physics spine clumps, then signed S on each shell
+      color = physics spine hue; lightness tracks D_eff (micro→macro)
+
+    Green-gate is a status badge, not a gray color wipe.
     """
     by_ring: dict[int, list[dict[str, Any]]] = {}
     out = []
@@ -484,6 +682,10 @@ def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, 
                 n["regime"] = "emergence" if n["S"] > 0 else "dispersal"
             except (TypeError, ValueError):
                 pass
+        # physics kinship before sort/color
+        spine = resolve_physics_spine(n)
+        n["physics_spine"] = spine
+        n["scale_band"] = scale_band(n.get("D_eff"))
         by_ring.setdefault(ring, []).append(n)
     for ring, group in by_ring.items():
         group_sorted = sorted(group, key=_s_sort_key)
@@ -495,29 +697,30 @@ def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, 
             )
             cluster = _resolve_cluster(n)
             n["cluster"] = cluster
-            # keep group aligned with science family (not the word "extension")
-            if kind != "problem_route" and cluster in SCIENCE_CLUSTERS:
-                n["group"] = cluster
-            elif kind == "problem_route":
+            spine = n.get("physics_spine") or resolve_physics_spine(n)
+            n["physics_spine"] = spine
+            # group for UI = physics spine (As Above So Below)
+            if kind == "problem_route":
                 n["group"] = "problem_route"
             else:
-                n["group"] = n.get("group") or cluster
+                n["group"] = spine
 
+            paint = color_as_above_so_below(
+                spine=spine,
+                d_eff=n.get("D_eff"),
+                is_core=is_core or kind == "domain",
+                is_extension=is_ext,
+            )
             if kind == "problem_route":
                 color = CLUSTER_COLORS["problem_route"]
                 size = 10
             else:
-                base = CLUSTER_COLORS.get(cluster, CLUSTER_COLORS["unknown"])
+                color = paint["color"]
                 if is_core or kind == "domain":
-                    # full-bright NeuroLab / core fold
-                    color = base
                     size = 6 + min(14, abs(float(n["S"])) * 12) if n.get("S") is not None else 10
                 elif is_ext:
-                    # same family hue, muted — still readable, not "unknown slate"
-                    color = _blend_hex(base, toward="#1a2230", t=0.42)
                     size = 4 + min(8, (abs(float(n["S"])) * 8) if n.get("S") is not None else 3)
                 else:
-                    color = base
                     size = 6 + min(14, abs(float(n["S"])) * 12) if n.get("S") is not None else 8
 
             # Green gate is a *status badge*, not a color wipe to gray
@@ -526,20 +729,23 @@ def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, 
             n["green_gate"] = bool(green)
             n["color"] = color
             n["size"] = float(size)
-            n["color_family"] = cluster
-            # even on shell (original aesthetic) + mild ring phase offset
+            n["color_family"] = spine
+            n["scale_band"] = paint.get("scale_band")
+            # even on shell; phase offset by ring keeps shells readable
             n["angle"] = (2 * math.pi * i) / max(len(group_sorted), 1) + ring * 0.07
-            n["layout_mode"] = "deff_ring_s_ordered"
+            n["layout_mode"] = "deff_ring_physics_s"
             out.append(n)
     return out
 
 
 def reassign_ring_angles_by_s(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """After S updates, re-space each D_eff ring by signed S (keeps classic shells)."""
+    """After S updates, re-space each D_eff ring by physics spine then S."""
     by_ring: dict[int, list[dict[str, Any]]] = {}
     for n in nodes:
         if n.get("kind") in ("seed", "law", "memory", "prediction"):
             continue
+        if not n.get("physics_spine"):
+            n["physics_spine"] = resolve_physics_spine(n)
         ring = int(n.get("ring") or max(1, min(8, int(1 + int(n.get("D_eff") or 12) / 4))))
         n["ring"] = ring
         by_ring.setdefault(ring, []).append(n)
@@ -547,6 +753,7 @@ def reassign_ring_angles_by_s(nodes: list[dict[str, Any]]) -> list[dict[str, Any
         group_sorted = sorted(group, key=_s_sort_key)
         for i, n in enumerate(group_sorted):
             n["angle"] = (2 * math.pi * i) / max(len(group_sorted), 1) + ring * 0.07
+            n["layout_mode"] = "deff_ring_physics_s"
     return nodes
 
 
@@ -648,8 +855,19 @@ def build_universe_graph(
                 n["flip_rate"] = de[dom].get("flip_rate")
             if n.get("is_core") and n.get("S") is not None:
                 n["size"] = 6 + min(14, abs(float(n["S"])) * 12)
-                n["color"] = CLUSTER_COLORS.get(n.get("cluster") or "", CLUSTER_COLORS["unknown"])
-        # Re-space shells by S after canonical restore (same classic rings)
+                # keep As Above So Below paint (physics spine + D_eff lightness)
+                spine = n.get("physics_spine") or resolve_physics_spine(n)
+                paint = color_as_above_so_below(
+                    spine=spine,
+                    d_eff=n.get("D_eff"),
+                    is_core=True,
+                )
+                n["physics_spine"] = spine
+                n["color"] = paint["color"]
+                n["scale_band"] = paint["scale_band"]
+                n["color_family"] = spine
+                n["group"] = spine
+        # Re-space shells by physics spine + S after canonical restore
         reassign_ring_angles_by_s(domains)
         # law → core only (not every extension — avoids visual washout)
         law_edges = []
@@ -733,17 +951,19 @@ def build_universe_graph(
             "n_predictions": len(pred_nodes),
             "clusters": domains_by_cluster(),
             "cluster_colors": CLUSTER_COLORS,
+            "physics_spine_hues": PHYSICS_SPINE_HUE,
             "layer_edge_colors": LAYER_EDGE_COLORS,
             "archive_connective": archive_meta,
             "rings": {
                 "0": "seeds (π e φ γ G) + law K",
-                "1-6": "D_eff shells — nodes ordered by signed S on each ring",
-                "layout": "classic multi-scale rings (original look) + S organization",
+                "1-6": "D_eff shells — dimensional interface (As Above So Below scale)",
+                "layout": "ring = D_eff · angle = physics spine then S · color = spine hue / D_eff lightness",
                 "5": "problem-route intents (navigator)",
                 "7": "memory engrams (LTM)",
                 "8": "preregistered predictions",
             },
-            "layout_mode": "deff_ring_s_ordered",
+            "layout_mode": "deff_ring_physics_s",
+            "color_doctrine": "as_above_so_below",
             "layers": [
                 "seed_to_law",
                 "law_to_domain",
@@ -755,15 +975,14 @@ def build_universe_graph(
                 "memory / prediction",
             ],
             "legend": [
-                "White = seeds (π,e,φ,γ,G) → violet K law hub",
-                "Bright cluster hues = 35 core NeuroLab folds (size ∝ |S|)",
-                "Same hues, slightly muted = extension panels in that science family (not unknown)",
-                "Purple / green / pink / gold / cyan / orange = quantum / AMO / life / earth / astro / cosmo",
-                "Lime axons = routes_to_core (panel → core validation spine)",
-                "Pink hubs = problem routes (navigator intents)",
-                "Cyan axons = archive domain-coupling validations (crosswalk / lean tags)",
-                "Gold = preregistered predictions · Grey = adaptive memory",
-                "Green-gate ≤0.5% is a status badge on the node — not a gray color wipe",
+                "As Above So Below: same physics spine → same hue family",
+                "Ring radius = D_eff dimensional interface (micro inner → macro outer)",
+                "Lightness tracks D_eff (brighter=micro, deeper=macro) within a spine",
+                "Angle on shell: physics kinship clumps, then signed S vitality",
+                "Violet particle/QM · teal AMO · rose matter/energy · magenta life/mind",
+                "Gold earth · cyan astro · orange cosmo · steel formal math",
+                "Lime axons = routes_to_core · cyan = archive couplings · gold = PREDs",
+                "Green-gate ≤0.5% is a status badge — not a gray wipe",
             ],
         },
         "note": (
