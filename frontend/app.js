@@ -840,6 +840,60 @@
   if ($("scope-select")) $("scope-select").onchange = () => loadGraph();
   if ($("btn-view-2d")) $("btn-view-2d").onclick = () => setViewMode("2d");
   if ($("btn-view-3d")) $("btn-view-3d").onclick = () => setViewMode("3d");
+
+  async function restartServer() {
+    const hud = $("hud-status");
+    if (hud) hud.textContent = "restarting server…";
+    if ($("btn-restart")) $("btn-restart").disabled = true;
+    try {
+      const r = await api("/api/server/restart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+      });
+      if (hud) {
+        hud.textContent = r.already_scheduled
+          ? "restart already in progress — waiting…"
+          : "server restarting — waiting for health…";
+      }
+    } catch (e) {
+      // server may die mid-response; still poll
+      if (hud) hud.textContent = "restart sent — waiting for health…";
+    }
+    // Poll health until new process answers, then full page reload
+    const started = Date.now();
+    const poll = async () => {
+      if (Date.now() - started > 90000) {
+        if (hud) hud.textContent = "restart timeout — use START_FSOT.bat";
+        if ($("btn-restart")) $("btn-restart").disabled = false;
+        return;
+      }
+      try {
+        const h = await fetch("/api/health", { cache: "no-store" });
+        if (h.ok) {
+          if (hud) hud.textContent = "server up — reloading page…";
+          setTimeout(() => window.location.reload(), 350);
+          return;
+        }
+      } catch (_) { /* still down */ }
+      setTimeout(poll, 600);
+    };
+    setTimeout(poll, 900);
+  }
+
+  if ($("btn-restart")) $("btn-restart").onclick = () => restartServer();
+
+  // Keyboard: Ctrl+R = reload graph; Ctrl+Shift+R = restart server
+  window.addEventListener("keydown", (ev) => {
+    const tag = (ev.target && ev.target.tagName) || "";
+    const typing = tag === "TEXTAREA" || tag === "INPUT" || (ev.target && ev.target.isContentEditable);
+    if (typing) return;
+    if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === "r") {
+      ev.preventDefault();
+      if (ev.shiftKey) restartServer();
+      else loadGraph();
+    }
+  });
   if ($("btn-thesis")) {
     $("btn-thesis").onclick = () => {
       if (selected) loadThesis(selected.id);

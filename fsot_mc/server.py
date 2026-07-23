@@ -16,6 +16,7 @@ Serves:
   /api/pathways     → live pathway queue / alignment status / scaffold deltas
   /api/pathways/expand → POST gated expansion proposals (JSON)
   /api/queue        → alias of pathways status + recent chat/expand activity
+  /api/server/restart → POST restart serve process (UI Ctrl+Shift+R)
 """
 
 from __future__ import annotations
@@ -23,6 +24,10 @@ from __future__ import annotations
 import json
 import mimetypes
 import os
+import subprocess
+import sys
+import threading
+import time
 import traceback
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -34,6 +39,13 @@ from fsot_mc.paths import PACKAGE_ROOT
 
 FRONTEND_DIR = PACKAGE_ROOT / "frontend"
 TISSUE_DIR = PACKAGE_ROOT / "docs" / "tissue"
+
+# Filled by serve(); used for in-process restart
+_SERVE_HOST = "127.0.0.1"
+_SERVE_PORT = 8765
+_HTTP_SERVER: ThreadingHTTPServer | None = None
+_RESTART_LOCK = threading.Lock()
+_RESTART_SCHEDULED = False
 
 
 def _json_bytes(obj: Any, code: int = 200) -> tuple[int, bytes, str]:
@@ -179,6 +191,29 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
             if r.get("ok") and data.get("rebuild", True):
                 r["rebuild"] = rebuild_tissue_with_deltas(force=True)
             return _json_bytes(r)
+
+        if path in ("/api/server/restart", "/api/restart") and method == "POST":
+            # Schedule process restart; client should poll /api/health then reload.
+            r = schedule_server_restart()
+            code = 200 if r.get("ok") else 409
+            return _json_bytes(r, code)
+
+        if path in ("/api/server/status", "/api/server") and method == "GET":
+            return _json_bytes(
+                {
+                    "ok": True,
+                    "host": _SERVE_HOST,
+                    "port": _SERVE_PORT,
+                    "version": __version__,
+                    "restart_scheduled": _RESTART_SCHEDULED,
+                    "pid": os.getpid(),
+                    "shortcuts": {
+                        "reload_graph": "Ctrl+R (UI)",
+                        "restart_server": "Ctrl+Shift+R or ⟳ Restart button",
+                    },
+                    "free_parameters": 0,
+                }
+            )
 
         if path == "/api/ask" and method == "POST":
             """
@@ -563,7 +598,6 @@ class FSOTHandler(BaseHTTPRequestHandler):
 
 def _warm_qwen_background() -> None:
     """Load Qwen in a daemon thread so first UI ask is not cold."""
-    import threading
 
     def _run() -> None:
         try:
@@ -585,12 +619,121 @@ def _warm_qwen_background() -> None:
     threading.Thread(target=_run, name="qwen-warm", daemon=True).start()
 
 
+def schedule_server_restart() -> dict[str, Any]:
+    """
+    Restart the serve process in-place (new console on Windows).
+
+    Flow: respond to client → wait for port free → spawn new serve → exit.
+    """
+    global _RESTART_SCHEDULED
+    with _RESTART_LOCK:
+        if _RESTART_SCHEDULED:
+            return {
+                "ok": True,
+                "already_scheduled": True,
+                "host": _SERVE_HOST,
+                "port": _SERVE_PORT,
+                "note": "Restart already in progress — wait for /api/health.",
+            }
+        _RESTART_SCHEDULED = True
+
+    host, port = _SERVE_HOST, int(_SERVE_PORT)
+    root = str(PACKAGE_ROOT)
+    py = sys.executable
+
+    def _worker() -> None:
+        print(f"[fsot-serve] restart scheduled — spawning new process on {host}:{port}")
+        time.sleep(0.45)
+        # Child waits until this process releases the port, then starts serve.
+        waiter = f"""
+import os, sys, time, socket, subprocess
+host = {host!r}
+port = {port}
+root = {root!r}
+py = {py!r}
+env = os.environ.copy()
+env['PYTHONPATH'] = root
+# preserve common FSOT env if parent had them
+for _ in range(60):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.bind((host, port))
+        s.close()
+        break
+    except OSError:
+        try:
+            s.close()
+        except Exception:
+            pass
+        time.sleep(0.25)
+else:
+    sys.stderr.write('fsot-restart: port still busy\\n')
+os.chdir(root)
+args = [py, '-m', 'fsot_mc', 'serve', '--host', host, '--port', str(port)]
+if sys.platform == 'win32':
+    flags = 0x00000010  # CREATE_NEW_CONSOLE
+    subprocess.Popen(args, cwd=root, env=env, creationflags=flags, close_fds=True)
+else:
+    subprocess.Popen(args, cwd=root, env=env, start_new_session=True)
+"""
+        try:
+            if sys.platform == "win32":
+                flags = 0x00000010 | 0x00000200  # NEW_CONSOLE | NEW_PROCESS_GROUP
+                subprocess.Popen(
+                    [py, "-c", waiter],
+                    cwd=root,
+                    env=os.environ.copy(),
+                    creationflags=flags,
+                    close_fds=True,
+                )
+            else:
+                subprocess.Popen(
+                    [py, "-c", waiter],
+                    cwd=root,
+                    env=os.environ.copy(),
+                    start_new_session=True,
+                )
+        except Exception as exc:
+            print(f"[fsot-serve] restart spawn failed: {exc}")
+            return
+
+        # Shut down this server
+        time.sleep(0.15)
+        httpd = _HTTP_SERVER
+        try:
+            if httpd is not None:
+                threading.Thread(target=httpd.shutdown, daemon=True).start()
+        except Exception as exc:
+            print(f"[fsot-serve] shutdown warn: {exc}")
+        time.sleep(0.35)
+        print("[fsot-serve] exiting for restart.")
+        os._exit(0)
+
+    threading.Thread(target=_worker, name="fsot-restart", daemon=True).start()
+    return {
+        "ok": True,
+        "already_scheduled": False,
+        "host": host,
+        "port": port,
+        "pid": os.getpid(),
+        "note": "Server restarting — poll GET /api/health then reload the page.",
+        "poll_url": f"http://{host}:{port}/api/health",
+        "free_parameters": 0,
+    }
+
+
 def serve(*, host: str = "127.0.0.1", port: int = 8765, warm_qwen: bool = True) -> None:
+    global _SERVE_HOST, _SERVE_PORT, _HTTP_SERVER, _RESTART_SCHEDULED
+    _SERVE_HOST = host
+    _SERVE_PORT = int(port)
+    _RESTART_SCHEDULED = False
     if not FRONTEND_DIR.is_dir():
         raise SystemExit(f"Frontend missing: {FRONTEND_DIR}")
     if warm_qwen and os.environ.get("FSOT_MC_QWEN_WARM", "1") not in ("0", "false", "no"):
         _warm_qwen_background()
     httpd = ThreadingHTTPServer((host, port), FSOTHandler)
+    _HTTP_SERVER = httpd
     print(f"FSOT Monte Carlo Intelligence  v{__version__}")
     print(f"  visual:  http://{host}:{port}/")
     print(f"  health:  http://{host}:{port}/api/health")
@@ -598,6 +741,7 @@ def serve(*, host: str = "127.0.0.1", port: int = 8765, warm_qwen: bool = True) 
     print(f"  ask:     POST /api/ask  (mind + Qwen default)")
     print(f"  queue:   GET  /api/queue  (pathway / soft-court / scaffold live)")
     print(f"  expand:  POST /api/pathways/expand  (gated graph growth)")
+    print(f"  restart: POST /api/server/restart  (UI: Ctrl+Shift+R)")
     print(f"  narrate: POST /api/narrate · GET /api/narrate/status")
     print("  Ctrl+C to stop. free_parameters=0 · pin D1D38A")
     try:
@@ -605,6 +749,7 @@ def serve(*, host: str = "127.0.0.1", port: int = 8765, warm_qwen: bool = True) 
     except KeyboardInterrupt:
         print("\nstopped.")
     finally:
+        _HTTP_SERVER = None
         httpd.server_close()
 
 
