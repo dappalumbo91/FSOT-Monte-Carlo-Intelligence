@@ -22,9 +22,11 @@ def test_gate_for_training_matches_authority():
 def test_identity_seeds_defined():
     assert len(IDENTITY_SFT) >= 5
     for s in IDENTITY_SFT:
-        low = s["assistant"].lower()
-        assert "fluid spacetime" in low
-        assert any(k in s["assistant"] or k in low for k in ("FSOT", "D1D38A", "free_parameters", "pin", "vitality", "lean"))
+        assert "fluid spacetime" in s["assistant"].lower()
+    # core identity pair must name FSOT expansion + pin doctrine
+    core = next(s for s in IDENTITY_SFT if s["id"] == "id-fsot-name")
+    assert "Fluid Spacetime Omni-Theory" in core["assistant"]
+    assert "D1D38A" in core["assistant"]
 
 
 def test_admit_rejects_wrong_acronym(tmp_path, monkeypatch):
