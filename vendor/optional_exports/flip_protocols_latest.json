@@ -1,0 +1,1571 @@
+{
+  "method": "fsot_flip_hotspot_protocols",
+  "generated_at": "2026-07-23T02:20:48.177055+00:00",
+  "free_parameters": 0,
+  "n_hotspots": 30,
+  "min_rate_floor": 0.1534822148944508,
+  "n_paths": 48,
+  "cards": [
+    {
+      "id": "FLIP-PROTO-Fluid_Dynamics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Fluid_Dynamics flip hotspot",
+      "domain": "Fluid_Dynamics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.6666666666666666,
+      "S_canonical": -0.5627338062568505,
+      "S_path_mean": 0.3794027243185451,
+      "D_eff": 15,
+      "cluster": "life_matter_energy",
+      "hypothesis": "Fluid_Dynamics flips regime under multipath observer coupling at rate 0.667 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.5627338062568505.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Fluid_Dynamics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.6666666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.5627338062568505
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.3794027243185451
+        },
+        {
+          "quantity": "D_eff",
+          "value": 15
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Quantum_Computing",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Quantum_Computing flip hotspot",
+      "domain": "Quantum_Computing",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.6666666666666666,
+      "S_canonical": -0.14767310363368627,
+      "S_path_mean": 0.2125432316032089,
+      "D_eff": 11,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Quantum_Computing flips regime under multipath observer coupling at rate 0.667 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.14767310363368627.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Quantum_Computing; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.6666666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.14767310363368627
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.2125432316032089
+        },
+        {
+          "quantity": "D_eff",
+          "value": 11
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Particle_Astrophysics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Particle_Astrophysics flip hotspot",
+      "domain": "Particle_Astrophysics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.6458333333333334,
+      "S_canonical": -0.4244117200288864,
+      "S_path_mean": 0.30462074398516914,
+      "D_eff": 24,
+      "cluster": "cosmo_unification",
+      "hypothesis": "Particle_Astrophysics flips regime under multipath observer coupling at rate 0.646 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.4244117200288864.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Particle_Astrophysics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.6458333333333334,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.4244117200288864
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.30462074398516914
+        },
+        {
+          "quantity": "D_eff",
+          "value": 24
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Seismology",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Seismology flip hotspot",
+      "domain": "Seismology",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.625,
+      "S_canonical": -0.44590157211030373,
+      "S_path_mean": 0.4907122523282002,
+      "D_eff": 18,
+      "cluster": "earth_complex_systems",
+      "hypothesis": "Seismology flips regime under multipath observer coupling at rate 0.625 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.44590157211030373.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Seismology; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.625,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.44590157211030373
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.4907122523282002
+        },
+        {
+          "quantity": "D_eff",
+          "value": 18
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Atmospheric_Physics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Atmospheric_Physics flip hotspot",
+      "domain": "Atmospheric_Physics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.6041666666666666,
+      "S_canonical": -0.47643190542960034,
+      "S_path_mean": 0.27004658082656935,
+      "D_eff": 17,
+      "cluster": "earth_complex_systems",
+      "hypothesis": "Atmospheric_Physics flips regime under multipath observer coupling at rate 0.604 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.47643190542960034.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Atmospheric_Physics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.6041666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.47643190542960034
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.27004658082656935
+        },
+        {
+          "quantity": "D_eff",
+          "value": 17
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Meteorology",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Meteorology flip hotspot",
+      "domain": "Meteorology",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.6041666666666666,
+      "S_canonical": -0.48499702084687996,
+      "S_path_mean": 0.2869756562710993,
+      "D_eff": 16,
+      "cluster": "earth_complex_systems",
+      "hypothesis": "Meteorology flips regime under multipath observer coupling at rate 0.604 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.48499702084687996.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Meteorology; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.6041666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.48499702084687996
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.2869756562710993
+        },
+        {
+          "quantity": "D_eff",
+          "value": 16
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Cosmology",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Cosmology flip hotspot",
+      "domain": "Cosmology",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5833333333333334,
+      "S_canonical": -0.5024559462100434,
+      "S_path_mean": 0.32937453285641594,
+      "D_eff": 25,
+      "cluster": "cosmo_unification",
+      "hypothesis": "Cosmology flips regime under multipath observer coupling at rate 0.583 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.5024559462100434.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Cosmology; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5833333333333334,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.5024559462100434
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.32937453285641594
+        },
+        {
+          "quantity": "D_eff",
+          "value": 25
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Nuclear_Physics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Nuclear_Physics flip hotspot",
+      "domain": "Nuclear_Physics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5625,
+      "S_canonical": 0.9213094330291354,
+      "S_path_mean": 0.12022014435268763,
+      "D_eff": 15,
+      "cluster": "life_matter_energy",
+      "hypothesis": "Nuclear_Physics flips regime under multipath observer coupling at rate 0.562 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.9213094330291354.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Nuclear_Physics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5625,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.9213094330291354
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.12022014435268763
+        },
+        {
+          "quantity": "D_eff",
+          "value": 15
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Astronomy",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Astronomy flip hotspot",
+      "domain": "Astronomy",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5416666666666666,
+      "S_canonical": 0.8984595681660629,
+      "S_path_mean": 0.14860099816369962,
+      "D_eff": 20,
+      "cluster": "astro_planetary",
+      "hypothesis": "Astronomy flips regime under multipath observer coupling at rate 0.542 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.8984595681660629.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Astronomy; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5416666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.8984595681660629
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.14860099816369962
+        },
+        {
+          "quantity": "D_eff",
+          "value": 20
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Optics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Optics flip hotspot",
+      "domain": "Optics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5416666666666666,
+      "S_canonical": 0.4080624712153455,
+      "S_path_mean": 0.08150008165467627,
+      "D_eff": 10,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Optics flips regime under multipath observer coupling at rate 0.542 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.4080624712153455.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Optics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5416666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.4080624712153455
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.08150008165467627
+        },
+        {
+          "quantity": "D_eff",
+          "value": 10
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Planetary_Science",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Planetary_Science flip hotspot",
+      "domain": "Planetary_Science",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5416666666666666,
+      "S_canonical": 0.7671791385407589,
+      "S_path_mean": 0.11990077299358999,
+      "D_eff": 21,
+      "cluster": "astro_planetary",
+      "hypothesis": "Planetary_Science flips regime under multipath observer coupling at rate 0.542 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.7671791385407589.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Planetary_Science; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5416666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.7671791385407589
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.11990077299358999
+        },
+        {
+          "quantity": "D_eff",
+          "value": 21
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Psychology",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Psychology flip hotspot",
+      "domain": "Psychology",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5416666666666666,
+      "S_canonical": 1.0502056403979547,
+      "S_path_mean": 0.16568783120653569,
+      "D_eff": 16,
+      "cluster": "earth_complex_systems",
+      "hypothesis": "Psychology flips regime under multipath observer coupling at rate 0.542 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=1.0502056403979547.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Psychology; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5416666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 1.0502056403979547
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.16568783120653569
+        },
+        {
+          "quantity": "D_eff",
+          "value": 16
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Quantum_Gravity",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Quantum_Gravity flip hotspot",
+      "domain": "Quantum_Gravity",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5416666666666666,
+      "S_canonical": -0.5255977531899869,
+      "S_path_mean": 0.2700191024029017,
+      "D_eff": 22,
+      "cluster": "astro_planetary",
+      "hypothesis": "Quantum_Gravity flips regime under multipath observer coupling at rate 0.542 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.5255977531899869.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Quantum_Gravity; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5416666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.5255977531899869
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.2700191024029017
+        },
+        {
+          "quantity": "D_eff",
+          "value": 22
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Oceanography",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Oceanography flip hotspot",
+      "domain": "Oceanography",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.5,
+      "S_canonical": -0.37715907584612013,
+      "S_path_mean": 0.15333440344857446,
+      "D_eff": 17,
+      "cluster": "earth_complex_systems",
+      "hypothesis": "Oceanography flips regime under multipath observer coupling at rate 0.500 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.37715907584612013.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Oceanography; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.5,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.37715907584612013
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.15333440344857446
+        },
+        {
+          "quantity": "D_eff",
+          "value": 17
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "high",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Astrophysics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Astrophysics flip hotspot",
+      "domain": "Astrophysics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4791666666666667,
+      "S_canonical": 0.8824107984181296,
+      "S_path_mean": 0.247035087101609,
+      "D_eff": 24,
+      "cluster": "cosmo_unification",
+      "hypothesis": "Astrophysics flips regime under multipath observer coupling at rate 0.479 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.8824107984181296.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Astrophysics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4791666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.8824107984181296
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.247035087101609
+        },
+        {
+          "quantity": "D_eff",
+          "value": 24
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Geophysics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Geophysics flip hotspot",
+      "domain": "Geophysics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4791666666666667,
+      "S_canonical": -0.5490942927204095,
+      "S_path_mean": 0.1630443856613388,
+      "D_eff": 19,
+      "cluster": "earth_complex_systems",
+      "hypothesis": "Geophysics flips regime under multipath observer coupling at rate 0.479 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=-0.5490942927204095.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Geophysics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4791666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": -0.5490942927204095
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.1630443856613388
+        },
+        {
+          "quantity": "D_eff",
+          "value": 19
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Particle_Physics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Particle_Physics flip hotspot",
+      "domain": "Particle_Physics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4791666666666667,
+      "S_canonical": 0.9504134401245244,
+      "S_path_mean": 0.23015613321155579,
+      "D_eff": 5,
+      "cluster": "quantum_particle",
+      "hypothesis": "Particle_Physics flips regime under multipath observer coupling at rate 0.479 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.9504134401245244.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Particle_Physics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4791666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.9504134401245244
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.23015613321155579
+        },
+        {
+          "quantity": "D_eff",
+          "value": 5
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Quantum_Mechanics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Quantum_Mechanics flip hotspot",
+      "domain": "Quantum_Mechanics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4791666666666667,
+      "S_canonical": 0.9555063001027201,
+      "S_path_mean": 0.1986717812968187,
+      "D_eff": 6,
+      "cluster": "quantum_particle",
+      "hypothesis": "Quantum_Mechanics flips regime under multipath observer coupling at rate 0.479 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.9555063001027201.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Quantum_Mechanics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4791666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.9555063001027201
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.1986717812968187
+        },
+        {
+          "quantity": "D_eff",
+          "value": 6
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Neuroscience",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Neuroscience flip hotspot",
+      "domain": "Neuroscience",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4375,
+      "S_canonical": 0.514361962908362,
+      "S_path_mean": 0.19593823329081114,
+      "D_eff": 14,
+      "cluster": "life_matter_energy",
+      "hypothesis": "Neuroscience flips regime under multipath observer coupling at rate 0.438 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.514361962908362.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Neuroscience; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4375,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.514361962908362
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.19593823329081114
+        },
+        {
+          "quantity": "D_eff",
+          "value": 14
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-High_Energy_Physics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: High_Energy_Physics flip hotspot",
+      "domain": "High_Energy_Physics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4166666666666667,
+      "S_canonical": 0.8862640566467022,
+      "S_path_mean": 0.24739273132357387,
+      "D_eff": 7,
+      "cluster": "quantum_particle",
+      "hypothesis": "High_Energy_Physics flips regime under multipath observer coupling at rate 0.417 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.8862640566467022.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including High_Energy_Physics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4166666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.8862640566467022
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.24739273132357387
+        },
+        {
+          "quantity": "D_eff",
+          "value": 7
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Quantum_Optics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Quantum_Optics flip hotspot",
+      "domain": "Quantum_Optics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4166666666666667,
+      "S_canonical": 0.40817053817150195,
+      "S_path_mean": 0.16225088162302934,
+      "D_eff": 11,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Quantum_Optics flips regime under multipath observer coupling at rate 0.417 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.40817053817150195.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Quantum_Optics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4166666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.40817053817150195
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.16225088162302934
+        },
+        {
+          "quantity": "D_eff",
+          "value": 11
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Thermodynamics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Thermodynamics flip hotspot",
+      "domain": "Thermodynamics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.4166666666666667,
+      "S_canonical": 0.786974501611573,
+      "S_path_mean": 0.2877775755527901,
+      "D_eff": 15,
+      "cluster": "life_matter_energy",
+      "hypothesis": "Thermodynamics flips regime under multipath observer coupling at rate 0.417 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.786974501611573.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Thermodynamics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.4166666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.786974501611573
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.2877775755527901
+        },
+        {
+          "quantity": "D_eff",
+          "value": 15
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Chemistry",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Chemistry flip hotspot",
+      "domain": "Chemistry",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.3958333333333333,
+      "S_canonical": 0.4078840642307454,
+      "S_path_mean": 0.16116887397445656,
+      "D_eff": 8,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Chemistry flips regime under multipath observer coupling at rate 0.396 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.4078840642307454.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Chemistry; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.3958333333333333,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.4078840642307454
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.16116887397445656
+        },
+        {
+          "quantity": "D_eff",
+          "value": 8
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Condensed_Matter",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Condensed_Matter flip hotspot",
+      "domain": "Condensed_Matter",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.3958333333333333,
+      "S_canonical": 0.3384059955797752,
+      "S_path_mean": 0.18191579355002127,
+      "D_eff": 14,
+      "cluster": "life_matter_energy",
+      "hypothesis": "Condensed_Matter flips regime under multipath observer coupling at rate 0.396 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.3384059955797752.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Condensed_Matter; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.3958333333333333,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.3384059955797752
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.18191579355002127
+        },
+        {
+          "quantity": "D_eff",
+          "value": 14
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Electromagnetism",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Electromagnetism flip hotspot",
+      "domain": "Electromagnetism",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.375,
+      "S_canonical": 0.5188655207983146,
+      "S_path_mean": 0.26191990535648196,
+      "D_eff": 9,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Electromagnetism flips regime under multipath observer coupling at rate 0.375 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.5188655207983146.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Electromagnetism; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.375,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.5188655207983146
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.26191990535648196
+        },
+        {
+          "quantity": "D_eff",
+          "value": 9
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Materials_Science",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Materials_Science flip hotspot",
+      "domain": "Materials_Science",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.3541666666666667,
+      "S_canonical": 0.3352598807363839,
+      "S_path_mean": 0.1923468281753803,
+      "D_eff": 10,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Materials_Science flips regime under multipath observer coupling at rate 0.354 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.3352598807363839.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Materials_Science; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.3541666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.3352598807363839
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.1923468281753803
+        },
+        {
+          "quantity": "D_eff",
+          "value": 10
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Molecular_Chemistry",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Molecular_Chemistry flip hotspot",
+      "domain": "Molecular_Chemistry",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.3125,
+      "S_canonical": 0.33457338307781076,
+      "S_path_mean": 0.20049571286296566,
+      "D_eff": 9,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Molecular_Chemistry flips regime under multipath observer coupling at rate 0.312 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.33457338307781076.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Molecular_Chemistry; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.3125,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.33457338307781076
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.20049571286296566
+        },
+        {
+          "quantity": "D_eff",
+          "value": 9
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Atomic_Physics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Atomic_Physics flip hotspot",
+      "domain": "Atomic_Physics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.2916666666666667,
+      "S_canonical": 0.7358238658627418,
+      "S_path_mean": 0.3910266438375261,
+      "D_eff": 7,
+      "cluster": "quantum_particle",
+      "hypothesis": "Atomic_Physics flips regime under multipath observer coupling at rate 0.292 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.7358238658627418.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Atomic_Physics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.2916666666666667,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.7358238658627418
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.3910266438375261
+        },
+        {
+          "quantity": "D_eff",
+          "value": 7
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Economics",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Economics flip hotspot",
+      "domain": "Economics",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.16666666666666666,
+      "S_canonical": 0.6460045206857499,
+      "S_path_mean": 0.4316276110750638,
+      "D_eff": 20,
+      "cluster": "astro_planetary",
+      "hypothesis": "Economics flips regime under multipath observer coupling at rate 0.167 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.6460045206857499.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Economics; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.16666666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.6460045206857499
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.4316276110750638
+        },
+        {
+          "quantity": "D_eff",
+          "value": 20
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    },
+    {
+      "id": "FLIP-PROTO-Physical_Chemistry",
+      "class": "flip_hotspot_protocol",
+      "title": "Observer protocol: Physical_Chemistry flip hotspot",
+      "domain": "Physical_Chemistry",
+      "epistemic_tier": "measured_application",
+      "free_parameters": 0,
+      "flip_rate": 0.16666666666666666,
+      "S_canonical": 0.3340132704017093,
+      "S_path_mean": 0.34582433202514085,
+      "D_eff": 8,
+      "cluster": "atomic_molecular_optical",
+      "hypothesis": "Physical_Chemistry flips regime under multipath observer coupling at rate 0.167 (\u2265 Poof floor 0.1535). Same seed engine; observer branch selection alters path-mean S relative to canonical S=0.3340132704017093.",
+      "materials_methods": [
+        "Fix authority pin D1D38A; free_parameters=0.",
+        "Run multipath MC with n_paths\u226564 on core set including Physical_Chemistry; record flip_rate and path-mean S.",
+        "Vary observer coupling (observed=True/False, \u03b4\u03c8 noise) without changing seeds.",
+        "Log canonical S vs path ensemble (p10/p50/p90 of S on this fold).",
+        "If lab/instrument exists for this domain, pre-register observable + kill threshold."
+      ],
+      "measurements": [
+        {
+          "quantity": "flip_rate",
+          "target": 0.16666666666666666,
+          "unit": "fraction_of_paths"
+        },
+        {
+          "quantity": "S_canonical",
+          "value": 0.3340132704017093
+        },
+        {
+          "quantity": "S_path_mean",
+          "value": 0.34582433202514085
+        },
+        {
+          "quantity": "D_eff",
+          "value": 8
+        }
+      ],
+      "pass_criteria": [
+        "flip_rate reproducible within \u00b10.05 across seeds for same n_paths",
+        "Seeds/pin unchanged",
+        "Canonical S matches atlas recompute"
+      ],
+      "kill_criteria": [
+        "flip_rate collapses to 0 under all observer settings while claiming observer-sensitivity",
+        "Requires free-parameter retune to match path statistics",
+        "Authority pin mismatch"
+      ],
+      "priority": "medium",
+      "status": "ready_for_experiment"
+    }
+  ],
+  "note": "Observer-sensitive folds from full-core multipath. These are experiment priorities under the same ToE law."
+}

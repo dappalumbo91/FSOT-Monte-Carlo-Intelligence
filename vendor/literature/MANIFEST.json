@@ -1,0 +1,37 @@
+{
+  "method": "fsot_optional_literature_pack",
+  "free_parameters": 0,
+  "authority": "D1D38A",
+  "note": "Portable FTS indexes for clone reproducibility. Full multi-million arXiv index is too large for GitHub; rebuild locally with literature-index --max-papers 0 if you have the OAI dump.",
+  "files": {
+    "arxiv_fts.sqlite": {
+      "mb": 288.72,
+      "bytes": 288722944
+    },
+    "wiki_fts.sqlite": {
+      "mb": 14.2,
+      "bytes": 14204928
+    }
+  },
+  "build": {
+    "shipped_dir": "C:\\Users\\damia\\Desktop\\FSOT-Monte-Carlo-Intelligence\\vendor\\literature",
+    "built_at": "2026-07-23T02:55:23.470482+00:00",
+    "wiki": {
+      "ok": true,
+      "method": "copy_local",
+      "db": "C:\\Users\\damia\\Desktop\\FSOT-Monte-Carlo-Intelligence\\vendor\\literature\\wiki_fts.sqlite",
+      "mb": 14.2
+    },
+    "arxiv": {
+      "ok": true,
+      "source": "D:\\training data\\arXiv Dataset\\arxiv-metadata-oai-snapshot.json",
+      "db": "C:\\Users\\damia\\Desktop\\FSOT-Monte-Carlo-Intelligence\\vendor\\literature\\arxiv_fts.sqlite",
+      "n_scanned": 102954,
+      "n_papers": 100000,
+      "seconds": 111.79,
+      "free_parameters": 0,
+      "note": "Local arXiv FTS index for offline FSOT literature cross-reference.",
+      "mb": 288.72
+    }
+  }
+}

@@ -23,9 +23,9 @@ data/exports/
 
 data/memory/
 data/connective_tissue_compact.json
+# Local rebuilds / full multi-GB arXiv index (prefer vendor/literature shipped pack)
 data/literature/
 
-
-# huge raw coupling (compact tissue is shipped instead)
-vendor/archive_bundle/data__domain_coupling_simulation_benchmark.json
+# Optional full coupling is now shipped via Git LFS (see .gitattributes)
+# vendor/archive_bundle/data__domain_coupling_simulation_benchmark.json
 

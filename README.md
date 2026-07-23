@@ -71,11 +71,29 @@ See [`requirements.txt`](requirements.txt) / [`pyproject.toml`](pyproject.toml):
 - mpmath ≥ 1.3  
 - pytest ≥ 8.3 (dev)
 
-**Shipped for offline use:** `fsot_mc/` law+atlas, `vendor/archive_bundle/` (navigator, certificates, compact connective tissue), `vendor/pflt/`, `frontend/`, `docs/tissue/`.
+**Shipped for offline use:** `fsot_mc/` law+atlas, `vendor/archive_bundle/` (navigator, certificates, compact connective tissue, **raw coupling via Git LFS**), `vendor/pflt/`, `frontend/`, `docs/tissue/`.
 
-**Optional (not required to reproduce gate/tests/UI):**
+**Optional assets (Git LFS — pull after clone):**
 
-- Local arXiv OAI dump / Simple Wikipedia → set `FSOT_MC_ARXIV_JSON` / `FSOT_MC_WIKI_ROOT`
+```powershell
+git lfs install
+git lfs pull
+python scripts\bootstrap_independent.py   # copies vendor/literature → data/ if needed
+python -m fsot_mc literature-status
+python -m fsot_mc literature-search -q "quantum gravity fluid spacetime"
+```
+
+| Asset | Path | Size (approx) |
+|-------|------|----------------|
+| arXiv FTS (100k FSOT-priority) | `vendor/literature/arxiv_fts.sqlite` | ~275 MB (LFS) |
+| Simple Wiki FTS | `vendor/literature/wiki_fts.sqlite` | ~14 MB (LFS) |
+| Raw domain coupling benchmark | `vendor/archive_bundle/data__domain_coupling_simulation_benchmark.json` | ~32 MB (LFS) |
+| Export snapshots | `vendor/optional_exports/` | small JSON |
+
+**Still local-only (too large for GitHub):** full multi-million arXiv OAI dump / full multi-GB FTS rebuild — use your dump + `literature-index --max-papers 0`.
+
+**Other optional:**
+
 - Live web chew: `FSOT_MC_ONLINE=1`
 - Torch polar student: `FSOT_MC_USE_TORCH=1`
 

@@ -1,0 +1,2297 @@
+{
+  "method": "fsot_scientific_intelligence_audit",
+  "generated_at": "2026-07-23T01:56:01.381689+00:00",
+  "free_parameters": 0,
+  "authority": "D1D38A",
+  "overall_score": 0.9382,
+  "grade": "A",
+  "n_checks": 15,
+  "n_pass": 15,
+  "n_fail": 0,
+  "critical_failures": [],
+  "high_failures": [],
+  "checks": [
+    {
+      "id": "AUTH-001",
+      "layer": "law",
+      "title": "Authority pin D1D38A + float engine",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "authority_sha256": "D1D38A185487B452E470AC68ECE2EB45AEB1CA9CE25FC9BF9564C19633FFBE70",
+        "float_engine": true,
+        "bytes_local": true
+      },
+      "finding": "Authority pin D1D38A and float engine agree.",
+      "improvement": "",
+      "duration_s": 0.001
+    },
+    {
+      "id": "AUTH-002",
+      "layer": "law",
+      "title": "Seed immutability under literature chew",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "K": 0.4202216641606968,
+        "POOF": 0.1534822148944508,
+        "PHI": 1.618033988749895,
+        "match_expected_K": true
+      },
+      "finding": "Seeds immutable across chew path.",
+      "improvement": "",
+      "duration_s": 0.038
+    },
+    {
+      "id": "IND-001",
+      "layer": "runtime",
+      "title": "Independent vendor workspace",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "status": {
+          "independent": true,
+          "checks": {
+            "compute_authority": true,
+            "full_atlas": true,
+            "archive_bundle": true,
+            "navigator": true,
+            "pflt_vision": true,
+            "pflt_core": true,
+            "linguistics": true,
+            "realities_snapshot": true
+          },
+          "package_root": "C:\\Users\\damia\\Desktop\\FSOT-Monte-Carlo-Intelligence",
+          "external_archive_optional": false,
+          "free_parameters": 0
+        }
+      },
+      "finding": "Independent workspace: 8/8 local assets OK.",
+      "improvement": "",
+      "duration_s": 0.001
+    },
+    {
+      "id": "EMP-001",
+      "layer": "empirical",
+      "title": "Core fold recompute vs atlas",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "n_core": 35,
+        "n_within_tol": 35,
+        "max_rel_error_pct": 1.1277168935710288e-13,
+        "median_rel_error_pct": 2.9436465823723784e-14
+      },
+      "finding": "Core recompute max_rel_error_pct=1.1277168935710288e-13.",
+      "improvement": "",
+      "duration_s": 0.0
+    },
+    {
+      "id": "EMP-002",
+      "layer": "empirical",
+      "title": "Archive \u22640.5% green gate",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "pass": 405,
+        "fail": 0,
+        "pooled_median_of_domain_medians_pct": 0.010337117254355377,
+        "max_pooled": 0.3579695,
+        "worst": "Phi_Morphogenetic_Scaling"
+      },
+      "finding": "Archive green gate 405/405, median-of-medians=0.010337117254355377%.",
+      "improvement": "",
+      "duration_s": 0.004
+    },
+    {
+      "id": "EMP-003",
+      "layer": "empirical",
+      "title": "Contested open-science panel",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "n": 16,
+        "within_0_5": 16,
+        "pooled_median_pct": 0.029748999999999998,
+        "baseline_pct": 15.0,
+        "verdict": "CONTESTED_SECTORS_FSOT_AHEAD_OF_CURRENT_MODELS"
+      },
+      "finding": "Contested panel 16/16 within 0.5%; FSOT pooled=0.029748999999999998% vs baseline ~15%.",
+      "improvement": "Expand contested panel live recompute in MC (not only archive snapshot).",
+      "duration_s": 0.0
+    },
+    {
+      "id": "DOM-001",
+      "layer": "atlas",
+      "title": "Full domain+extension atlas evaluate coverage",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "n_core": 35,
+        "n_core_eval_ok": 35,
+        "core_fail": [],
+        "n_extension": 367,
+        "n_extension_ok": 367,
+        "ext_fail_n": 0,
+        "n_total_atlas": 402,
+        "clusters": {
+          "quantum_particle": 7,
+          "atomic_molecular_optical": 25,
+          "life_matter_energy": 125,
+          "earth_complex_systems": 170,
+          "astro_planetary": 47,
+          "cosmo_unification": 28
+        },
+        "core_panel_S": [
+          {
+            "domain": "Acoustics",
+            "S": 0.31159079708634163,
+            "D_eff": 10,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": -0.25850848811263016,
+            "T2": 1.0,
+            "T3": 2.6221011059652958e-17
+          },
+          {
+            "domain": "Astronomy",
+            "S": 0.8984595681660629,
+            "D_eff": 20,
+            "regime": "emergence",
+            "cluster": "astro_planetary",
+            "T1": 1.138061039667111,
+            "T2": 1.0,
+            "T3": 9.327730901295065e-18
+          },
+          {
+            "domain": "Astrophysics",
+            "S": 0.8824107984181296,
+            "D_eff": 24,
+            "regime": "emergence",
+            "cluster": "cosmo_unification",
+            "T1": 1.0998698393633681,
+            "T2": 1.0,
+            "T3": 8.092029886153025e-18
+          },
+          {
+            "domain": "Atmospheric_Physics",
+            "S": -0.47643190542960034,
+            "D_eff": 17,
+            "regime": "dispersal",
+            "cluster": "earth_complex_systems",
+            "T1": -2.1337633112780408,
+            "T2": 1.0,
+            "T3": 1.3532119373063797e-17
+          },
+          {
+            "domain": "Atomic_Physics",
+            "S": 0.7358238658627418,
+            "D_eff": 7,
+            "regime": "emergence",
+            "cluster": "quantum_particle",
+            "T1": 0.7510374371878069,
+            "T2": 1.0,
+            "T3": 2.2368473929062404e-17
+          },
+          {
+            "domain": "Biochemistry",
+            "S": 0.3062212293865663,
+            "D_eff": 13,
+            "regime": "emergence",
+            "cluster": "life_matter_energy",
+            "T1": -0.2712864292749448,
+            "T2": 1.0,
+            "T3": 2.1863647628064347e-17
+          },
+          {
+            "domain": "Biology",
+            "S": 0.444725007703846,
+            "D_eff": 12,
+            "regime": "emergence",
+            "cluster": "life_matter_energy",
+            "T1": 0.0583105195018667,
+            "T2": 1.0,
+            "T3": 2.4423529355785666e-17
+          },
+          {
+            "domain": "Chemistry",
+            "S": 0.4078840642307454,
+            "D_eff": 8,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": -0.029359742683883507,
+            "T2": 1.0,
+            "T3": 2.5886265974909104e-17
+          },
+          {
+            "domain": "Condensed_Matter",
+            "S": 0.3384059955797752,
+            "D_eff": 14,
+            "regime": "emergence",
+            "cluster": "life_matter_energy",
+            "T1": -0.19469645560595017,
+            "T2": 1.0,
+            "T3": 1.9457619500650125e-17
+          },
+          {
+            "domain": "Cosmology",
+            "S": -0.5024559462100434,
+            "D_eff": 25,
+            "regime": "dispersal",
+            "cluster": "cosmo_unification",
+            "T1": -2.1956926285882763,
+            "T2": 1.0,
+            "T3": 7.824928065101266e-18
+          },
+          {
+            "domain": "Ecology",
+            "S": 0.3003170815488649,
+            "D_eff": 15,
+            "regime": "emergence",
+            "cluster": "life_matter_energy",
+            "T1": -0.2853365088906488,
+            "T2": 1.0,
+            "T3": 2.0750427916272364e-17
+          },
+          {
+            "domain": "Economics",
+            "S": 0.6460045206857499,
+            "D_eff": 20,
+            "regime": "emergence",
+            "cluster": "astro_planetary",
+            "T1": 0.5372946608452618,
+            "T2": 1.0,
+            "T3": 1.2212007513216145e-18
+          },
+          {
+            "domain": "Electromagnetism",
+            "S": 0.5188655207983146,
+            "D_eff": 9,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": 0.23474243488763952,
+            "T2": 1.0,
+            "T3": 2.237252217039533e-17
+          },
+          {
+            "domain": "Fluid_Dynamics",
+            "S": -0.5627338062568505,
+            "D_eff": 15,
+            "regime": "dispersal",
+            "cluster": "life_matter_energy",
+            "T1": -2.3391356378086585,
+            "T2": 1.0,
+            "T3": 1.316101694544898e-17
+          },
+          {
+            "domain": "Geophysics",
+            "S": -0.5490942927204095,
+            "D_eff": 19,
+            "regime": "dispersal",
+            "cluster": "earth_complex_systems",
+            "T1": -2.306677735944691,
+            "T2": 1.0,
+            "T3": 9.688898360025811e-18
+          },
+          {
+            "domain": "High_Energy_Physics",
+            "S": 0.8862640566467022,
+            "D_eff": 7,
+            "regime": "emergence",
+            "cluster": "quantum_particle",
+            "T1": 1.1090394242686792,
+            "T2": 1.0,
+            "T3": 1.9714689841362852e-17
+          },
+          {
+            "domain": "Materials_Science",
+            "S": 0.3352598807363839,
+            "D_eff": 10,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": -0.20218325391197037,
+            "T2": 1.0,
+            "T3": 2.4086907935598157e-17
+          },
+          {
+            "domain": "Meteorology",
+            "S": -0.48499702084687996,
+            "D_eff": 16,
+            "regime": "dispersal",
+            "cluster": "earth_complex_systems",
+            "T1": -2.154145685981131,
+            "T2": 1.0,
+            "T3": 1.4115591985790973e-17
+          },
+          {
+            "domain": "Molecular_Chemistry",
+            "S": 0.33457338307781076,
+            "D_eff": 9,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": -0.20381690994906282,
+            "T2": 1.0,
+            "T3": 2.5670309050227358e-17
+          },
+          {
+            "domain": "Neuroscience",
+            "S": 0.514361962908362,
+            "D_eff": 14,
+            "regime": "emergence",
+            "cluster": "life_matter_energy",
+            "T1": 0.22402533419044554,
+            "T2": 1.0,
+            "T3": 1.6957958036642956e-17
+          },
+          {
+            "domain": "Nuclear_Physics",
+            "S": 0.9213094330291354,
+            "D_eff": 15,
+            "regime": "emergence",
+            "cluster": "life_matter_energy",
+            "T1": 1.1924367818333563,
+            "T2": 1.0,
+            "T3": 1.1439533093361641e-17
+          },
+          {
+            "domain": "Oceanography",
+            "S": -0.37715907584612013,
+            "D_eff": 17,
+            "regime": "dispersal",
+            "cluster": "earth_complex_systems",
+            "T1": -1.8975241117076032,
+            "T2": 1.0,
+            "T3": 1.4855513289928136e-17
+          },
+          {
+            "domain": "Optics",
+            "S": 0.4080624712153455,
+            "D_eff": 10,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": -0.028935188217001334,
+            "T2": 1.0,
+            "T3": 2.2652891973465503e-17
+          },
+          {
+            "domain": "Particle_Astrophysics",
+            "S": -0.4244117200288864,
+            "D_eff": 24,
+            "regime": "dispersal",
+            "cluster": "cosmo_unification",
+            "T1": -2.0099710610507393,
+            "T2": 1.0,
+            "T3": 1.0434476130658017e-17
+          },
+          {
+            "domain": "Particle_Physics",
+            "S": 0.9504134401245244,
+            "D_eff": 5,
+            "regime": "emergence",
+            "cluster": "quantum_particle",
+            "T1": 1.2616954840316785,
+            "T2": 1.0,
+            "T3": 2.213063399252353e-17
+          },
+          {
+            "domain": "Physical_Chemistry",
+            "S": 0.3340132704017093,
+            "D_eff": 8,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": -0.20514980809276073,
+            "T2": 1.0,
+            "T3": 2.7524967057822195e-17
+          },
+          {
+            "domain": "Planetary_Science",
+            "S": 0.7671791385407589,
+            "D_eff": 21,
+            "regime": "emergence",
+            "cluster": "astro_planetary",
+            "T1": 0.8256534680881713,
+            "T2": 1.0,
+            "T3": 1.0342733378808682e-17
+          },
+          {
+            "domain": "Psychology",
+            "S": 1.0502056403979547,
+            "D_eff": 16,
+            "regime": "emergence",
+            "cluster": "earth_complex_systems",
+            "T1": 1.4991706281862374,
+            "T2": 1.0,
+            "T3": 8.276139686158076e-18
+          },
+          {
+            "domain": "Quantum_Computing",
+            "S": -0.14767310363368627,
+            "D_eff": 11,
+            "regime": "dispersal",
+            "cluster": "atomic_molecular_optical",
+            "T1": -1.3514171596284352,
+            "T2": 1.0,
+            "T3": 2.2712263022008896e-17
+          },
+          {
+            "domain": "Quantum_Gravity",
+            "S": -0.5255977531899869,
+            "D_eff": 22,
+            "regime": "dispersal",
+            "cluster": "astro_planetary",
+            "T1": -2.2507631043719663,
+            "T2": 1.0,
+            "T3": 8.672746011982368e-18
+          },
+          {
+            "domain": "Quantum_Mechanics",
+            "S": 0.9555063001027201,
+            "D_eff": 6,
+            "regime": "emergence",
+            "cluster": "quantum_particle",
+            "T1": 1.273814944812853,
+            "T2": 1.0,
+            "T3": 1.9990920171588356e-17
+          },
+          {
+            "domain": "Quantum_Optics",
+            "S": 0.40817053817150195,
+            "D_eff": 11,
+            "regime": "emergence",
+            "cluster": "atomic_molecular_optical",
+            "T1": -0.028678021665694935,
+            "T2": 1.0,
+            "T3": 2.1360086653136695e-17
+          },
+          {
+            "domain": "Seismology",
+            "S": -0.44590157211030373,
+            "D_eff": 18,
+            "regime": "dispersal",
+            "cluster": "earth_complex_systems",
+            "T1": -2.0611103856363453,
+            "T2": 1.0,
+            "T3": 6.757880835870708e-18
+          },
+          {
+            "domain": "Sociology",
+            "S": 0.6501466524159139,
+            "D_eff": 18,
+            "regime": "emergence",
+            "cluster": "earth_complex_systems",
+            "T1": 0.5471516769951479,
+            "T2": 1.0,
+            "T3": 1.3192309909958441e-18
+          },
+          {
+            "domain": "Thermodynamics",
+            "S": 0.786974501611573,
+            "D_eff": 15,
+            "regime": "emergence",
+            "cluster": "life_matter_energy",
+            "T1": 0.8727604232004239,
+            "T2": 1.0,
+            "T3": 1.316101694544898e-17
+          }
+        ]
+      },
+      "finding": "Atlas coverage: core 35/35 eval-OK, extensions 367/367, total folds 402, clusters 6.",
+      "improvement": "Sync any missing extension panels from Physical Archive navigator; fail closed on core eval errors.",
+      "duration_s": 0.001
+    },
+    {
+      "id": "NAV-001",
+      "layer": "atlas",
+      "title": "Navigator cores/panels/routes/subfields",
+      "ok": true,
+      "score": 0.8813466666666667,
+      "severity": "info",
+      "evidence": {
+        "nav_core_names": 35,
+        "atlas_core": 35,
+        "core_overlap_frac": 1.0,
+        "n_extension_panels": 367,
+        "n_problem_routes": 19,
+        "n_subfields": 45,
+        "mean_subfield_breadth_pct": 40.67333333333333,
+        "thin_subfield_domains": [
+          "Acoustics",
+          "Actuarial_Science",
+          "Atomic_Physics",
+          "Cartography_GIS",
+          "Condensed_Matter",
+          "Ethology",
+          "Limnology",
+          "Neutrino_Physics",
+          "Particle_Physics",
+          "Petrology_Geochemistry",
+          "Quantum_Gravity",
+          "Quantum_Optics",
+          "Radio_Astronomy",
+          "Sociology",
+          "Soil_Science",
+          "Toxicology",
+          "Volcanology"
+        ],
+        "expansion_neurolab": 35,
+        "expansion_extension": 367,
+        "route_intents": [
+          "superconductivity_tc",
+          "quantum_entanglement",
+          "developmental_biology",
+          "psychometrics_rct",
+          "materials_mechanics",
+          "neuroscience_connectomics",
+          "optics_interferometry",
+          "fluid_dynamics",
+          "formal_proof",
+          "desktop_application",
+          "cosmology_cmb",
+          "climate_paleo",
+          "particle_physics",
+          "seismology",
+          "consciousness",
+          "machine_molecule_catalog",
+          "fuel_lab_engine",
+          "blackhole_whitehole_cycle",
+          "quantum_transporter"
+        ]
+      },
+      "finding": "Navigator: core overlap 100%, ext panels 367, problem routes 19, subfields 45, mean breadth 40.7%.",
+      "improvement": "Deepen thin subfields (breadth<40%); link every subfield note into tissue docs + graph.",
+      "duration_s": 0.005
+    },
+    {
+      "id": "MC-001",
+      "layer": "multipath",
+      "title": "Full-core multipath coherence + flips",
+      "ok": true,
+      "score": 0.9600000000000001,
+      "severity": "info",
+      "evidence": {
+        "mean": 0.6395833333333333,
+        "p10": 0.5428571428571428,
+        "p90": 0.7428571428571429,
+        "width": 0.20000000000000007,
+        "n_paths": 96,
+        "n_core": 35,
+        "n_core_in_ensemble": 35,
+        "core_coverage_frac": 1.0,
+        "missing_cores": [],
+        "n_long_range_bridges": 6,
+        "flip_hotspots": [
+          [
+            "Quantum_Computing",
+            0.6875
+          ],
+          [
+            "Particle_Astrophysics",
+            0.6041666666666666
+          ],
+          [
+            "Atmospheric_Physics",
+            0.5729166666666666
+          ],
+          [
+            "Quantum_Gravity",
+            0.5729166666666666
+          ],
+          [
+            "Cosmology",
+            0.5625
+          ],
+          [
+            "Meteorology",
+            0.5625
+          ],
+          [
+            "Seismology",
+            0.5520833333333334
+          ],
+          [
+            "Oceanography",
+            0.5416666666666666
+          ],
+          [
+            "Geophysics",
+            0.5208333333333334
+          ],
+          [
+            "High_Energy_Physics",
+            0.5
+          ],
+          [
+            "Particle_Physics",
+            0.5
+          ],
+          [
+            "Chemistry",
+            0.4791666666666667
+          ],
+          [
+            "Fluid_Dynamics",
+            0.4791666666666667
+          ],
+          [
+            "Astrophysics",
+            0.4583333333333333
+          ],
+          [
+            "Atomic_Physics",
+            0.4583333333333333
+          ]
+        ],
+        "all_flip_rates": [
+          [
+            "Quantum_Computing",
+            0.6875
+          ],
+          [
+            "Particle_Astrophysics",
+            0.6041666666666666
+          ],
+          [
+            "Atmospheric_Physics",
+            0.5729166666666666
+          ],
+          [
+            "Quantum_Gravity",
+            0.5729166666666666
+          ],
+          [
+            "Cosmology",
+            0.5625
+          ],
+          [
+            "Meteorology",
+            0.5625
+          ],
+          [
+            "Seismology",
+            0.5520833333333334
+          ],
+          [
+            "Oceanography",
+            0.5416666666666666
+          ],
+          [
+            "Geophysics",
+            0.5208333333333334
+          ],
+          [
+            "High_Energy_Physics",
+            0.5
+          ],
+          [
+            "Particle_Physics",
+            0.5
+          ],
+          [
+            "Chemistry",
+            0.4791666666666667
+          ],
+          [
+            "Fluid_Dynamics",
+            0.4791666666666667
+          ],
+          [
+            "Astrophysics",
+            0.4583333333333333
+          ],
+          [
+            "Atomic_Physics",
+            0.4583333333333333
+          ],
+          [
+            "Neuroscience",
+            0.4583333333333333
+          ],
+          [
+            "Nuclear_Physics",
+            0.4479166666666667
+          ],
+          [
+            "Physical_Chemistry",
+            0.4375
+          ],
+          [
+            "Astronomy",
+            0.4270833333333333
+          ],
+          [
+            "Psychology",
+            0.4270833333333333
+          ],
+          [
+            "Quantum_Mechanics",
+            0.4166666666666667
+          ],
+          [
+            "Thermodynamics",
+            0.4166666666666667
+          ],
+          [
+            "Planetary_Science",
+            0.3958333333333333
+          ],
+          [
+            "Optics",
+            0.3854166666666667
+          ],
+          [
+            "Electromagnetism",
+            0.375
+          ],
+          [
+            "Condensed_Matter",
+            0.34375
+          ],
+          [
+            "Materials_Science",
+            0.34375
+          ],
+          [
+            "Molecular_Chemistry",
+            0.3125
+          ],
+          [
+            "Quantum_Optics",
+            0.3020833333333333
+          ],
+          [
+            "Economics",
+            0.1875
+          ],
+          [
+            "Sociology",
+            0.14583333333333334
+          ],
+          [
+            "Biochemistry",
+            0.052083333333333336
+          ],
+          [
+            "Acoustics",
+            0.0
+          ],
+          [
+            "Biology",
+            0.0
+          ],
+          [
+            "Ecology",
+            0.0
+          ]
+        ]
+      },
+      "finding": "Full-core multipath: 35/35 cores, emergence mean=0.6395833333333333, width=0.200, bridges=6, hotspots=25.",
+      "improvement": "Per-core observer protocols for flip hotspots; separate UI metric for map% vs green-gate.",
+      "duration_s": 0.053
+    },
+    {
+      "id": "LIT-001",
+      "layer": "literature",
+      "title": "Multi-cluster literature\u2192FSOT cross-ref battery",
+      "ok": true,
+      "score": 0.6253571428571428,
+      "severity": "info",
+      "evidence": {
+        "arxiv_indexed": 25000,
+        "wiki_indexed": 15000,
+        "n_probes": 12,
+        "expect_hit_frac": 1.0,
+        "core_domains_touched": [
+          "Astronomy",
+          "Astrophysics",
+          "Atomic_Physics",
+          "Biochemistry",
+          "Biology",
+          "Condensed_Matter",
+          "Cosmology",
+          "Fluid_Dynamics",
+          "Geophysics",
+          "High_Energy_Physics",
+          "Materials_Science",
+          "Neuroscience",
+          "Nuclear_Physics",
+          "Particle_Physics",
+          "Quantum_Computing",
+          "Quantum_Gravity",
+          "Quantum_Mechanics",
+          "Quantum_Optics",
+          "Seismology"
+        ],
+        "n_core_touched": 19,
+        "n_core_total": 35,
+        "domain_breadth_frac": 0.5428571428571428,
+        "n_hit_total": 48,
+        "probes": [
+          {
+            "q": "quantum entanglement measurement",
+            "n_hits": 4,
+            "primary": [
+              "Quantum_Mechanics",
+              "Atomic_Physics",
+              "Quantum_Optics",
+              "Quantum_Computing",
+              "Chemistry"
+            ],
+            "expect": [
+              "Quantum_Mechanics",
+              "Quantum_Optics",
+              "Quantum_Computing"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0704.2973",
+              "0709.1982"
+            ]
+          },
+          {
+            "q": "general relativity gravitational waves black hole",
+            "n_hits": 4,
+            "primary": [
+              "Astronomy",
+              "Astrophysics",
+              "Quantum_Gravity",
+              "Planetary_Science",
+              "Cosmology"
+            ],
+            "expect": [
+              "Cosmology",
+              "Astrophysics",
+              "Quantum_Gravity",
+              "Astronomy"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0704.0754",
+              "0708.4202"
+            ]
+          },
+          {
+            "q": "Hubble tension dark energy cosmology",
+            "n_hits": 4,
+            "primary": [
+              "Quantum_Mechanics",
+              "Particle_Physics",
+              "Astronomy",
+              "Astrophysics",
+              "Quantum_Gravity",
+              "Cosmology"
+            ],
+            "expect": [
+              "Cosmology",
+              "Astrophysics"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0711.0359",
+              "0706.0410"
+            ]
+          },
+          {
+            "q": "superconductivity condensed matter",
+            "n_hits": 4,
+            "primary": [
+              "Particle_Physics",
+              "Quantum_Mechanics",
+              "Astronomy",
+              "High_Energy_Physics",
+              "Condensed_Matter",
+              "Astrophysics"
+            ],
+            "expect": [
+              "Condensed_Matter",
+              "Materials_Science"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0710.3505",
+              "0705.1201"
+            ]
+          },
+          {
+            "q": "neural network brain neuroscience consciousness",
+            "n_hits": 4,
+            "primary": [
+              "Quantum_Mechanics",
+              "Biology",
+              "Cosmology",
+              "Neuroscience"
+            ],
+            "expect": [
+              "Neuroscience",
+              "Biology",
+              "Computer_Science"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0710.2556",
+              "0707.0245"
+            ]
+          },
+          {
+            "q": "DNA protein genome biology",
+            "n_hits": 4,
+            "primary": [
+              "Quantum_Mechanics",
+              "Condensed_Matter",
+              "Biology",
+              "Materials_Science",
+              "Biochemistry",
+              "Biophysics"
+            ],
+            "expect": [
+              "Biology",
+              "Biochemistry"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0704.2114",
+              "0705.4062"
+            ]
+          },
+          {
+            "q": "fluid dynamics turbulence Navier",
+            "n_hits": 4,
+            "primary": [
+              "Fluid_Dynamics",
+              "Quantum_Mechanics",
+              "Particle_Physics"
+            ],
+            "expect": [
+              "Fluid_Dynamics"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0705.3132",
+              "0705.3972"
+            ]
+          },
+          {
+            "q": "seismic earthquake geophysics",
+            "n_hits": 4,
+            "primary": [
+              "Seismology",
+              "Geophysics"
+            ],
+            "expect": [
+              "Seismology",
+              "Geophysics"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0709.1792",
+              "0709.3976"
+            ]
+          },
+          {
+            "q": "nuclear structure particle physics",
+            "n_hits": 4,
+            "primary": [
+              "Particle_Physics",
+              "Atomic_Physics",
+              "High_Energy_Physics",
+              "Nuclear_Physics"
+            ],
+            "expect": [
+              "Nuclear_Physics",
+              "Particle_Physics"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0711.0710",
+              "0708.1033"
+            ]
+          },
+          {
+            "q": "atmospheric climate ozone",
+            "n_hits": 4,
+            "primary": [
+              "Quantum_Mechanics",
+              "Condensed_Matter",
+              "Atmospheric_Physics",
+              "Materials_Science",
+              "Cosmology"
+            ],
+            "expect": [
+              "Atmospheric_Physics",
+              "Meteorology",
+              "Oceanography"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0704.2782",
+              "0706.3720"
+            ]
+          },
+          {
+            "q": "quantum computing qubit",
+            "n_hits": 4,
+            "primary": [
+              "Quantum_Mechanics",
+              "Atomic_Physics",
+              "Quantum_Optics",
+              "Quantum_Computing",
+              "Chemistry"
+            ],
+            "expect": [
+              "Quantum_Computing",
+              "Quantum_Mechanics"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0708.1986",
+              "0705.0174"
+            ]
+          },
+          {
+            "q": "chemistry molecular reaction",
+            "n_hits": 4,
+            "primary": [
+              "Astronomy",
+              "Atomic_Physics",
+              "Chemistry",
+              "Astrophysics",
+              "Cosmology"
+            ],
+            "expect": [
+              "Chemistry",
+              "Molecular_Chemistry",
+              "Physical_Chemistry"
+            ],
+            "expect_hit": true,
+            "sample": [
+              "0710.2250",
+              "0709.0947"
+            ]
+          }
+        ]
+      },
+      "finding": "Literature battery: 100% probes domain-aligned, 19/35 cores touched, index arxiv=25000 wiki=15000, hits=48.",
+      "improvement": "Index full OAI dump; expand category\u2192domain map for all 35 cores; per-domain literature shelves in tissue docs.",
+      "duration_s": 0.248
+    },
+    {
+      "id": "MIND-001",
+      "layer": "mind",
+      "title": "Multi-domain mind grounding (all cores + clusters)",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "n_core_domains": 35,
+        "route_coverage_frac": 1.0,
+        "n_clusters": 6,
+        "deep_probes": 9,
+        "deep_ok_frac": 1.0,
+        "mean_structural_token_frac": 1.0,
+        "structural_tokens": [
+          "free_parameters",
+          "d1d38a",
+          "s=",
+          "d_eff",
+          "emergence",
+          "dispersal",
+          "seed",
+          "fold",
+          "multipath"
+        ],
+        "domain_route_table": [
+          {
+            "domain": "Acoustics",
+            "routed": true,
+            "S_canonical_live": 0.31159079708634163,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Astronomy",
+            "routed": true,
+            "S_canonical_live": 0.8984595681660629,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Astrophysics",
+            "routed": true,
+            "S_canonical_live": 0.8824107984181296,
+            "cluster": "cosmo_unification"
+          },
+          {
+            "domain": "Atmospheric_Physics",
+            "routed": true,
+            "S_canonical_live": -0.47643190542960034,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Atomic_Physics",
+            "routed": true,
+            "S_canonical_live": 0.7358238658627418,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Biochemistry",
+            "routed": true,
+            "S_canonical_live": 0.3062212293865663,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Biology",
+            "routed": true,
+            "S_canonical_live": 0.444725007703846,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Chemistry",
+            "routed": true,
+            "S_canonical_live": 0.4078840642307454,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Condensed_Matter",
+            "routed": true,
+            "S_canonical_live": 0.3384059955797752,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Cosmology",
+            "routed": true,
+            "S_canonical_live": -0.5024559462100434,
+            "cluster": "cosmo_unification"
+          },
+          {
+            "domain": "Ecology",
+            "routed": true,
+            "S_canonical_live": 0.3003170815488649,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Economics",
+            "routed": true,
+            "S_canonical_live": 0.6460045206857499,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Electromagnetism",
+            "routed": true,
+            "S_canonical_live": 0.5188655207983146,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Fluid_Dynamics",
+            "routed": true,
+            "S_canonical_live": -0.5627338062568505,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Geophysics",
+            "routed": true,
+            "S_canonical_live": -0.5490942927204095,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "High_Energy_Physics",
+            "routed": true,
+            "S_canonical_live": 0.8862640566467022,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Materials_Science",
+            "routed": true,
+            "S_canonical_live": 0.3352598807363839,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Meteorology",
+            "routed": true,
+            "S_canonical_live": -0.48499702084687996,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Molecular_Chemistry",
+            "routed": true,
+            "S_canonical_live": 0.33457338307781076,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Neuroscience",
+            "routed": true,
+            "S_canonical_live": 0.514361962908362,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Nuclear_Physics",
+            "routed": true,
+            "S_canonical_live": 0.9213094330291354,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Oceanography",
+            "routed": true,
+            "S_canonical_live": -0.37715907584612013,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Optics",
+            "routed": true,
+            "S_canonical_live": 0.4080624712153455,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Particle_Astrophysics",
+            "routed": true,
+            "S_canonical_live": -0.4244117200288864,
+            "cluster": "cosmo_unification"
+          },
+          {
+            "domain": "Particle_Physics",
+            "routed": true,
+            "S_canonical_live": 0.9504134401245244,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Physical_Chemistry",
+            "routed": true,
+            "S_canonical_live": 0.3340132704017093,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Planetary_Science",
+            "routed": true,
+            "S_canonical_live": 0.7671791385407589,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Psychology",
+            "routed": true,
+            "S_canonical_live": 1.0502056403979547,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Quantum_Computing",
+            "routed": true,
+            "S_canonical_live": -0.14767310363368627,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Quantum_Gravity",
+            "routed": true,
+            "S_canonical_live": -0.5255977531899869,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Quantum_Mechanics",
+            "routed": true,
+            "S_canonical_live": 0.9555063001027201,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Quantum_Optics",
+            "routed": true,
+            "S_canonical_live": 0.40817053817150195,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Seismology",
+            "routed": true,
+            "S_canonical_live": -0.44590157211030373,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Sociology",
+            "routed": true,
+            "S_canonical_live": 0.6501466524159139,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Thermodynamics",
+            "routed": true,
+            "S_canonical_live": 0.786974501611573,
+            "cluster": "life_matter_energy"
+          }
+        ],
+        "deep_results": [
+          {
+            "cluster": "astro_planetary",
+            "rep": "Actuarial_Science_Panel",
+            "ok": true,
+            "mention_frac": 0.0425531914893617,
+            "structural_token_frac": 1.0,
+            "has_s_numeric": true,
+            "n_routed": 27,
+            "n_focus": 12,
+            "answer_len": 6140
+          },
+          {
+            "cluster": "atomic_molecular_optical",
+            "rep": "Rust_Lean_Bridge",
+            "ok": true,
+            "mention_frac": 0.32,
+            "structural_token_frac": 1.0,
+            "has_s_numeric": true,
+            "n_routed": 28,
+            "n_focus": 12,
+            "answer_len": 6622
+          },
+          {
+            "cluster": "cosmo_unification",
+            "rep": "Domain_Coupling_Simulation_Refresh_Panel",
+            "ok": true,
+            "mention_frac": 0.07142857142857142,
+            "structural_token_frac": 1.0,
+            "has_s_numeric": true,
+            "n_routed": 29,
+            "n_focus": 12,
+            "answer_len": 6246
+          },
+          {
+            "cluster": "earth_complex_systems",
+            "rep": "Psychology",
+            "ok": true,
+            "mention_frac": 0.01764705882352941,
+            "structural_token_frac": 1.0,
+            "has_s_numeric": true,
+            "n_routed": 32,
+            "n_focus": 12,
+            "answer_len": 6757
+          },
+          {
+            "cluster": "life_matter_energy",
+            "rep": "Arxiv_Primitives_V14",
+            "ok": true,
+            "mention_frac": 0.056,
+            "structural_token_frac": 1.0,
+            "has_s_numeric": true,
+            "n_routed": 33,
+            "n_focus": 12,
+            "answer_len": 11176
+          },
+          {
+            "cluster": "quantum_particle",
+            "rep": "Quantum_Mechanics",
+            "ok": true,
+            "mention_frac": 0.5714285714285714,
+            "structural_token_frac": 1.0,
+            "has_s_numeric": true,
+            "n_routed": 33,
+            "n_focus": 12,
+            "answer_len": 6401
+          },
+          {
+            "cluster": "cross_scale",
+            "rep": null,
+            "ok": true,
+            "structural_token_frac": 1.0,
+            "answer_len": 11288
+          },
+          {
+            "cluster": "green_gate",
+            "rep": null,
+            "ok": true,
+            "structural_token_frac": 1.0,
+            "answer_len": 9850
+          },
+          {
+            "cluster": "to_architecture",
+            "rep": null,
+            "ok": true,
+            "structural_token_frac": 1.0,
+            "answer_len": 6360
+          }
+        ]
+      },
+      "finding": "Mind multi-domain grounding: route 100% of 35 cores, deep probes OK 100% (9 probes across 6 clusters), structural token mean 100% \u2014 not a 6-keyword toy check.",
+      "improvement": "Force every answer to emit full core-panel table when query is global; auto-attach literature hits per routed domain.",
+      "duration_s": 8.197
+    },
+    {
+      "id": "TISSUE-001",
+      "layer": "connective",
+      "title": "Connective graph vs full archive domains",
+      "ok": true,
+      "score": 0.8911795023296298,
+      "severity": "info",
+      "evidence": {
+        "graph_nodes": 547,
+        "graph_edges": 3502,
+        "core_in_graph_frac": 1.0,
+        "atlas_in_graph_frac": 1.0,
+        "missing_cores": [],
+        "missing_atlas_domains_n": 0,
+        "tissue_nodes": 511,
+        "tissue_edges": 3364,
+        "raw_coupling_edges": 39062,
+        "compact_edge_frac": 0.08611950232962982,
+        "edge_kinds": {
+          "seed_to_law": 5,
+          "law_to_domain": 35,
+          "routes_to_core": 734,
+          "by_core_membership": 367,
+          "problem_route": 55,
+          "coupling_lean_overlap": 2088,
+          "coupling_fsot_prediction_cross_ratio": 6,
+          "coupling_magnetosphere_cluster": 10,
+          "coupling_crosswalk_module": 98,
+          "coupling_fluidlink_fpc_timing": 6,
+          "ladder": 34,
+          "cluster": 29,
+          "long_range": 5,
+          "prediction_link": 30
+        },
+        "problem_route_nodes": 19,
+        "nav_problem_routes": 19,
+        "green_gate": "403/403"
+      },
+      "finding": "Connective coverage: core 100%, atlas folds 100% (0 missing), edges 3502 (compact/raw=0.086), problem routes 19/19.",
+      "improvement": "Raise lean-overlap degree caps; ensure every atlas domain is a graph node; edge error_pct LOD.",
+      "duration_s": 0.031
+    },
+    {
+      "id": "DOC-001",
+      "layer": "documentation",
+      "title": "Per-node scientific tissue theses",
+      "ok": true,
+      "score": 1.0,
+      "severity": "info",
+      "evidence": {
+        "n_docs": 695,
+        "sample_ok": "5/5"
+      },
+      "finding": "Tissue library 695 docs; samples 5/5 resolvable.",
+      "improvement": "Enrich theses with live literature citations + Lean obligation IDs per fold.",
+      "duration_s": 0.002
+    },
+    {
+      "id": "SELF-001",
+      "layer": "self_referral",
+      "title": "FSOT self-referral on FULL domain atlas",
+      "ok": true,
+      "score": 0.9857142857142857,
+      "severity": "info",
+      "evidence": {
+        "n_core_total": 35,
+        "n_core_in_multipath": 35,
+        "multipath_emergence_mean": 0.6540178571428571,
+        "literature_queries": 8,
+        "literature_hits_total": 24,
+        "literature_domains": [
+          "Astronomy",
+          "Astrophysics",
+          "Atomic_Physics",
+          "Biochemistry",
+          "Biology",
+          "Chemistry",
+          "Condensed_Matter",
+          "Cosmology",
+          "Fluid_Dynamics",
+          "High_Energy_Physics",
+          "Materials_Science",
+          "Neuroscience",
+          "Particle_Physics",
+          "Quantum_Computing",
+          "Quantum_Gravity",
+          "Quantum_Mechanics",
+          "Quantum_Optics"
+        ],
+        "sample_arxiv": [
+          "0707.3359",
+          "0710.5386",
+          "0710.3995",
+          "0709.2138",
+          "0706.4180",
+          "0710.3505",
+          "0704.3893",
+          "0707.2305"
+        ],
+        "domain_grounding_frac": 0.9428571428571428,
+        "domains_grounded": [
+          "Acoustics",
+          "Astronomy",
+          "Astrophysics",
+          "Atmospheric_Physics",
+          "Atomic_Physics",
+          "Biochemistry",
+          "Biology",
+          "Chemistry",
+          "Condensed_Matter",
+          "Cosmology",
+          "Ecology",
+          "Economics",
+          "Electromagnetism",
+          "Fluid_Dynamics",
+          "Geophysics",
+          "High_Energy_Physics",
+          "Materials_Science",
+          "Meteorology",
+          "Molecular_Chemistry",
+          "Neuroscience",
+          "Nuclear_Physics",
+          "Oceanography",
+          "Particle_Astrophysics",
+          "Particle_Physics",
+          "Physical_Chemistry",
+          "Planetary_Science",
+          "Psychology",
+          "Quantum_Computing",
+          "Quantum_Gravity",
+          "Quantum_Mechanics",
+          "Quantum_Optics",
+          "Seismology",
+          "Thermodynamics"
+        ],
+        "domains_missing_in_mind": [
+          "Optics",
+          "Sociology"
+        ],
+        "structural_checks": {
+          "free_parameters_or_zero_fp": true,
+          "d1d38a": true,
+          "law_S": true,
+          "multipath": true,
+          "green_gate_0_5": true,
+          "emergence_map": true,
+          "experiment_honesty": true
+        },
+        "structural_frac": 1.0,
+        "cluster_grounding": {
+          "quantum_particle": true,
+          "atomic_molecular_optical": true,
+          "life_matter_energy": true,
+          "earth_complex_systems": true,
+          "astro_planetary": true,
+          "cosmo_unification": true
+        },
+        "cluster_frac": 1.0,
+        "self_folds_n": 35,
+        "self_folds": [
+          {
+            "domain": "Acoustics",
+            "S_path_mean": 0.31354865361009937,
+            "flip_rate": 0.015625,
+            "D_eff": 10,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Astronomy",
+            "S_path_mean": 0.4274183208314991,
+            "flip_rate": 0.359375,
+            "D_eff": 20,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Astrophysics",
+            "S_path_mean": 0.4822423314934688,
+            "flip_rate": 0.3125,
+            "D_eff": 24,
+            "cluster": "cosmo_unification"
+          },
+          {
+            "domain": "Atmospheric_Physics",
+            "S_path_mean": 0.2984542442192312,
+            "flip_rate": 0.625,
+            "D_eff": 17,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Atomic_Physics",
+            "S_path_mean": 0.10020350086029943,
+            "flip_rate": 0.53125,
+            "D_eff": 7,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Biochemistry",
+            "S_path_mean": 0.29512825619821664,
+            "flip_rate": 0.078125,
+            "D_eff": 13,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Biology",
+            "S_path_mean": 0.5179683519804649,
+            "flip_rate": 0.0,
+            "D_eff": 12,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Chemistry",
+            "S_path_mean": 0.1722356056309666,
+            "flip_rate": 0.421875,
+            "D_eff": 8,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Condensed_Matter",
+            "S_path_mean": 0.1975821474923371,
+            "flip_rate": 0.390625,
+            "D_eff": 14,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Cosmology",
+            "S_path_mean": 0.2065289532371868,
+            "flip_rate": 0.484375,
+            "D_eff": 25,
+            "cluster": "cosmo_unification"
+          },
+          {
+            "domain": "Ecology",
+            "S_path_mean": 0.42580749209391927,
+            "flip_rate": 0.0,
+            "D_eff": 15,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Economics",
+            "S_path_mean": 0.41150166250400416,
+            "flip_rate": 0.140625,
+            "D_eff": 20,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Electromagnetism",
+            "S_path_mean": 0.3724463120525436,
+            "flip_rate": 0.265625,
+            "D_eff": 9,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Fluid_Dynamics",
+            "S_path_mean": 0.2934782906172694,
+            "flip_rate": 0.578125,
+            "D_eff": 15,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Geophysics",
+            "S_path_mean": 0.35114771107726606,
+            "flip_rate": 0.59375,
+            "D_eff": 19,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "High_Energy_Physics",
+            "S_path_mean": 0.5397695151246364,
+            "flip_rate": 0.25,
+            "D_eff": 7,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Materials_Science",
+            "S_path_mean": 0.24174315875554583,
+            "flip_rate": 0.3125,
+            "D_eff": 10,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Meteorology",
+            "S_path_mean": 0.15671151952604057,
+            "flip_rate": 0.484375,
+            "D_eff": 16,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Molecular_Chemistry",
+            "S_path_mean": 0.21649675770211355,
+            "flip_rate": 0.3125,
+            "D_eff": 9,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Neuroscience",
+            "S_path_mean": 0.20205310986006633,
+            "flip_rate": 0.4375,
+            "D_eff": 14,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Nuclear_Physics",
+            "S_path_mean": 0.3531030691141079,
+            "flip_rate": 0.40625,
+            "D_eff": 15,
+            "cluster": "life_matter_energy"
+          },
+          {
+            "domain": "Oceanography",
+            "S_path_mean": 0.1852128821714987,
+            "flip_rate": 0.546875,
+            "D_eff": 17,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Optics",
+            "S_path_mean": 0.19975662858392884,
+            "flip_rate": 0.40625,
+            "D_eff": 10,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Particle_Astrophysics",
+            "S_path_mean": 0.3522854842515254,
+            "flip_rate": 0.65625,
+            "D_eff": 24,
+            "cluster": "cosmo_unification"
+          },
+          {
+            "domain": "Particle_Physics",
+            "S_path_mean": 0.36801563169277723,
+            "flip_rate": 0.390625,
+            "D_eff": 5,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Physical_Chemistry",
+            "S_path_mean": 0.24366080617354224,
+            "flip_rate": 0.296875,
+            "D_eff": 8,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Planetary_Science",
+            "S_path_mean": 0.14173852410163854,
+            "flip_rate": 0.546875,
+            "D_eff": 21,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Psychology",
+            "S_path_mean": 0.39996679992151823,
+            "flip_rate": 0.40625,
+            "D_eff": 16,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Quantum_Computing",
+            "S_path_mean": 0.17013015314287155,
+            "flip_rate": 0.546875,
+            "D_eff": 11,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Quantum_Gravity",
+            "S_path_mean": 0.35613326641400606,
+            "flip_rate": 0.609375,
+            "D_eff": 22,
+            "cluster": "astro_planetary"
+          },
+          {
+            "domain": "Quantum_Mechanics",
+            "S_path_mean": 0.212559482431064,
+            "flip_rate": 0.484375,
+            "D_eff": 6,
+            "cluster": "quantum_particle"
+          },
+          {
+            "domain": "Quantum_Optics",
+            "S_path_mean": 0.16230837507621693,
+            "flip_rate": 0.453125,
+            "D_eff": 11,
+            "cluster": "atomic_molecular_optical"
+          },
+          {
+            "domain": "Seismology",
+            "S_path_mean": 0.3265366088833404,
+            "flip_rate": 0.53125,
+            "D_eff": 18,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Sociology",
+            "S_path_mean": 0.481833671674754,
+            "flip_rate": 0.09375,
+            "D_eff": 18,
+            "cluster": "earth_complex_systems"
+          },
+          {
+            "domain": "Thermodynamics",
+            "S_path_mean": 0.22132006110617433,
+            "flip_rate": 0.453125,
+            "D_eff": 15,
+            "cluster": "life_matter_energy"
+          }
+        ],
+        "mind_answer_len": 13195,
+        "mind_answer_preview": "FSOT LAW (ToE paradigm shift, free_parameters=0, authority D1D38A): raw_S = K\u00b7(T1+T2+T3) from fixed seeds (\u03c0, e, \u03c6, \u03b3, Catalan). T1 carries coherence / perceived_adjust / quirk_mod (observer coupling); T2 carries dimensional / fluid-structure terms; T3 carries acoustic_bleed, poof, chaos, and long-range bleed. Each scientific domain is a *fold* of one 25D fluid condensate, indexed by effective depth D_eff and phase \u03b4\u03c8 \u2014 not a separate fitted model. Sign(S)>0 = emergence (structure-forming vitality); sign(S)\u22640 = dispersal. This is a paradigm shift in how the universe is seen: one fluid, many folds, life and cosmos on the same seed engine \u2014 not bolted-on ontologies. Formal multi-prover obligations + large empirical panels already close many domains on this same engine; multipath Monte Carlo ",
+        "note": "Self-referral uses full core atlas + multi-cluster literature \u2014 not 6 keywords."
+      },
+      "finding": "Self-referral FULL: multipath 35/35 cores, lit hits=24 domains=17, mind domain-ground 94%, structural 100%, clusters 100%.",
+      "improvement": "Mind must emit full 35-core S panel on self-audit; auto-merge literature hits per core; LTM-solidify audit ledger; never equate multipath map% with green-gate.",
+      "duration_s": 1.202
+    },
+    {
+      "id": "FORM-001",
+      "layer": "formal",
+      "title": "Formal soft-court bridge",
+      "ok": true,
+      "score": 0.73,
+      "severity": "info",
+      "evidence": {
+        "local_court": true,
+        "proved_claims": 65,
+        "pending": 25,
+        "promoted": 8,
+        "online_lean_per_path": false
+      },
+      "finding": "Soft court local=True, proved_claims=65, pending=25, promoted=8.",
+      "improvement": "Auto-promote audit high_failures into pending obligations; never claim per-path Lean.",
+      "duration_s": 0.002
+    }
+  ],
+  "improvement_ledger": [
+    {
+      "id": "LIT-001",
+      "title": "Multi-cluster literature\u2192FSOT cross-ref battery",
+      "severity": "medium",
+      "improvement": "Index full OAI dump; expand category\u2192domain map for all 35 cores; per-domain literature shelves in tissue docs.",
+      "finding": "Literature battery: 100% probes domain-aligned, 19/35 cores touched, index arxiv=25000 wiki=15000, hits=48.",
+      "score": 0.6253571428571428,
+      "passed": true
+    },
+    {
+      "id": "FORM-001",
+      "title": "Formal soft-court bridge",
+      "severity": "medium",
+      "improvement": "Auto-promote audit high_failures into pending obligations; never claim per-path Lean.",
+      "finding": "Soft court local=True, proved_claims=65, pending=25, promoted=8.",
+      "score": 0.73,
+      "passed": true
+    },
+    {
+      "id": "NAV-001",
+      "title": "Navigator cores/panels/routes/subfields",
+      "severity": "low",
+      "improvement": "Deepen thin subfields (breadth<40%); link every subfield note into tissue docs + graph.",
+      "finding": "Navigator: core overlap 100%, ext panels 367, problem routes 19, subfields 45, mean breadth 40.7%.",
+      "score": 0.8813466666666667,
+      "passed": true
+    },
+    {
+      "id": "TISSUE-001",
+      "title": "Connective graph vs full archive domains",
+      "severity": "low",
+      "improvement": "Raise lean-overlap degree caps; ensure every atlas domain is a graph node; edge error_pct LOD.",
+      "finding": "Connective coverage: core 100%, atlas folds 100% (0 missing), edges 3502 (compact/raw=0.086), problem routes 19/19.",
+      "score": 0.8911795023296298,
+      "passed": true
+    },
+    {
+      "id": "MC-001",
+      "title": "Full-core multipath coherence + flips",
+      "severity": "low",
+      "improvement": "Per-core observer protocols for flip hotspots; separate UI metric for map% vs green-gate.",
+      "finding": "Full-core multipath: 35/35 cores, emergence mean=0.6395833333333333, width=0.200, bridges=6, hotspots=25.",
+      "score": 0.9600000000000001,
+      "passed": true
+    },
+    {
+      "id": "SELF-001",
+      "title": "FSOT self-referral on FULL domain atlas",
+      "severity": "low",
+      "improvement": "Mind must emit full 35-core S panel on self-audit; auto-merge literature hits per core; LTM-solidify audit ledger; never equate multipath map% with green-gate.",
+      "finding": "Self-referral FULL: multipath 35/35 cores, lit hits=24 domains=17, mind domain-ground 94%, structural 100%, clusters 100%.",
+      "score": 0.9857142857142857,
+      "passed": true
+    },
+    {
+      "id": "EMP-003",
+      "title": "Contested open-science panel",
+      "severity": "low",
+      "improvement": "Expand contested panel live recompute in MC (not only archive snapshot).",
+      "finding": "Contested panel 16/16 within 0.5%; FSOT pooled=0.029748999999999998% vs baseline ~15%.",
+      "score": 1.0,
+      "passed": true
+    },
+    {
+      "id": "DOM-001",
+      "title": "Full domain+extension atlas evaluate coverage",
+      "severity": "low",
+      "improvement": "Sync any missing extension panels from Physical Archive navigator; fail closed on core eval errors.",
+      "finding": "Atlas coverage: core 35/35 eval-OK, extensions 367/367, total folds 402, clusters 6.",
+      "score": 1.0,
+      "passed": true
+    },
+    {
+      "id": "MIND-001",
+      "title": "Multi-domain mind grounding (all cores + clusters)",
+      "severity": "low",
+      "improvement": "Force every answer to emit full core-panel table when query is global; auto-attach literature hits per routed domain.",
+      "finding": "Mind multi-domain grounding: route 100% of 35 cores, deep probes OK 100% (9 probes across 6 clusters), structural token mean 100% \u2014 not a 6-keyword toy check.",
+      "score": 1.0,
+      "passed": true
+    },
+    {
+      "id": "DOC-001",
+      "title": "Per-node scientific tissue theses",
+      "severity": "low",
+      "improvement": "Enrich theses with live literature citations + Lean obligation IDs per fold.",
+      "finding": "Tissue library 695 docs; samples 5/5 resolvable.",
+      "score": 1.0,
+      "passed": true
+    }
+  ],
+  "self_referral": {
+    "id": "SELF-001",
+    "layer": "self_referral",
+    "title": "FSOT self-referral on FULL domain atlas",
+    "ok": true,
+    "score": 0.9857142857142857,
+    "severity": "info",
+    "evidence": {
+      "n_core_total": 35,
+      "n_core_in_multipath": 35,
+      "multipath_emergence_mean": 0.6540178571428571,
+      "literature_queries": 8,
+      "literature_hits_total": 24,
+      "literature_domains": [
+        "Astronomy",
+        "Astrophysics",
+        "Atomic_Physics",
+        "Biochemistry",
+        "Biology",
+        "Chemistry",
+        "Condensed_Matter",
+        "Cosmology",
+        "Fluid_Dynamics",
+        "High_Energy_Physics",
+        "Materials_Science",
+        "Neuroscience",
+        "Particle_Physics",
+        "Quantum_Computing",
+        "Quantum_Gravity",
+        "Quantum_Mechanics",
+        "Quantum_Optics"
+      ],
+      "sample_arxiv": [
+        "0707.3359",
+        "0710.5386",
+        "0710.3995",
+        "0709.2138",
+        "0706.4180",
+        "0710.3505",
+        "0704.3893",
+        "0707.2305"
+      ],
+      "domain_grounding_frac": 0.9428571428571428,
+      "domains_grounded": [
+        "Acoustics",
+        "Astronomy",
+        "Astrophysics",
+        "Atmospheric_Physics",
+        "Atomic_Physics",
+        "Biochemistry",
+        "Biology",
+        "Chemistry",
+        "Condensed_Matter",
+        "Cosmology",
+        "Ecology",
+        "Economics",
+        "Electromagnetism",
+        "Fluid_Dynamics",
+        "Geophysics",
+        "High_Energy_Physics",
+        "Materials_Science",
+        "Meteorology",
+        "Molecular_Chemistry",
+        "Neuroscience",
+        "Nuclear_Physics",
+        "Oceanography",
+        "Particle_Astrophysics",
+        "Particle_Physics",
+        "Physical_Chemistry",
+        "Planetary_Science",
+        "Psychology",
+        "Quantum_Computing",
+        "Quantum_Gravity",
+        "Quantum_Mechanics",
+        "Quantum_Optics",
+        "Seismology",
+        "Thermodynamics"
+      ],
+      "domains_missing_in_mind": [
+        "Optics",
+        "Sociology"
+      ],
+      "structural_checks": {
+        "free_parameters_or_zero_fp": true,
+        "d1d38a": true,
+        "law_S": true,
+        "multipath": true,
+        "green_gate_0_5": true,
+        "emergence_map": true,
+        "experiment_honesty": true
+      },
+      "structural_frac": 1.0,
+      "cluster_grounding": {
+        "quantum_particle": true,
+        "atomic_molecular_optical": true,
+        "life_matter_energy": true,
+        "earth_complex_systems": true,
+        "astro_planetary": true,
+        "cosmo_unification": true
+      },
+      "cluster_frac": 1.0,
+      "self_folds_n": 35,
+      "self_folds": [
+        {
+          "domain": "Acoustics",
+          "S_path_mean": 0.31354865361009937,
+          "flip_rate": 0.015625,
+          "D_eff": 10,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Astronomy",
+          "S_path_mean": 0.4274183208314991,
+          "flip_rate": 0.359375,
+          "D_eff": 20,
+          "cluster": "astro_planetary"
+        },
+        {
+          "domain": "Astrophysics",
+          "S_path_mean": 0.4822423314934688,
+          "flip_rate": 0.3125,
+          "D_eff": 24,
+          "cluster": "cosmo_unification"
+        },
+        {
+          "domain": "Atmospheric_Physics",
+          "S_path_mean": 0.2984542442192312,
+          "flip_rate": 0.625,
+          "D_eff": 17,
+          "cluster": "earth_complex_systems"
+        },
+        {
+          "domain": "Atomic_Physics",
+          "S_path_mean": 0.10020350086029943,
+          "flip_rate": 0.53125,
+          "D_eff": 7,
+          "cluster": "quantum_particle"
+        },
+        {
+          "domain": "Biochemistry",
+          "S_path_mean": 0.29512825619821664,
+          "flip_rate": 0.078125,
+          "D_eff": 13,
+          "cluster": "life_matter_energy"
+        },
+        {
+          "domain": "Biology",
+          "S_path_mean": 0.5179683519804649,
+          "flip_rate": 0.0,
+          "D_eff": 12,
+          "cluster": "life_matter_energy"
+        },
+        {
+          "domain": "Chemistry",
+          "S_path_mean": 0.1722356056309666,
+          "flip_rate": 0.421875,
+          "D_eff": 8,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Condensed_Matter",
+          "S_path_mean": 0.1975821474923371,
+          "flip_rate": 0.390625,
+          "D_eff": 14,
+          "cluster": "life_matter_energy"
+        },
+        {
+          "domain": "Cosmology",
+          "S_path_mean": 0.2065289532371868,
+          "flip_rate": 0.484375,
+          "D_eff": 25,
+          "cluster": "cosmo_unification"
+        },
+        {
+          "domain": "Ecology",
+          "S_path_mean": 0.42580749209391927,
+          "flip_rate": 0.0,
+          "D_eff": 15,
+          "cluster": "life_matter_energy"
+        },
+        {
+          "domain": "Economics",
+          "S_path_mean": 0.41150166250400416,
+          "flip_rate": 0.140625,
+          "D_eff": 20,
+          "cluster": "astro_planetary"
+        },
+        {
+          "domain": "Electromagnetism",
+          "S_path_mean": 0.3724463120525436,
+          "flip_rate": 0.265625,
+          "D_eff": 9,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Fluid_Dynamics",
+          "S_path_mean": 0.2934782906172694,
+          "flip_rate": 0.578125,
+          "D_eff": 15,
+          "cluster": "life_matter_energy"
+        },
+        {
+          "domain": "Geophysics",
+          "S_path_mean": 0.35114771107726606,
+          "flip_rate": 0.59375,
+          "D_eff": 19,
+          "cluster": "earth_complex_systems"
+        },
+        {
+          "domain": "High_Energy_Physics",
+          "S_path_mean": 0.5397695151246364,
+          "flip_rate": 0.25,
+          "D_eff": 7,
+          "cluster": "quantum_particle"
+        },
+        {
+          "domain": "Materials_Science",
+          "S_path_mean": 0.24174315875554583,
+          "flip_rate": 0.3125,
+          "D_eff": 10,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Meteorology",
+          "S_path_mean": 0.15671151952604057,
+          "flip_rate": 0.484375,
+          "D_eff": 16,
+          "cluster": "earth_complex_systems"
+        },
+        {
+          "domain": "Molecular_Chemistry",
+          "S_path_mean": 0.21649675770211355,
+          "flip_rate": 0.3125,
+          "D_eff": 9,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Neuroscience",
+          "S_path_mean": 0.20205310986006633,
+          "flip_rate": 0.4375,
+          "D_eff": 14,
+          "cluster": "life_matter_energy"
+        },
+        {
+          "domain": "Nuclear_Physics",
+          "S_path_mean": 0.3531030691141079,
+          "flip_rate": 0.40625,
+          "D_eff": 15,
+          "cluster": "life_matter_energy"
+        },
+        {
+          "domain": "Oceanography",
+          "S_path_mean": 0.1852128821714987,
+          "flip_rate": 0.546875,
+          "D_eff": 17,
+          "cluster": "earth_complex_systems"
+        },
+        {
+          "domain": "Optics",
+          "S_path_mean": 0.19975662858392884,
+          "flip_rate": 0.40625,
+          "D_eff": 10,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Particle_Astrophysics",
+          "S_path_mean": 0.3522854842515254,
+          "flip_rate": 0.65625,
+          "D_eff": 24,
+          "cluster": "cosmo_unification"
+        },
+        {
+          "domain": "Particle_Physics",
+          "S_path_mean": 0.36801563169277723,
+          "flip_rate": 0.390625,
+          "D_eff": 5,
+          "cluster": "quantum_particle"
+        },
+        {
+          "domain": "Physical_Chemistry",
+          "S_path_mean": 0.24366080617354224,
+          "flip_rate": 0.296875,
+          "D_eff": 8,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Planetary_Science",
+          "S_path_mean": 0.14173852410163854,
+          "flip_rate": 0.546875,
+          "D_eff": 21,
+          "cluster": "astro_planetary"
+        },
+        {
+          "domain": "Psychology",
+          "S_path_mean": 0.39996679992151823,
+          "flip_rate": 0.40625,
+          "D_eff": 16,
+          "cluster": "earth_complex_systems"
+        },
+        {
+          "domain": "Quantum_Computing",
+          "S_path_mean": 0.17013015314287155,
+          "flip_rate": 0.546875,
+          "D_eff": 11,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Quantum_Gravity",
+          "S_path_mean": 0.35613326641400606,
+          "flip_rate": 0.609375,
+          "D_eff": 22,
+          "cluster": "astro_planetary"
+        },
+        {
+          "domain": "Quantum_Mechanics",
+          "S_path_mean": 0.212559482431064,
+          "flip_rate": 0.484375,
+          "D_eff": 6,
+          "cluster": "quantum_particle"
+        },
+        {
+          "domain": "Quantum_Optics",
+          "S_path_mean": 0.16230837507621693,
+          "flip_rate": 0.453125,
+          "D_eff": 11,
+          "cluster": "atomic_molecular_optical"
+        },
+        {
+          "domain": "Seismology",
+          "S_path_mean": 0.3265366088833404,
+          "flip_rate": 0.53125,
+          "D_eff": 18,
+          "cluster": "earth_complex_systems"
+        },
+        {
+          "domain": "Sociology",
+          "S_path_mean": 0.481833671674754,
+          "flip_rate": 0.09375,
+          "D_eff": 18,
+          "cluster": "earth_complex_systems"
+        },
+        {
+          "domain": "Thermodynamics",
+          "S_path_mean": 0.22132006110617433,
+          "flip_rate": 0.453125,
+          "D_eff": 15,
+          "cluster": "life_matter_energy"
+        }
+      ],
+      "mind_answer_len": 13195,
+      "mind_answer_preview": "FSOT LAW (ToE paradigm shift, free_parameters=0, authority D1D38A): raw_S = K\u00b7(T1+T2+T3) from fixed seeds (\u03c0, e, \u03c6, \u03b3, Catalan). T1 carries coherence / perceived_adjust / quirk_mod (observer coupling); T2 carries dimensional / fluid-structure terms; T3 carries acoustic_bleed, poof, chaos, and long-range bleed. Each scientific domain is a *fold* of one 25D fluid condensate, indexed by effective depth D_eff and phase \u03b4\u03c8 \u2014 not a separate fitted model. Sign(S)>0 = emergence (structure-forming vitality); sign(S)\u22640 = dispersal. This is a paradigm shift in how the universe is seen: one fluid, many folds, life and cosmos on the same seed engine \u2014 not bolted-on ontologies. Formal multi-prover obligations + large empirical panels already close many domains on this same engine; multipath Monte Carlo ",
+      "note": "Self-referral uses full core atlas + multi-cluster literature \u2014 not 6 keywords."
+    },
+    "finding": "Self-referral FULL: multipath 35/35 cores, lit hits=24 domains=17, mind domain-ground 94%, structural 100%, clusters 100%.",
+    "improvement": "Mind must emit full 35-core S panel on self-audit; auto-merge literature hits per core; LTM-solidify audit ledger; never equate multipath map% with green-gate.",
+    "duration_s": 1.202
+  },
+  "doctrine": "Audit uses the same seed engine and multipath mind under audit. Literature and multipath are observation/discovery; green-gate remains empirical bar. Self-referral must never promote multipath-only claims to proved tier."
+}

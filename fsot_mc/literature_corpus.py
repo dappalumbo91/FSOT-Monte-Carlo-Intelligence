@@ -165,12 +165,33 @@ def literature_dir() -> Path:
     return d
 
 
+def shipped_literature_dir() -> Path:
+    """Portable pack under vendor/literature/ (cloned with the repo / Git LFS)."""
+    from fsot_mc.paths import PACKAGE_ROOT
+
+    return PACKAGE_ROOT / "vendor" / "literature"
+
+
+def _resolve_db(name: str) -> Path:
+    """
+    Prefer local data/literature (user rebuilds / full dump).
+    Fall back to vendor/literature shipped pack so clones work offline.
+    """
+    local = literature_dir() / name
+    if local.is_file() and local.stat().st_size > 10_000:
+        return local
+    shipped = shipped_literature_dir() / name
+    if shipped.is_file() and shipped.stat().st_size > 10_000:
+        return shipped
+    return local  # default write target for new builds
+
+
 def arxiv_db_path() -> Path:
-    return literature_dir() / "arxiv_fts.sqlite"
+    return _resolve_db("arxiv_fts.sqlite")
 
 
 def wiki_db_path() -> Path:
-    return literature_dir() / "wiki_fts.sqlite"
+    return _resolve_db("wiki_fts.sqlite")
 
 
 def _connect(path: Path) -> sqlite3.Connection:
@@ -278,12 +299,16 @@ def build_arxiv_index(
     category_prefixes: list[str] | None = None,
     rebuild: bool = False,
     fsot_priority: bool | None = None,
+    db_path: Path | None = None,
 ) -> dict[str, Any]:
     """
     Stream arXiv JSONL into SQLite FTS5.
 
     max_papers=None (CLI --max-papers 0) indexes the full OAI dump (slow).
-    Default max_papers=100k for quick maps.
+    Default max_papers=100k for quick maps / shipped pack.
+
+    db_path: optional explicit SQLite path (use vendor/literature for ship pack
+    without overwriting a full local data/literature index).
 
     fsot_priority:
       - True  → keep only FSOT_PRIORITY_PREFIXES (physics/astro/q-bio/…)
@@ -297,7 +322,8 @@ def build_arxiv_index(
     if fsot_priority is None:
         fsot_priority = max_papers is not None
 
-    db = arxiv_db_path()
+    db = Path(db_path) if db_path is not None else (literature_dir() / "arxiv_fts.sqlite")
+    db.parent.mkdir(parents=True, exist_ok=True)
     if rebuild and db.is_file():
         try:
             db.unlink()
@@ -560,14 +586,19 @@ def build_wiki_index(
     root: Path | None = None,
     max_articles: int | None = 50_000,
     rebuild: bool = False,
+    db_path: Path | None = None,
 ) -> dict[str, Any]:
     root = Path(root or DEFAULT_WIKI)
     if not root.is_dir():
         return {"ok": False, "error": "wiki_root_missing", "path": str(root)}
 
-    db = wiki_db_path()
+    db = Path(db_path) if db_path is not None else (literature_dir() / "wiki_fts.sqlite")
+    db.parent.mkdir(parents=True, exist_ok=True)
     if rebuild and db.is_file():
-        db.unlink()
+        try:
+            db.unlink()
+        except OSError:
+            pass
     conn = _connect(db)
     init_wiki_db(conn)
     n_exist = conn.execute("SELECT COUNT(*) FROM articles").fetchone()[0]
@@ -807,6 +838,7 @@ def literature_search(
 
 def literature_status() -> dict[str, Any]:
     arx_db, wiki_db = arxiv_db_path(), wiki_db_path()
+    ship = shipped_literature_dir()
     out: dict[str, Any] = {
         "arxiv_path": str(DEFAULT_ARXIV),
         "arxiv_exists": DEFAULT_ARXIV.is_file(),
@@ -815,19 +847,52 @@ def literature_status() -> dict[str, Any]:
         "wiki_exists": DEFAULT_WIKI.is_dir(),
         "arxiv_db": str(arx_db),
         "wiki_db": str(wiki_db),
+        "shipped_dir": str(ship),
+        "using_shipped_arxiv": arx_db.is_file() and ship in arx_db.parents,
+        "using_shipped_wiki": wiki_db.is_file() and ship in wiki_db.parents,
         "free_parameters": 0,
     }
     if arx_db.is_file():
         conn = _connect(arx_db)
         out["arxiv_indexed"] = conn.execute("SELECT COUNT(*) FROM papers").fetchone()[0]
         out["arxiv_meta"] = {r[0]: r[1] for r in conn.execute("SELECT key,value FROM meta")}
+        out["arxiv_db_mb"] = round(arx_db.stat().st_size / 1e6, 1)
         conn.close()
     else:
         out["arxiv_indexed"] = 0
     if wiki_db.is_file():
         conn = _connect(wiki_db)
         out["wiki_indexed"] = conn.execute("SELECT COUNT(*) FROM articles").fetchone()[0]
+        out["wiki_db_mb"] = round(wiki_db.stat().st_size / 1e6, 1)
         conn.close()
     else:
         out["wiki_indexed"] = 0
     return out
+
+
+def ensure_shipped_literature(*, force_copy: bool = False) -> dict[str, Any]:
+    """
+    Copy vendor/literature → data/literature when local DBs missing.
+    Safe for clones that only have the Git LFS shipped pack.
+    """
+    import shutil
+
+    ship = shipped_literature_dir()
+    dest = literature_dir()
+    copied = []
+    for name in ("arxiv_fts.sqlite", "wiki_fts.sqlite", "MANIFEST.json"):
+        src = ship / name
+        tgt = dest / name
+        if not src.is_file():
+            continue
+        if force_copy or not tgt.is_file() or tgt.stat().st_size < 10_000:
+            shutil.copy2(src, tgt)
+            copied.append(name)
+    return {
+        "ok": True,
+        "shipped_dir": str(ship),
+        "data_dir": str(dest),
+        "copied": copied,
+        "status": literature_status(),
+        "free_parameters": 0,
+    }

@@ -24,6 +24,24 @@ def main() -> int:
     st = independence_status()
     print(json.dumps(st, indent=2))
 
+    # Optional literature pack (Git LFS vendor/literature → data/literature if missing)
+    try:
+        from fsot_mc.literature_corpus import ensure_shipped_literature
+
+        lit = ensure_shipped_literature()
+        print("literature_pack:", {k: lit.get(k) for k in ("ok", "copied", "shipped_dir")})
+        st_lit = lit.get("status") or {}
+        print(
+            "  arxiv_indexed=",
+            st_lit.get("arxiv_indexed"),
+            "wiki_indexed=",
+            st_lit.get("wiki_indexed"),
+            "shipped=",
+            st_lit.get("using_shipped_arxiv"),
+        )
+    except Exception as exc:
+        print("literature_pack: skip", exc)
+
     # Rebuild atlas from local bundle if needed
     if (archive_bundle_dir() / "data__fsot_domain_navigator.json").is_file():
         from fsot_mc.atlas_build import build_full_atlas

@@ -191,17 +191,42 @@ Lab still closes `pass`/`kill` with measured evidence — preregistered ≠ lab-
 
 ---
 
-## 12. Optional local literature index
+## 12. Optional literature pack (Git LFS) + full local rebuild
 
-Not required for gate / tests / UI. If you have an arXiv OAI JSONL dump:
+### 12a. Shipped pack (clone-reproducible)
 
 ```powershell
-$env:FSOT_MC_ARXIV_JSON = "C:\path\to\arxiv-metadata-oai-snapshot.json"
-python -m fsot_mc literature-index --max-papers 100000 --arxiv-only
+git lfs install
+git lfs pull
+python scripts\bootstrap_independent.py
+python -m fsot_mc literature-status
 python -m fsot_mc literature-search -q "fluid spacetime cosmology"
 ```
 
-Index SQLite lives under `data/literature/` (gitignored; rebuild locally).
+| File | Contents |
+|------|----------|
+| `vendor/literature/arxiv_fts.sqlite` | ~100k FSOT-priority papers (FTS5) |
+| `vendor/literature/wiki_fts.sqlite` | Simple Wikipedia FTS |
+| `vendor/literature/MANIFEST.json` | build metadata |
+| `vendor/archive_bundle/data__domain_coupling_simulation_benchmark.json` | full ~39k-edge coupling (LFS) |
+| `vendor/optional_exports/` | audit / claims / flip / readings JSON samples |
+
+Runtime resolution: use `data/literature/*` if present (your full rebuild); else fall back to `vendor/literature/*`.
+
+### 12b. Full OAI dump (local only — multi-GB)
+
+```powershell
+$env:FSOT_MC_ARXIV_JSON = "C:\path\to\arxiv-metadata-oai-snapshot.json"
+python -m fsot_mc literature-index --max-papers 0 --arxiv-only --rebuild-index
+```
+
+Rebuilds into `data/literature/` (gitignored). Does not replace the shipped 100k pack.
+
+Repackage ship assets after rebuild:
+
+```powershell
+python scripts\package_optional_assets.py --max-papers 100000
+```
 
 ---
 
