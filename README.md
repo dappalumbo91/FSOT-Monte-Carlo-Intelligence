@@ -10,6 +10,7 @@
 | **Authority pin** | **D1D38A** · `free_parameters = 0` |
 | **Theory law court** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | **Product** | Universe multipath intelligence (**not** markets) |
+| **Chat model weights** | [dappalumbo91/FSOT-Qwen2.5-7B-Instruct](https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct) (Hugging Face · ~14 GB safetensors) |
 
 > Paradigm: one seed-derived fluid engine; domains are folds; multipath observation histories **are** thought.  
 > Seeds never move. Discovery proposes; formal/empirical spine accepts or rejects.
@@ -21,6 +22,7 @@
 | Document | Purpose |
 |----------|---------|
 | [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | **Clone → install → gate → tests → UI** (start here) |
+| [docs/QWEN_WEIGHTS.md](docs/QWEN_WEIGHTS.md) | **Where the chat model lives** (Hugging Face link + download) |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the system works scientifically |
 | [docs/CLAIMS.md](docs/CLAIMS.md) | Data-first claims ledger (MEASURED / PREREG / STRUCTURE) |
 | [docs/SCIENTIFIC_AUDIT_REPORT.md](docs/SCIENTIFIC_AUDIT_REPORT.md) | Full-domain scientific audit |
@@ -98,15 +100,23 @@ python -m fsot_mc literature-search -q "quantum gravity fluid spacetime"
 - Torch polar student: `FSOT_MC_USE_TORCH=1`
 - **Qwen2.5-Instruct 7B chat** (reads all `docs/` + tissue via RAG):
 
+| | |
+|--|--|
+| **Project weights (canonical for this repo)** | **[dappalumbo91/FSOT-Qwen2.5-7B-Instruct](https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct)** |
+| **Upstream base model** | [Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) |
+| **Local path after download** | `vendor/models/Qwen2.5-7B-Instruct/` (gitignored) |
+| **Why not in this git tree** | Shards ~3.5 GB each; [GitHub LFS max 2 GB/file](https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-git-large-file-storage) |
+
 ```powershell
 pip install -e ".[narrate]"   # torch transformers accelerate safetensors huggingface_hub bitsandbytes
-python scripts/download_qwen25_instruct.py   # ~14 GB from Hugging Face → vendor/models/
+# pulls from dappalumbo91/FSOT-Qwen2.5-7B-Instruct (~14 GB)
+python scripts/download_qwen25_instruct.py
 python -m fsot_mc docs-index --rebuild-index
 python -m fsot_mc chat -q "What does the Biology thesis say about S?"
 python -m fsot_mc serve --port 8765
 ```
 
-**Weights are not in git:** each safetensor shard is ~3.5 GB; GitHub LFS caps files at **2 GB**, so push fails. Official source: [`Qwen/Qwen2.5-7B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct). One download per machine; code + docs stay on GitHub.
+Full notes: [docs/QWEN_WEIGHTS.md](docs/QWEN_WEIGHTS.md).
 
 ---
 

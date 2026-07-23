@@ -20,9 +20,11 @@ Canonical weights stay on **Hugging Face** (same place every clone already downl
 
 | What | Where |
 |------|--------|
-| Code + docs + chat wiring | GitHub: `FSOT-Monte-Carlo-Intelligence` |
-| Model safetensors | Hugging Face: `Qwen/Qwen2.5-7B-Instruct` |
+| Code + docs + chat wiring | [GitHub: FSOT-Monte-Carlo-Intelligence](https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence) |
+| **Model safetensors (project host)** | **[dappalumbo91/FSOT-Qwen2.5-7B-Instruct](https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct)** |
+| Upstream base | [Qwen/Qwen2.5-7B-Instruct](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct) |
 | After download | `vendor/models/Qwen2.5-7B-Instruct/` (gitignored working copy) |
+| Full notes | [docs/QWEN_WEIGHTS.md](../../docs/QWEN_WEIGHTS.md) |
 
 ## Qwen2.5-Instruct 7B (download into the project)
 

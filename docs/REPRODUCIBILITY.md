@@ -102,14 +102,27 @@ Local bundle evidence:
 
 ---
 
-## 6. Conversational mind
+## 6. Conversational mind + Qwen (documentation chat)
+
+**Model weights (not in git):**  
+https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct  
+
+See [QWEN_WEIGHTS.md](./QWEN_WEIGHTS.md).
+
+```powershell
+pip install -e ".[narrate]"
+python scripts/download_qwen25_instruct.py   # from dappalumbo91/FSOT-Qwen2.5-7B-Instruct
+python -m fsot_mc docs-index --rebuild-index
+python -m fsot_mc chat -q "What does the Biology tissue thesis say about S?"
+python -m fsot_mc chat                       # interactive multi-turn
+python -m fsot_mc serve --port 8765          # UI “Talk to the work”
+```
+
+Legacy multipath mind (no Qwen):
 
 ```powershell
 python -m fsot_mc ask --think -q "What does multipath emergence mean for biology?"
-python -m fsot_mc ask -q "Compare FSOT to general relativity"
-python -m fsot_mc ask -q "What FSOT fuels should we experiment on?"
 python -m fsot_mc ask --online --chew -q "quantum gravity and fluid spacetime"
-python -m fsot_mc chat
 ```
 
 Chew is offline-first; live literature requires `--online` or `FSOT_MC_ONLINE=1`.

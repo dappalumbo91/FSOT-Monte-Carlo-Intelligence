@@ -2,7 +2,9 @@
 
 **Workspace:** `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence`  
 **Version:** 1.5.0  
-**Mode:** **Independent** — no I:/D:/Desktop required at runtime
+**Mode:** **Independent** — no I:/D:/Desktop required at runtime  
+**Chat weights (Hugging Face):** https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct  
+**GitHub code:** https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence
 
 ## Independence
 
@@ -35,6 +37,9 @@ python -m fsot_mc polar-train --n-paths 64
 python -m fsot_mc formal
 python -m fsot_mc realities
 python -m fsot_mc apis
+python -m fsot_mc download-qwen   # or: python scripts/download_qwen25_instruct.py
+python -m fsot_mc docs-index --rebuild-index
+python -m fsot_mc chat -q "What does the Biology thesis say about S?"
 python -m fsot_mc ask --think -q "What does the multipath emergence percentage mean for biology?"
 python -m fsot_mc ask --chew --online -q "Compare FSOT to general relativity"
 python -m fsot_mc ask -q "What FSOT fuels should we experiment on?"

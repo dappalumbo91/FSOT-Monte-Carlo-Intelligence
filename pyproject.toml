@@ -28,6 +28,8 @@ narrate = [
 [project.urls]
 Homepage = "https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence"
 Theory = "https://github.com/dappalumbo91/FSOT-2.1-Lean"
+ChatModel = "https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct"
+HuggingFace = "https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct"
 
 [project.scripts]
 fsot-mc = "fsot_mc.__main__:main"
