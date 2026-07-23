@@ -63,25 +63,23 @@
 
   function ringRadius(ring) {
     const r = Number(ring) || 0;
-    // wider shells when full atlas so extensions don't crush cores
     const step = isFull ? 95 : 72;
     return (40 + r * step) * ringScale;
   }
 
-  /** Home position: prefer server S–D_eff polar (layout_r × layout_angle). */
+  /** Home: server layout_r × layout_angle (seeds stay in hub). */
   function homeFor(n) {
-    // seeds/law near origin with small fixed constellation
     if (n.kind === "law") return { x: 0, y: 0 };
-    if (n.kind === "seed") {
-      const i = ["seed_pi", "seed_e", "seed_phi", "seed_gamma", "seed_catalan"].indexOf(n.id);
-      const ang = (i >= 0 ? i : 0) * (Math.PI * 2 / 5) - Math.PI / 2;
-      return { x: Math.cos(ang) * 28 * ringScale, y: Math.sin(ang) * 28 * ringScale };
-    }
-    // FSOT law geometry: radius ∝ D_eff, angle ∝ signed canonical S
+    // Prefer server coords for everyone including seeds (hub constellation)
     if (n.layout_r != null && (n.layout_angle != null || n.angle != null)) {
       const R = Number(n.layout_r) * ringScale;
       const a = n.layout_angle != null ? n.layout_angle : n.angle;
       return { x: Math.cos(a) * R, y: Math.sin(a) * R };
+    }
+    if (n.kind === "seed") {
+      const i = ["seed_pi", "seed_e", "seed_phi", "seed_gamma", "seed_catalan"].indexOf(n.id);
+      const ang = (i >= 0 ? i : 0) * (Math.PI * 2 / 5) - Math.PI / 2;
+      return { x: Math.cos(ang) * 52 * ringScale, y: Math.sin(ang) * 52 * ringScale };
     }
     const R = ringRadius(n.ring);
     const a = n.angle != null ? n.angle : 0;
@@ -128,15 +126,14 @@
   function initPositions() {
     const N = nodes.length;
     isFull = N > 80;
-    // S–D_eff layout already spaces by continuous D_eff radius — milder global scale
-    ringScale = isFull ? Math.max(1.05, Math.sqrt(N / 180)) : 1.0;
+    // Server already spaces widely — keep ringScale modest so hub isn't crushed by scale
+    ringScale = isFull ? 1.0 : 1.05;
     temp = 1.0;
     settled = false;
     frame = 0;
     sim = true;
 
-    // Do NOT re-alphabetize angles — server already set S–D_eff polar layout.
-    // Only fill missing angles as fallback (alphabetical within ring).
+    // Trust server S–D / hub layout. Only fill missing angles as fallback.
     const missing = nodes.filter((n) => n.layout_r == null && n.angle == null && n.kind !== "law" && n.kind !== "seed");
     if (missing.length) {
       const byRing = {};
@@ -158,18 +155,17 @@
       const h = homeFor(n);
       n.homeX = h.x;
       n.homeY = h.y;
-      // tiny jitter only while hot — pattern is the S–D home
-      const j = isFull ? 3 : 10;
+      const j = (n.kind === "seed" || n.kind === "law") ? 0 : (isFull ? 2 : 8);
       n.x = h.x + (Math.random() - 0.5) * j;
       n.y = h.y + (Math.random() - 0.5) * j;
       n.vx = 0;
       n.vy = 0;
-      // pin strength by role: cores/seeds firmer; S–D geometry must hold
-      if (n.kind === "seed" || n.kind === "law") n.pin = 0.96;
-      else if (n.is_core || (n.kind === "domain" && n.atlas_kind !== "extension_panel")) n.pin = 0.82;
+      // Seeds + law almost welded; cores firm; extensions softer
+      if (n.kind === "seed" || n.kind === "law") n.pin = 0.99;
+      else if (n.is_core || (n.kind === "domain" && n.atlas_kind !== "extension_panel" && n.atlas_kind !== "extension")) n.pin = 0.88;
       else if (n.kind === "problem_route") n.pin = 0.8;
-      else if (n.kind === "extension") n.pin = 0.86;
-      else n.pin = 0.78;
+      else if (n.kind === "extension") n.pin = 0.9;
+      else n.pin = 0.8;
     }
     classifyEdges();
   }
@@ -251,10 +247,10 @@
       let d = Math.sqrt(dx * dx + dy * dy) + 0.01;
       let ideal = 90 * ringScale;
       const knd = e.kind || "";
-      if (knd === "seed_to_law") ideal = 36 * ringScale;
+      if (knd === "seed_to_law") ideal = 52 * ringScale; // match SEED_HUB_R
       else if (knd === "law_to_domain") {
         const Rb = b.layout_r != null ? Number(b.layout_r) * ringScale : ringRadius(b.ring || 2);
-        ideal = Math.max(40, Math.abs(Rb - 10));
+        ideal = Math.max(120, Math.abs(Rb)); // spokes out past hub gap
       }
       else if (knd === "routes_to_core") ideal = 70 * ringScale;
       else if (knd === "long_range") ideal = 160 * ringScale;
@@ -311,56 +307,73 @@
     const t = (now - t0) / 1000;
     ctx.clearRect(0, 0, W, H);
 
-    // D_eff scale rings (continuous radius shells: D≈5,10,15,20,25)
+    // Hub disk + D_eff shells (radii match server: base 140 + D*22)
     ctx.save();
     ctx.translate(W / 2 + cam.x, H / 2 + cam.y);
     ctx.scale(cam.scale, cam.scale);
+    // seed hub disk — makes π e φ γ G + K read as the root
+    ctx.beginPath();
+    ctx.arc(0, 0, 70 * ringScale, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(196,181,253,0.06)";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.14)";
+    ctx.lineWidth = 1.2 / cam.scale;
+    ctx.stroke();
     const deffMarks = [5, 10, 15, 20, 25];
     for (const D of deffMarks) {
-      const R = (55 + D * 16) * ringScale;
+      const R = (140 + D * 22) * ringScale;
       ctx.beginPath();
       ctx.arc(0, 0, R, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(100, 120, 160, ${D === 15 ? 0.08 : 0.04})`;
+      ctx.strokeStyle = `rgba(100, 120, 160, ${D === 15 ? 0.1 : 0.045})`;
       ctx.lineWidth = 1 / cam.scale;
       ctx.stroke();
-      if (cam.scale > 0.55) {
-        ctx.fillStyle = "rgba(140, 160, 190, 0.35)";
+      if (cam.scale > 0.45) {
+        ctx.fillStyle = "rgba(140, 160, 190, 0.4)";
         ctx.font = `${10 / cam.scale}px ui-sans-serif, system-ui`;
-        ctx.fillText(`D=${D}`, R * 0.72, -R * 0.72);
+        ctx.fillText(`D=${D}`, 4 / cam.scale, -R - 4 / cam.scale);
       }
     }
-    // S axis: emergence east, dispersal west
-    if (cam.scale > 0.5) {
-      ctx.strokeStyle = "rgba(52, 211, 153, 0.18)";
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(420 * ringScale, 0);
-      ctx.stroke();
-      ctx.strokeStyle = "rgba(248, 113, 113, 0.18)";
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.lineTo(-420 * ringScale, 0);
-      ctx.stroke();
-      ctx.fillStyle = "rgba(52, 211, 153, 0.4)";
+    if (cam.scale > 0.4) {
+      ctx.fillStyle = "rgba(230,236,244,0.55)";
       ctx.font = `${11 / cam.scale}px ui-sans-serif, system-ui`;
-      ctx.fillText("S>0 emergence", 200 * ringScale, -8 / cam.scale);
-      ctx.fillStyle = "rgba(248, 113, 113, 0.4)";
-      ctx.fillText("S<0 dispersal", -340 * ringScale, -8 / cam.scale);
+      ctx.textAlign = "center";
+      ctx.fillText("seeds → K", 0, -78 * ringScale);
     }
     ctx.restore();
 
     const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
 
-    // LOD: zoom densifies lean-overlap + membership mesh
-    // cam.scale ~0.4 default full; ≥0.7 early dense; ≥1.2 ultra mesh
-    const lodDense = cam.scale >= 0.7;
-    const lodUltra = cam.scale >= 1.2;
+    // LOD — default is SKELETON (hub + cores). Zoom reveals tissue.
+    // This stops 10k base edges from turning the graph into a blurred smear.
+    const lodTissue = cam.scale >= 0.75;   // routes + priority coupling
+    const lodDense = cam.scale >= 1.05;    // lean-overlap mesh
+    const lodUltra = cam.scale >= 1.45;
+
+    const BACKBONE = new Set(["seed_to_law", "law_to_domain", "ladder", "long_range", "cluster"]);
     const drawEdges = edges.filter((e) => {
       const k = e.kind || "";
-      const tier = e.density_tier || (k === "coupling_lean_overlap" || k === "by_core_membership" ? "dense" : "base");
-      if (tier === "base") return true;
-      if (tier === "dense") return lodDense;
+      if (k === "seed_to_law" || e.backbone) return true;
+      if (k === "law_to_domain") return true; // spokes K → folds
+      if (k === "ladder" || k === "long_range" || k === "cluster") return true;
+      if (k === "problem_route") return lodTissue || !isFull;
+      if (k === "routes_to_core") return lodTissue;
+      if (k === "coupling_lean_overlap" || k === "by_core_membership") return lodDense;
+      if (k.startsWith("coupling_")) return lodTissue;
+      if (k === "memory_link" || k === "prediction_link") return lodTissue;
+      // default: hide unknown mass at far zoom
       return lodUltra;
+    });
+
+    // sort so backbone draws on top of faint tissue
+    drawEdges.sort((a, b) => {
+      const score = (e) => {
+        const k = e.kind || "";
+        if (k === "seed_to_law") return 3;
+        if (k === "law_to_domain") return 2;
+        if (k === "ladder" || k === "long_range") return 1;
+        return 0;
+      };
+      return score(a) - score(b);
     });
 
     for (const e of drawEdges) {
@@ -368,98 +381,128 @@
       if (!a || !b) continue;
       const sa = worldToScreen(a.x, a.y);
       const sb = worldToScreen(b.x, b.y);
-      // skip offscreen for speed
       if ((sa.x < -80 && sb.x < -80) || (sa.x > W + 80 && sb.x > W + 80)) continue;
       if ((sa.y < -80 && sb.y < -80) || (sa.y > H + 80 && sb.y > H + 80)) continue;
 
       const midX = (sa.x + sb.x) / 2;
       const midY = (sa.y + sb.y) / 2;
       const dx = sb.x - sa.x, dy = sb.y - sa.y;
-      const nx = -dy * 0.06, ny = dx * 0.06;
+      const nx = -dy * 0.04, ny = dx * 0.04;
       const knd = e.kind || "";
       const isDense = knd === "coupling_lean_overlap" || knd === "by_core_membership" || e.density_tier === "dense";
-      const isStruct = structuralIds.has(e.id || `${e.source}->${e.target}`) || knd === "seed_to_law" || knd === "routes_to_core" || knd === "long_range" || knd === "problem_route";
+      const isSeed = knd === "seed_to_law";
+      const isLawSpoke = knd === "law_to_domain";
 
       ctx.beginPath();
       ctx.moveTo(sa.x, sa.y);
       ctx.quadraticCurveTo(midX + nx, midY + ny, sb.x, sb.y);
-      if (knd === "law_to_domain") {
-        ctx.strokeStyle = `rgba(196,181,253,${isFull ? 0.06 : 0.12})`;
-        ctx.lineWidth = 0.7;
+      if (isSeed) {
+        // bright hub spokes — never fade into tissue
+        ctx.strokeStyle = "rgba(255,255,255,0.9)";
+        ctx.lineWidth = 2.2;
+      } else if (isLawSpoke) {
+        const toCore = b && (b.is_core || b.atlas_kind === "core");
+        ctx.strokeStyle = toCore
+          ? `rgba(196,181,253,${isFull ? 0.35 : 0.5})`
+          : `rgba(196,181,253,${isFull ? 0.08 : 0.15})`;
+        ctx.lineWidth = toCore ? 1.35 : 0.6;
       } else if (isDense) {
-        // denser mesh when zoomed — still faint so structure reads
-        const a0 = lodUltra ? 0.12 : (lodDense ? 0.08 : 0.04);
-        ctx.strokeStyle = `rgba(34,211,238,${settled ? a0 : a0 * 0.7})`;
-        ctx.lineWidth = lodUltra ? 0.7 : 0.5;
+        const a0 = lodUltra ? 0.1 : 0.05;
+        ctx.strokeStyle = `rgba(34,211,238,${a0})`;
+        ctx.lineWidth = 0.5;
       } else if (knd === "routes_to_core") {
-        ctx.strokeStyle = `rgba(163,230,53,${settled ? 0.45 : 0.3})`;
-        ctx.lineWidth = 1.1;
+        ctx.strokeStyle = `rgba(163,230,53,${lodTissue ? 0.28 : 0.12})`;
+        ctx.lineWidth = 0.9;
       } else {
-        ctx.strokeStyle = e.color || `rgba(103,232,249,${0.25 + 0.25 * (e.strength || 0.5)})`;
-        ctx.lineWidth = knd === "long_range" ? 1.6 : 0.9;
+        ctx.strokeStyle = e.color || `rgba(103,232,249,0.35)`;
+        ctx.lineWidth = knd === "long_range" ? 1.4 : 0.85;
       }
       ctx.globalAlpha = 1;
       ctx.stroke();
 
-      // pulses only on structural axons (readable signal, not chaos)
-      const pulse = !isDense && e.animated !== false && knd !== "law_to_domain" && (isStruct || knd === "seed_to_law" || knd === "routes_to_core" || knd === "long_range" || knd === "problem_route");
+      // pulse only hub + strong structural (not every axon)
+      const pulse = isSeed || (knd === "long_range" && !isFull);
       if (pulse) {
-        const phase = (t * (settled ? 0.22 : 0.4) + (e.strength || 0.5) * 1.7) % 1;
+        const phase = (t * 0.35 + (e.strength || 0.5) * 1.7) % 1;
         const px = (1 - phase) * (1 - phase) * sa.x + 2 * (1 - phase) * phase * (midX + nx) + phase * phase * sb.x;
         const py = (1 - phase) * (1 - phase) * sa.y + 2 * (1 - phase) * phase * (midY + ny) + phase * phase * sb.y;
-        const g = ctx.createRadialGradient(px, py, 0, px, py, settled ? 5 : 7);
-        g.addColorStop(0, "rgba(200, 240, 255, 0.95)");
+        const g = ctx.createRadialGradient(px, py, 0, px, py, isSeed ? 7 : 5);
+        g.addColorStop(0, isSeed ? "rgba(255,255,255,0.95)" : "rgba(200, 240, 255, 0.9)");
         g.addColorStop(1, "rgba(103, 232, 249, 0)");
         ctx.fillStyle = g;
         ctx.beginPath();
-        ctx.arc(px, py, settled ? 4.5 : 6, 0, Math.PI * 2);
+        ctx.arc(px, py, isSeed ? 5.5 : 4, 0, Math.PI * 2);
         ctx.fill();
       }
     }
 
-    // nodes = neurons / seeds
-    for (const n of nodes) {
+    // Draw order: extensions first (under), then cores, then hub on top
+    const drawOrder = nodes.slice().sort((a, b) => {
+      const rank = (n) => {
+        if (n.kind === "law") return 5;
+        if (n.kind === "seed") return 4;
+        if (n.is_core || n.atlas_kind === "core") return 3;
+        if (n.kind === "problem_route") return 2;
+        if (n.kind === "extension") return 1;
+        return 0;
+      };
+      return rank(a) - rank(b);
+    });
+
+    for (const n of drawOrder) {
+      // hide most extensions until tissue zoom — kills the smudge
+      const isExt = n.kind === "extension" || n.atlas_kind === "extension_panel";
+      if (isFull && isExt && !n.is_core && cam.scale < 0.75 && !(selected && selected.id === n.id) && !(hover && hover.id === n.id)) {
+        continue;
+      }
+
       const s = worldToScreen(n.x, n.y);
-      const r = Math.max(3, (n.size || 8) * 0.55 * Math.sqrt(cam.scale));
+      const hub = n.kind === "seed" || n.kind === "law";
+      const core = n.is_core || n.atlas_kind === "core";
+      let r = Math.max(2.5, (n.size || 8) * 0.55 * Math.sqrt(Math.max(cam.scale, 0.35)));
+      if (hub) r = Math.max(r, n.kind === "law" ? 14 : 11);
+      else if (core) r = Math.max(r, 5.5);
       const isSel = selected && selected.id === n.id;
       const isHov = hover && hover.id === n.id;
 
       // glow
-      const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, r * 3.5);
+      const glow = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, r * (hub ? 4.2 : 3.2));
       const col = n.color || "#8892a4";
-      glow.addColorStop(0, col + (n.kind === "seed" || n.kind === "law" ? "aa" : "55"));
+      glow.addColorStop(0, hub ? (col === "#ffffff" || col === "#fff" ? "rgba(255,255,255,0.85)" : col + "cc") : col + "55");
       glow.addColorStop(1, "transparent");
       ctx.fillStyle = glow;
       ctx.beginPath();
-      ctx.arc(s.x, s.y, r * 3.5, 0, Math.PI * 2);
+      ctx.arc(s.x, s.y, r * (hub ? 4.2 : 3.2), 0, Math.PI * 2);
       ctx.fill();
 
       ctx.beginPath();
       ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
-      ctx.fillStyle = col;
+      ctx.fillStyle = hub && n.kind === "seed" ? "#ffffff" : col;
       ctx.fill();
-      if (isSel || isHov) {
+      if (hub) {
+        ctx.strokeStyle = n.kind === "law" ? "rgba(196,181,253,0.95)" : "rgba(255,255,255,0.9)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      } else if (isSel || isHov) {
         ctx.strokeStyle = "#fff";
         ctx.lineWidth = 2;
         ctx.stroke();
       } else if (n.regime === "dispersal") {
-        ctx.strokeStyle = "rgba(255,100,100,0.5)";
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(255,100,100,0.55)";
+        ctx.lineWidth = 1.2;
         ctx.stroke();
       }
 
-      // labels: seeds/law always; cores when zoomed; extensions only on hover/select
       const showLabel =
         isSel || isHov ||
-        n.kind === "seed" || n.kind === "law" ||
-        n.kind === "problem_route" ||
-        (cam.scale > (isFull ? 1.1 : 0.85) && (n.is_core || n.kind === "domain") && n.kind !== "extension") ||
-        (n.is_core && Math.abs(n.S || 0) > 0.45);
+        hub ||
+        (core && (cam.scale > 0.55 || Math.abs(n.S || 0) > 0.7)) ||
+        (n.kind === "problem_route" && cam.scale > 0.7);
       if (showLabel) {
-        ctx.font = `${n.kind === "seed" || n.kind === "law" ? 12 : 10}px Segoe UI, system-ui`;
-        ctx.fillStyle = "rgba(230,236,244,0.9)";
+        ctx.font = `${hub ? 13 : 10}px Segoe UI, system-ui`;
+        ctx.fillStyle = hub ? "rgba(255,255,255,0.98)" : "rgba(230,236,244,0.92)";
         ctx.textAlign = "center";
-        ctx.fillText(n.label || n.id, s.x, s.y + r + 12);
+        ctx.fillText(n.label || n.id, s.x, s.y + r + (hub ? 14 : 11));
       }
     }
 
@@ -670,7 +713,8 @@
       edges = g.edges || [];
       meta = g.meta || {};
       initPositions();
-      cam = { x: 0, y: 0, scale: scope === "full" ? 0.42 : 0.85 };
+      // pull back enough to see seed hub + first core shells
+      cam = { x: 0, y: 0, scale: scope === "full" ? 0.38 : 0.75 };
       $("hud-nodes").innerHTML = `nodes <strong>${g.n_nodes}</strong>`;
       $("hud-edges").innerHTML = `axons <strong>${g.n_edges}</strong>`;
       const ef = meta.map_emergence_mean;

@@ -68,13 +68,19 @@ LAYER_EDGE_COLORS: dict[str, str] = {
 
 
 # ── S–D_eff polar layout (FSOT law geometry) ──────────────────────────
-# Radius driven by D_eff (complexity shells). Angle driven by signed S
-# from the same SD / free_parameters=0 fold engine (not multipath path-mean).
-S_LAYOUT_SPAN = 1.15  # |S| clamp for angular map (~atlas range)
+# Hub: 5 seeds → law K (inner constellation).
+# Cores: rank-spaced by signed S around the circle (no value-crush smush).
+# Radius: D_eff shells with a clear gap outside the seed hub.
+# Extensions: outer halo near parent core angle (not stacked on cores).
+S_LAYOUT_SPAN = 1.15
+SEED_HUB_R = 52.0
+CORE_R_BASE = 140.0   # clear gap after seed hub so spokes read
+CORE_R_STEP = 22.0
+EXT_R_GAP = 95.0      # extensions sit well outside core shell
 
 
-def deff_to_radius(D: float | int | None, *, base: float = 55.0, step: float = 16.0) -> float:
-    """Continuous radius from D_eff — low-D near law K, high-D outer."""
+def deff_to_radius(D: float | int | None, *, base: float = CORE_R_BASE, step: float = CORE_R_STEP) -> float:
+    """Continuous radius from D_eff — low-D near (but outside) seed hub, high-D outer."""
     d = float(D if D is not None else 12.0)
     d = max(0.0, min(32.0, d))
     return base + d * step
@@ -82,179 +88,234 @@ def deff_to_radius(D: float | int | None, *, base: float = 55.0, step: float = 1
 
 def s_to_angle(S: float | None, *, span: float = S_LAYOUT_SPAN) -> float:
     """
-    Map signed canonical S → polar angle.
-
-    S > 0 (emergence) → right / east half (about −π/2 … +π/2 around 0)
-    S < 0 (dispersal) → left / west half
-    S = 0 → north (π/2) gap edge
-
-    Uses continuous map: θ = (S/span) * π   so +S → +π side, −S → −π side
-    then rotate so emergence is to the RIGHT (0 = +x): θ' = −θ + 0.
-    Final: θ = −(S/span)*π  with S=+span → θ=−π (left? wait)
-
-    Desired: emergence RIGHT (+x), dispersal LEFT (−x).
-      S = +span → θ = 0      (east)
-      S = 0     → θ = π/2    (north) — mid
-      S = −span → θ = π      (west)
-
-    Linear: θ = π/2 * (1 − S/span) clamped, but that only covers 0..π.
-    Full: θ = (π/2) − (S/span)*(π/2)  → S=+1 → 0, S=−1 → π.
-    Extensions/outliers get small φ-jitter later.
+    Continuous S→angle helper (tests / diagnostics).
+    Layout placement uses rank-spacing (see apply_sd_layout) so dense S
+    bands do not crush into a blob.
     """
     if S is None:
-        return math.pi / 2  # unknown → north
+        return math.pi / 2
     s = max(-span, min(span, float(S)))
-    # S=+span → 0 (east/emergence), S=−span → π (west/dispersal)
+    # S=+span → 0 (east), S=−span → π (west)
     return (math.pi / 2.0) * (1.0 - s / span)
+
+
+def _is_core_node(n: dict[str, Any]) -> bool:
+    if n.get("is_core"):
+        return True
+    if n.get("atlas_kind") == "core":
+        return True
+    if n.get("kind") == "domain" and n.get("atlas_kind") not in ("extension_panel", "extension"):
+        # exclude pure extension panels
+        if n.get("kind") == "extension":
+            return False
+        return n.get("S") is not None and n.get("domain") is not None
+    return False
 
 
 def apply_sd_layout(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """
-    Assign layout_r / layout_angle / ring / angle from D_eff × signed S.
+    Readable S–D_eff geometry with seed hub connected to tissue.
 
-    Geometry is the ToE phase portrait:
-      radial = D_eff shells
-      angular = S fold sign (emergence ↔ dispersal)
-    Multipath path-mean never drives geometry (stored separately as S_path_mean).
+      ring 0  — 5 seeds (constellation) + law K at origin
+      ring 1+ — 35 cores: angle = S-rank equal spacing; radius ∝ D_eff
+      outer   — extensions in halo around parent core
+      fringe  — memory / predictions / problem routes
+
+    Rank-spacing prevents the continuous-S crush that stacked ~400
+    emergence nodes into a quarter-circle smudge.
     """
-    # Index cores by domain for extension inheritance
-    core_by_domain: dict[str, dict[str, Any]] = {}
-    for n in nodes:
-        if n.get("is_core") or (
-            n.get("kind") == "domain" and n.get("atlas_kind") not in ("extension_panel",)
-            and n.get("domain")
-            and n.get("S") is not None
-        ):
-            if n.get("domain"):
-                core_by_domain[str(n["domain"])] = n
+    seeds = [n for n in nodes if n.get("kind") == "seed"]
+    laws = [n for n in nodes if n.get("kind") == "law"]
+    cores = [n for n in nodes if _is_core_node(n) and n.get("kind") not in ("seed", "law", "memory", "prediction", "problem_route")]
+    # de-dupe cores by domain
+    seen_dom: set[str] = set()
+    core_unique: list[dict[str, Any]] = []
+    for n in cores:
+        d = str(n.get("domain") or n.get("id"))
+        if d in seen_dom:
+            continue
+        seen_dom.add(d)
+        core_unique.append(n)
+    cores = core_unique
 
-    # Collect S range from nodes that have real signed S
-    signed = [
-        float(n["S"])
-        for n in nodes
-        if n.get("S") is not None
+    extensions = [
+        n for n in nodes
+        if n not in cores
         and n.get("kind") not in ("seed", "law", "memory", "prediction", "problem_route")
+        and not _is_core_node(n)
     ]
-    span = S_LAYOUT_SPAN
-    if signed:
-        span = max(S_LAYOUT_SPAN, max(abs(min(signed)), abs(max(signed))) * 1.05)
+    others = [
+        n for n in nodes
+        if n.get("kind") in ("memory", "prediction", "problem_route")
+    ]
 
-    # cluster order for micro-jitter (stable, not random)
-    cluster_order = {c: i for i, c in enumerate(sorted(CLUSTER_COLORS.keys()))}
+    # ── Hub: law + 5 seeds (always connected visually via seed_to_law edges) ──
+    for n in laws:
+        n["layout_r"] = 0.0
+        n["layout_angle"] = 0.0
+        n["angle"] = 0.0
+        n["ring"] = 0
+        n["size"] = max(float(n.get("size") or 16), 26)
+        n["layout_mode"] = "s_deff_polar"
+        n["hub_role"] = "law"
 
-    # pre-pass: resolve S_layout for every domain-like node
-    for n in nodes:
-        kind = n.get("kind") or ""
-        if kind in ("seed", "law"):
-            n["layout_r"] = 0.0 if kind == "law" else 28.0
-            n["layout_angle"] = float(n.get("angle") or 0.0)
-            n["ring"] = 0
-            continue
+    seed_order = ["seed_pi", "seed_e", "seed_phi", "seed_gamma", "seed_catalan"]
+    for i, n in enumerate(sorted(seeds, key=lambda x: seed_order.index(x["id"]) if x.get("id") in seed_order else 99)):
+        ang = -math.pi / 2 + (2 * math.pi * i) / max(len(seeds), 1)
+        n["layout_r"] = SEED_HUB_R
+        n["layout_angle"] = ang
+        n["angle"] = ang
+        n["ring"] = 0
+        n["size"] = max(float(n.get("size") or 18), 22)
+        n["layout_mode"] = "s_deff_polar"
+        n["hub_role"] = "seed"
 
-        if kind == "memory":
-            n["layout_r"] = deff_to_radius(26)
-            n["layout_angle"] = float(n.get("angle") or 0.0)
-            n["ring"] = 7
-            continue
+    # ── Cores: hemispheric S-rank equal spacing (readable + signed S) ──
+    # Dispersal (S<0) → LEFT half, equally spaced (no crush)
+    # Emergence (S>0) → RIGHT half, equally spaced
+    # Radius still ∝ D_eff with gap after seed hub
+    core_by_domain: dict[str, dict[str, Any]] = {}
 
-        if kind == "prediction":
-            n["layout_r"] = deff_to_radius(28)
-            n["layout_angle"] = float(n.get("angle") or 0.0)
-            n["ring"] = 8
-            continue
-
-        if kind == "problem_route":
-            n["layout_r"] = deff_to_radius(n.get("D_eff") or 14)
-            # pin intents near their core's S angle if known
-            cdom = n.get("core_domain")
-            parent = core_by_domain.get(str(cdom)) if cdom else None
-            if parent and parent.get("S") is not None:
-                base_ang = s_to_angle(float(parent["S"]), span=span)
-            else:
-                base_ang = float(n.get("angle") or 0.0)
-            n["layout_angle"] = base_ang + 0.12
-            n["ring"] = 5
-            n["angle"] = n["layout_angle"]
-            continue
-
-        # domains / extensions — treat is_core as core even if kind mislabeled
-        is_core = bool(n.get("is_core") or n.get("atlas_kind") == "core")
+    def _place_core(n: dict[str, Any], ang: float) -> None:
+        S = float(n["S"]) if n.get("S") is not None else 0.0
+        n["S_layout"] = S
+        n["S_canonical"] = n.get("S_canonical", S)
         D = n.get("D_eff")
-        S = n.get("S")
-        # extensions: inherit S angle from routes_to_core parent when own S missing
-        if S is None and n.get("routes_to_core"):
-            parent = core_by_domain.get(str(n["routes_to_core"]))
-            if parent and parent.get("S") is not None:
-                S = float(parent["S"])
-                n["S_inherited"] = True
-                n["S_layout"] = S
-        if S is not None:
-            n["S_layout"] = float(S)
-        else:
-            n["S_layout"] = None
-
         r = deff_to_radius(D)
-        # true extension panels sit slightly outward; cores stay on D shell
-        if (not is_core) and (kind == "extension" or n.get("atlas_kind") == "extension_panel"):
-            r += 22.0
-
-        ang = s_to_angle(n.get("S_layout"), span=span)
-        # micro-jitter by cluster + label so same-S nodes don't stack
-        cl = str(n.get("cluster") or n.get("group") or "")
-        ci = cluster_order.get(cl, 0)
-        name = str(n.get("domain") or n.get("label") or n.get("id") or "")
-        jitter = (ci * 0.035) + ((hash(name) % 1000) / 1000.0 - 0.5) * 0.06
-        # mild golden spiral by D so shells aren't perfect circles of collisions
-        ang = ang + jitter + (float(D or 12) * SEED_PHI % 1.0) * 0.04
-
         n["layout_r"] = r
         n["layout_angle"] = ang
         n["angle"] = ang
-        # discrete ring for legend/HUD only (true geometry uses layout_r)
-        n["ring"] = max(1, min(8, int(round((float(D or 12)) / 4.0))))
+        n["ring"] = max(1, min(6, int(round(float(D or 12) / 4.0))))
         n["layout_mode"] = "s_deff_polar"
+        n["is_core"] = True
+        n["size"] = max(float(n.get("size") or 8), 9 + min(12, abs(S) * 10))
+        if n.get("domain"):
+            core_by_domain[str(n["domain"])] = n
 
-    # second pass: tiny de-overlap only (must NOT destroy S→angle ordering)
-    bins: dict[int, list[dict[str, Any]]] = {}
-    for n in nodes:
-        if n.get("kind") in ("seed", "law", "memory", "prediction"):
-            continue
-        if n.get("layout_r") is None:
-            continue
-        b = int(round(float(n["layout_r"]) / 30.0))
-        bins.setdefault(b, []).append(n)
-    for group in bins.values():
-        if len(group) < 3:
-            continue
-        group.sort(
+    dispersal = sorted(
+        [n for n in cores if (n.get("S") is not None and float(n["S"]) < 0)],
+        key=lambda n: float(n["S"]),  # most negative first
+    )
+    emergence = sorted(
+        [n for n in cores if not (n.get("S") is not None and float(n["S"]) < 0)],
+        key=lambda n: float(n["S"]) if n.get("S") is not None else 0.0,
+    )
+    # Dispersal LEFT: equal-spaced π → π/2 (west→north). Most neg at pure west.
+    n_d = len(dispersal)
+    for i, n in enumerate(dispersal):
+        frac = (i + 0.5) / max(n_d, 1)  # rises as S rises (less negative)
+        ang = math.pi - (math.pi / 2.0) * frac
+        _place_core(n, ang)
+    # Emergence RIGHT: equal-spaced π/2 → 0 (north→east). Highest S at pure east.
+    n_e = len(emergence)
+    for i, n in enumerate(emergence):
+        frac = (i + 0.5) / max(n_e, 1)  # rises as S rises
+        ang = (math.pi / 2.0) * (1.0 - frac)
+        _place_core(n, ang)
+
+    # ── Extensions: outer halo clustered on parent core angle ──
+    # group by parent core
+    by_parent: dict[str, list[dict[str, Any]]] = {}
+    orphans: list[dict[str, Any]] = []
+    for n in extensions:
+        parent_name = n.get("routes_to_core")
+        if parent_name and str(parent_name) in core_by_domain:
+            by_parent.setdefault(str(parent_name), []).append(n)
+        else:
+            orphans.append(n)
+
+    for parent_name, group in by_parent.items():
+        parent = core_by_domain[parent_name]
+        p_ang = float(parent["layout_angle"])
+        p_r = float(parent["layout_r"])
+        group.sort(key=lambda x: str(x.get("domain") or x.get("label") or x.get("id") or ""))
+        n_g = len(group)
+        # fan ±0.35 rad around parent so halo is a petal, not a stack
+        fan = min(0.55, 0.08 + 0.02 * n_g)
+        for j, n in enumerate(group):
+            t = (j / max(n_g - 1, 1)) - 0.5 if n_g > 1 else 0.0
+            ang = p_ang + t * 2 * fan
+            # radius: outside parent, mild D_eff influence
+            d_ext = float(n.get("D_eff") or parent.get("D_eff") or 12)
+            r = p_r + EXT_R_GAP + (d_ext - 12) * 3.0 + (j % 5) * 8.0
+            if n.get("S") is not None:
+                n["S_layout"] = float(n["S"])
+            else:
+                n["S_layout"] = float(parent.get("S") or 0)
+                n["S_inherited"] = True
+            n["layout_r"] = r
+            n["layout_angle"] = ang
+            n["angle"] = ang
+            n["ring"] = max(3, min(7, int(round(r / 80))))
+            n["layout_mode"] = "s_deff_polar"
+            n["size"] = min(float(n.get("size") or 5), 6)
+
+    # orphans: outer ring, S-rank or label order
+    if orphans:
+        orphans.sort(
             key=lambda x: (
-                float(x.get("S_layout") if x.get("S_layout") is not None else 0.0),
+                float(x["S"]) if x.get("S") is not None else 0.0,
                 str(x.get("domain") or x.get("label") or ""),
             )
         )
-        n_g = len(group)
-        # Cap total fan to ±0.12 rad so S hemispheres stay intact
-        step = min(0.012, 0.24 / max(n_g, 1))
-        mid = (n_g - 1) / 2.0
-        for i, n in enumerate(group):
-            primary = s_to_angle(
-                float(n.get("S_layout") if n.get("S_layout") is not None else 0.0),
-                span=span,
-            )
-            n["layout_angle"] = primary + (i - mid) * step
-            n["angle"] = n["layout_angle"]
+        for j, n in enumerate(orphans):
+            ang = (2 * math.pi * j) / max(len(orphans), 1)
+            n["layout_r"] = deff_to_radius(n.get("D_eff") or 14) + EXT_R_GAP + 40
+            n["layout_angle"] = ang
+            n["angle"] = ang
+            n["S_layout"] = float(n["S"]) if n.get("S") is not None else None
+            n["ring"] = 7
+            n["layout_mode"] = "s_deff_polar"
+
+    # ── Memory / predictions / problem routes on outer fringe ──
+    for n in others:
+        kind = n.get("kind")
+        if kind == "problem_route":
+            cdom = n.get("core_domain")
+            parent = core_by_domain.get(str(cdom)) if cdom else None
+            if parent:
+                n["layout_angle"] = float(parent["layout_angle"]) + 0.15
+                n["layout_r"] = float(parent["layout_r"]) + EXT_R_GAP * 0.55
+            else:
+                n["layout_angle"] = float(n.get("angle") or 0)
+                n["layout_r"] = deff_to_radius(14) + 40
+            n["ring"] = 5
+        elif kind == "memory":
+            n["layout_r"] = deff_to_radius(26) + EXT_R_GAP + 60
+            n["layout_angle"] = float(n.get("angle") or 0)
+            n["ring"] = 7
+        else:  # prediction
+            n["layout_r"] = deff_to_radius(28) + EXT_R_GAP + 90
+            n["layout_angle"] = float(n.get("angle") or 0)
+            n["ring"] = 8
+        n["angle"] = n["layout_angle"]
+        n["layout_mode"] = "s_deff_polar"
 
     return nodes
 
 
 def layout_diagnostics(nodes: list[dict[str, Any]]) -> dict[str, Any]:
-    """Quick test report: how the graph organizes under D_eff and S."""
+    """Quick test report: organization under D_eff and S (cores only for scores)."""
     domains = [
         n for n in nodes
         if n.get("kind") in ("domain", "extension") or n.get("is_core")
     ]
-    cores = [n for n in domains if n.get("is_core") or (n.get("kind") == "domain" and n.get("atlas_kind") != "extension_panel" and n.get("S") is not None)]
-    with_s = [n for n in domains if n.get("S") is not None]
+    cores = [
+        n for n in domains
+        if n.get("is_core") or n.get("atlas_kind") == "core"
+    ]
+    # de-dupe
+    seen: set[str] = set()
+    cores_u: list[dict[str, Any]] = []
+    for n in cores:
+        d = str(n.get("domain") or n.get("id"))
+        if d in seen:
+            continue
+        seen.add(d)
+        cores_u.append(n)
+    cores = cores_u
+
+    with_s = [n for n in cores if n.get("S") is not None]
     signed_neg = [n for n in with_s if float(n["S"]) < 0]
     signed_pos = [n for n in with_s if float(n["S"]) > 0]
 
@@ -263,14 +324,10 @@ def layout_diagnostics(nodes: list[dict[str, Any]]) -> dict[str, Any]:
         a = float(n.get("layout_angle") or n.get("angle") or 0)
         return r * math.cos(a), r * math.sin(a)
 
-    # correlation proxies: mean x should rise with S; mean r should rise with D
+    # Scores on cores only (extensions sit on parent halos by design)
     if with_s:
-        xs_s = [(float(n["S"]), polar(n)[0]) for n in with_s]
-        # Spearman-ish via ranks
-        by_s = sorted(xs_s, key=lambda t: t[0])
-        # count pairs where higher S has higher x (east)
-        pairs = 0
-        agree = 0
+        by_s = sorted([(float(n["S"]), polar(n)[0]) for n in with_s], key=lambda t: t[0])
+        pairs = agree = 0
         for i in range(len(by_s)):
             for j in range(i + 1, len(by_s)):
                 pairs += 1
@@ -280,12 +337,12 @@ def layout_diagnostics(nodes: list[dict[str, Any]]) -> dict[str, Any]:
     else:
         s_x_order = None
 
-    with_d = [n for n in domains if n.get("D_eff") is not None and n.get("layout_r") is not None]
+    with_d = [n for n in cores if n.get("D_eff") is not None and n.get("layout_r") is not None]
     if with_d:
         by_d = sorted(with_d, key=lambda n: float(n["D_eff"]))
         pairs = agree = 0
         for i in range(len(by_d)):
-            for j in range(i + 1, min(i + 40, len(by_d))):  # local pairs for speed
+            for j in range(i + 1, len(by_d)):
                 pairs += 1
                 if float(by_d[j]["layout_r"]) >= float(by_d[i]["layout_r"]):
                     agree += 1
@@ -293,6 +350,7 @@ def layout_diagnostics(nodes: list[dict[str, Any]]) -> dict[str, Any]:
     else:
         d_r_order = None
 
+    seeds = [n for n in nodes if n.get("kind") == "seed"]
     core_table = []
     for n in sorted(cores, key=lambda x: float(x.get("S") if x.get("S") is not None else 0)):
         if not n.get("domain"):
@@ -314,15 +372,18 @@ def layout_diagnostics(nodes: list[dict[str, Any]]) -> dict[str, Any]:
         "layout_mode": "s_deff_polar",
         "free_parameters": 0,
         "n_domains": len(domains),
+        "n_cores": len(cores),
+        "n_seeds": len(seeds),
         "n_with_S": len(with_s),
         "n_emergence_S_gt_0": len(signed_pos),
         "n_dispersal_S_lt_0": len(signed_neg),
         "order_score_S_vs_east_x": s_x_order,
         "order_score_D_vs_radius": d_r_order,
+        "seed_hub_r": max((float(s.get("layout_r") or 0) for s in seeds), default=0),
+        "core_min_r": min((float(c.get("layout_r") or 0) for c in cores), default=0),
         "note": (
-            "S→east/west (emergence right, dispersal left); "
-            "D_eff→radius (low-D near K, high-D outer). "
-            "Scores ~1.0 = perfect monotonic organization."
+            "Hub: seeds→K. Cores: equal-spaced hemispheres by S-rank, radius∝D_eff. "
+            "Extensions: outer halo. Scores are core-only."
         ),
         "core_table": core_table,
     }
@@ -347,11 +408,12 @@ def _seed_nodes() -> list[dict[str, Any]]:
                 "role": role,
                 "group": "seed",
                 "color": CLUSTER_COLORS["seed"],
-                "size": 18,
+                "size": 24,
                 "D_eff": 0,
                 "S": None,
                 "ring": 0,
-                "angle": (2 * math.pi * i) / len(seeds),
+                "angle": -math.pi / 2 + (2 * math.pi * i) / len(seeds),
+                "hub_role": "seed",
             }
         )
     nodes.append(
@@ -363,7 +425,7 @@ def _seed_nodes() -> list[dict[str, Any]]:
             "role": "S = K·(T1+T2+T3)",
             "group": "law",
             "color": CLUSTER_COLORS["law"],
-            "size": 22,
+            "size": 28,
             "D_eff": 0,
             "S": None,
             "ring": 0,
@@ -383,9 +445,12 @@ def _seed_edges() -> list[dict[str, Any]]:
                 "source": sid,
                 "target": "law_K",
                 "kind": "seed_to_law",
+                "layer": "seed_to_law",
                 "strength": 1.0,
-                "color": CLUSTER_COLORS["law"],
+                "color": "rgba(255,255,255,0.95)",
                 "animated": True,
+                "density_tier": "base",
+                "backbone": True,
             }
         )
     return edges
@@ -894,11 +959,11 @@ def build_universe_graph(
                 )
             },
             "rings": {
-                "geometry": "radius ∝ D_eff · angle ∝ signed S (canonical)",
-                "east S>0": "emergence folds (Particle Physics, QM, Biology…)",
-                "west S<0": "dispersal folds (Cosmology, QG, Fluid Dynamics…)",
-                "inner D~5–10": "low-D near law K",
-                "outer D~20–25": "high-D complex systems / cosmo",
+                "hub": "π e φ γ G seeds → law K (always connected)",
+                "geometry": "cores: S-rank equal angle · radius ∝ D_eff",
+                "gap": "clear space between seed hub and first core shell",
+                "extensions": "outer halo petals around parent core",
+                "S order": "walk the circle: dispersal → emergence by rank",
                 "7": "memory engrams (LTM)",
                 "8": "preregistered predictions",
             },
