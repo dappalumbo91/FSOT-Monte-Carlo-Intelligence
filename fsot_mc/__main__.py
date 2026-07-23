@@ -44,6 +44,7 @@ def main(argv: list[str] | None = None) -> int:
             "literature-search",
             "literature-status",
             "scientific-audit",
+            "claims",
         ],
     )
     ap.add_argument("--host", default="127.0.0.1", help="serve host")
@@ -456,6 +457,21 @@ def main(argv: list[str] | None = None) -> int:
         if args.json:
             print(json.dumps(results, indent=2, default=str))
         return 0 if all((v or {}).get("ok", True) for v in results.values()) else 1
+
+    if args.command == "claims":
+        from fsot_mc.claims_ledger import write_claims_ledger
+
+        r = write_claims_ledger(write_md=True)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  CLAIMS LEDGER (data-first)")
+            print(f"  n_claims={r.get('n_claims')} free_parameters=0")
+            for c in r.get("claims") or []:
+                print(f"  [{c.get('tier')}] {c.get('id')}")
+                print(f"    {c.get('statement')[:200]}")
+            print(f"  written: {(r.get('written') or {})}")
+        return 0
 
     if args.command == "scientific-audit":
         from fsot_mc.scientific_audit import format_audit_markdown, run_scientific_audit

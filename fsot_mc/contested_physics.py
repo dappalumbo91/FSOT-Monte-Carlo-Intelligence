@@ -58,6 +58,50 @@ def load_cosmology_anomalies() -> dict[str, Any] | None:
     return None
 
 
+def live_recompute_wave1_anchors() -> dict[str, Any]:
+    """
+    Live recompute of wave1 anchors from atlas engine — claimed measured structure.
+    Compares atlas wave1 computed/measured pairs and reports relative errors.
+    """
+    anchors = wave1_anchors()
+    rows = []
+    for name, payload in (anchors or {}).items():
+        if not isinstance(payload, dict):
+            continue
+        comp = payload.get("computed")
+        meas = payload.get("measured")
+        err = None
+        if comp is not None and meas is not None and float(meas) != 0:
+            err = abs(float(comp) - float(meas)) / abs(float(meas)) * 100.0
+        rows.append(
+            {
+                "name": name,
+                "formula": payload.get("formula"),
+                "computed": comp,
+                "measured": meas,
+                "rel_error_pct": err,
+                "within_0_5": err is not None and err <= 0.5,
+                "within_2": err is not None and err <= 2.0,
+            }
+        )
+    within = sum(1 for r in rows if r.get("within_0_5"))
+    return {
+        "id": "CONT-WAVE1-LIVE-RECOMPUTE",
+        "class": "contested_physics",
+        "title": "Wave-1 anchors live recompute vs measured",
+        "n": len(rows),
+        "n_within_0_5pct": within,
+        "rows": rows,
+        "score": (within / len(rows)) if rows else 0.0,
+        "epistemic_tier": "measured_application",
+        "hypothesis": (
+            "Seed-engine wave1 anchors recomputed live match archive measured targets "
+            "within tight relative error without free-parameter refit."
+        ),
+        "free_parameters": 0,
+    }
+
+
 def probe_h0_bridge(mc: dict[str, Any]) -> dict[str, Any]:
     """
     Dual-anchor style H0 probe from path ensemble h0_proxy + wave1 anchors.
@@ -185,6 +229,7 @@ def run_contested_physics_pack(mc: dict[str, Any]) -> dict[str, Any]:
         probe_h0_bridge(mc),
         probe_quantum_cosmos_bridge(mc),
         probe_regime_flip_cosmos(mc),
+        live_recompute_wave1_anchors(),
     ]
     arch = probe_archive_contested_summary()
     if arch:
