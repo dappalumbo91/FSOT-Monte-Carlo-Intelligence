@@ -20,22 +20,37 @@ from typing import Any
 from fsot_mc.doc_rag import ensure_doc_index, format_hits_for_prompt, search_docs
 from fsot_mc.qwen_narrate import load_model, model_ready
 
-CHAT_SYSTEM = """You are the conversational guide for the FSOT Monte Carlo Intelligence workspace.
+CHAT_SYSTEM = """You are the conversational guide for FSOT Monte Carlo Intelligence.
 
-Your job: have a clear, helpful conversation about THIS project's documentation and results.
-You MUST ground answers in the DOCUMENTS provided in each turn (tissue theses, methodology, claims, etc.).
+Ground every answer in the DOCUMENTS and LIVE_SCALARS for this turn. Conversational colleague tone — complete replies, not table dumps, not mid-document continuations.
 
-Rules:
-1. free_parameters = 0. Authority pin D1D38A. Seeds π,e,φ,γ,Catalan never move.
-2. Prefer facts from DOCUMENTS and LIVE_SCALARS. Quote paths when you use a thesis (e.g. docs/tissue/domains/Biology.md).
-3. If docs do not cover something, say so honestly — do not invent FSOT formulas, free parameters, or proofs.
-4. Multipath / discovery metrics are not the ≤0.5% green-gate empirical bar. Soft court ≠ Lean-proved.
-5. Do NOT peer-review social recognition or "is this mainstream?" unless the user asks.
-6. Write like a knowledgeable colleague: conversational paragraphs, not dump of tables.
-7. When the user greets you or asks how you work, explain that you read the project docs (tissue theses, claims, methodology) and can discuss any fold or report in the pack.
-8. Never continue a document mid-sentence. Always answer the latest user message as a complete reply.
+=== HARD DOCTRINE (do not redefine) ===
+1. free_parameters = 0. Authority pin D1D38A. Seeds π, e, φ, γ, Catalan never move.
+2. Law form: S = K·(T1+T2+T3) under that pin. Domains are folds of one fluid, not separate fitted models.
+3. S is VITALITY, not "importance", "relevance", or "criticality":
+   - S > 0 → emergence (structure-forming regime)
+   - S ≤ 0 → dispersal (damping regime; still lawful, still the same fluid)
+   Never rank folds as "more important" because |S| is larger.
+4. D_eff is effective dimensionality of the fold (scale/complexity address), not a vague "depth score" you invent.
+5. TWO DIFFERENT METRICS — never conflate:
+   - Green gate: archive empirical bar — domain median_error_pct ≤ 0.5% (MEASURED panel accuracy).
+   - Multipath map co-emergence: mean over observer paths of (count of folds with S>0) / n_folds.
+     Often lands ~0.55–0.78 (~60–70%). This is map occupancy / co-emergence window under multipath thought.
+     It is NOT P(Earth has life), NOT a culture-plate rate, and NOT the green gate.
+6. Claim tiers: MEASURED (pin, zero free params, green-gate numbers) vs PREREGISTERED PREDs (kill discriminants; lab closes) vs multipath STRUCTURE (discovery/observer stats). Soft court promote ≠ Lean-proved.
+7. Prefer numbers from LIVE_SCALARS when present; cite document paths you used (e.g. docs/tissue/domains/Biology.md).
+8. If docs/scalars lack something, say so — do not invent free parameters, new constants, or proofs.
+9. Do NOT peer-review social recognition / mainstream status unless the user asks.
+10. Answer the user's actual question. If they ask for the green-gate vs multipath split, you MUST state both and contrast them explicitly.
 
-You are connected to the work. The documents ARE the source of truth for explanation."""
+You are connected to this workspace's documentation. Documents + live scalars are the source of truth for explanation."""
+
+# Injected every turn so doctrine survives long RAG context
+DOCTRINE_CARD = """DOCTRINE CARD (must obey):
+- S = vitality: S>0 emergence, S≤0 dispersal; NOT importance.
+- Green gate ≤0.5% median error ≠ multipath co-emergence fraction (~60–70% map occupancy).
+- free_parameters=0, pin D1D38A; soft court ≠ proved.
+"""
 
 _SESSIONS: dict[str, list[dict[str, str]]] = {}
 _SESSION_LOCK = threading.Lock()
@@ -190,9 +205,12 @@ def chat(
             messages.append({"role": role, "content": content[:2000]})
 
     user_payload = (
+        f"{DOCTRINE_CARD}\n"
         f"{ctx['context_block']}\n\n"
         f"USER MESSAGE:\n{message}\n\n"
-        "Reply as a complete conversational answer. Use the documents above. "
+        "Reply as a complete conversational answer. Use DOCUMENTS + LIVE_SCALARS. "
+        "Define S only as vitality (emergence/dispersal). "
+        "If the question touches multipath or green gate, keep those two metrics distinct. "
         "Do not continue a document mid-stream. Do not invent free parameters."
     )
     messages.append({"role": "user", "content": user_payload})
@@ -286,6 +304,7 @@ def _clean_reply(text: str) -> str:
         "END RETRIEVED",
         "=== END",
         "USER MESSAGE",
+        "DOCTRINE CARD",
     )
     for b in bad_starts:
         if t.startswith(b):
@@ -298,4 +317,36 @@ def _clean_reply(text: str) -> str:
     # strip trailing meta
     if "USER MESSAGE:" in t:
         t = t.split("USER MESSAGE:")[0].strip()
+    # strip leading punctuation/number garbage from truncated context
+    t = re.sub(r"^[\d\.\,\|\-\s]+", "", t).strip()
     return t
+
+
+def grade_reply(reply: str, *, expect: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Lightweight automatic checks that the reply tracks doctrine / numbers."""
+    r = (reply or "").lower()
+    expect = expect or {}
+    checks = {}
+    # S not importance
+    checks["avoids_importance_gloss"] = not any(
+        x in r for x in ("importance of the fold", "most critical fold", "relevance of the fold", "not the most critical")
+    )
+    # vitality / emergence language
+    checks["mentions_emergence_or_vitality"] = any(
+        x in r for x in ("emergence", "vitality", "dispersal", "s>0", "s > 0", "s≤", "s <")
+    )
+    if expect.get("need_green_gate_split"):
+        checks["mentions_green_gate"] = "0.5" in r or "green gate" in r or "green-gate" in r
+        checks["mentions_multipath_or_occupancy"] = any(
+            x in r for x in ("multipath", "co-emergence", "coemergence", "occupancy", "map")
+        )
+        checks["split_both"] = checks["mentions_green_gate"] and checks["mentions_multipath_or_occupancy"]
+    if expect.get("s_value") is not None:
+        s = float(expect["s_value"])
+        # accept a few formats
+        frag = f"{abs(s):.3f}"
+        checks["has_s_number"] = frag[:5] in r.replace(" ", "") or f"{s:.2f}" in r or f"{s:+.2f}".lower() in r
+    if expect.get("domain"):
+        checks["mentions_domain"] = expect["domain"].lower().replace("_", " ") in r or expect["domain"].lower() in r
+    score = sum(1 for v in checks.values() if v) / max(len(checks), 1)
+    return {"checks": checks, "score": round(score, 3), "n_checks": len(checks)}
