@@ -32,12 +32,14 @@
     <main class="layout">
       <aside class="sidebar left">
         <section>
-          <h2>Mind</h2>
-          <textarea id="ask-input" rows="3" placeholder="Ask the multipath mind… seeds never move"></textarea>
+          <h2>Mind + Qwen</h2>
+          <textarea id="ask-input" rows="3" placeholder="Ask FSOT… multipath mind + Qwen2.5 articulates"></textarea>
           <div class="row">
             <label><input type="checkbox" id="ask-chew" /> chew literature</label>
+            <label title="Uses Qwen2.5-7B over full FSOT pack (default on)"><input type="checkbox" id="ask-qwen" checked /> Qwen</label>
             <button id="btn-ask">Think</button>
           </div>
+          <div id="qwen-status" class="chip" style="margin:0.35rem 0;font-size:0.75rem">Qwen: …</div>
           <div id="ask-out" class="panel scroll"></div>
         </section>
         <section>
@@ -54,7 +56,7 @@
           <span id="hud-emerge">—</span>
           <span id="hud-status">loading…</span>
         </div>
-        <div class="hint">Classic D<sub>eff</sub> shells · ordered by S on each ring · seeds→K hub · zoom densifies tissue · click for thesis</div>
+        <div class="hint">Think = multipath mind + Qwen pack · D<sub>eff</sub> shells · S-ordered · seeds→K · select node → Explain with Qwen</div>
       </section>
 
       <aside class="sidebar right">
@@ -62,6 +64,7 @@
           <h2>Selection</h2>
           <div id="sel-out" class="panel scroll empty">Click a seed, fold, memory, or prediction</div>
           <button id="btn-thesis" class="full" style="margin-top:0.45rem;width:100%">Open scientific tissue thesis</button>
+          <button id="btn-explain" class="full" style="margin-top:0.35rem;width:100%">Explain with Qwen (selected node)</button>
         </section>
         <section>
           <h2>Tissue thesis</h2>

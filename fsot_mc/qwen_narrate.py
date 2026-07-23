@@ -14,10 +14,13 @@ Weights: Hugging Face safetensors under vendor/models/Qwen2.5-7B-Instruct
 from __future__ import annotations
 
 import os
+import threading
 from pathlib import Path
 from typing import Any
 
 from fsot_mc.paths import PACKAGE_ROOT
+
+_LOAD_LOCK = threading.Lock()
 
 DEFAULT_HF_ID = "Qwen/Qwen2.5-7B-Instruct"
 DEFAULT_LOCAL = PACKAGE_ROOT / "vendor" / "models" / "Qwen2.5-7B-Instruct"
@@ -189,6 +192,17 @@ def build_narration_pack(
     ef = ens.get("emergence_fraction") or {}
 
     mind_answer = _truncate(str((mind_out or {}).get("answer") or ""), max_mind_chars)
+
+    # Extra workspace streams — Qwen must see the same cortex the UI uses
+    # Literature FTS on full multi-GB index is slow; only when chew requested
+    # or FSOT_MC_NARRATE_LIT=1
+    extra = _collect_workspace_streams(
+        query,
+        thinking,
+        routed,
+        with_literature=bool(chew) or os.environ.get("FSOT_MC_NARRATE_LIT") == "1",
+    )
+
     pack = {
         "method": "fsot_narration_pack",
         "free_parameters": 0,
@@ -207,12 +221,192 @@ def build_narration_pack(
         ),
         "tissue_theses": theses,
         "n_theses": len(theses),
+        "literature": extra.get("literature"),
+        "contested": extra.get("contested"),
+        "engineering": extra.get("engineering"),
+        "biological_emergence": extra.get("biological_emergence"),
+        "memory_recall": extra.get("memory_recall"),
+        "discovery_hints": extra.get("discovery_hints"),
         "model_target": DEFAULT_HF_ID,
     }
     pack["context_text"] = _format_context_text(pack)
     # hard cap entire pack text for consumer GPUs (~12 GB)
     pack["context_text"] = _truncate(pack["context_text"], 12_000)
     return pack
+
+
+def _collect_workspace_streams(
+    query: str,
+    thinking: dict[str, Any],
+    routed: list[str],
+    *,
+    with_literature: bool = False,
+) -> dict[str, Any]:
+    """Pull literature, contested, bio, memory into the pack (best-effort)."""
+    out: dict[str, Any] = {}
+
+    # Literature (optional — full arXiv FTS can take tens of seconds)
+    out["literature"] = []
+    if with_literature:
+        try:
+            from fsot_mc.literature_corpus import literature_search
+
+            lit = literature_search(query or " ".join(routed[:3]), arxiv_limit=3, wiki_limit=2)
+            hits = []
+            for h in ((lit.get("arxiv") or {}).get("hits") or [])[:3]:
+                hits.append(
+                    {
+                        "id": h.get("id"),
+                        "title": h.get("title"),
+                        "categories": h.get("categories"),
+                        "fsot_domains": h.get("fsot_domains"),
+                    }
+                )
+            for h in ((lit.get("wikipedia") or {}).get("hits") or [])[:2]:
+                hits.append({"wiki": h.get("title"), "fsot_domains": h.get("fsot_domains")})
+            out["literature"] = hits
+        except Exception:
+            out["literature"] = []
+
+    contested = thinking.get("contested") or []
+    if isinstance(contested, list):
+        out["contested"] = contested[:4]
+    else:
+        out["contested"] = []
+
+    eng = thinking.get("engineering") or []
+    out["engineering"] = eng[:4] if isinstance(eng, list) else []
+
+    bio = thinking.get("biological_emergence") or {}
+    if isinstance(bio, dict):
+        out["biological_emergence"] = {
+            k: bio.get(k)
+            for k in ("hypothesis", "corridor_coemergence", "life_corridor", "map_stats")
+            if bio.get(k) is not None
+        }
+    else:
+        out["biological_emergence"] = {}
+
+    am = thinking.get("adaptive_memory") or {}
+    out["memory_recall"] = (am.get("recall") or [])[:4] if isinstance(am, dict) else []
+
+    dh = thinking.get("discovery_hints")
+    if isinstance(dh, list):
+        out["discovery_hints"] = dh[:5]
+    elif isinstance(dh, dict):
+        out["discovery_hints"] = [dh]
+    else:
+        out["discovery_hints"] = []
+    return out
+
+
+def full_mind_answer(
+    query: str,
+    *,
+    n_paths: int = 32,
+    chew: bool | None = False,
+    node_id: str | None = None,
+    use_qwen: bool = True,
+    max_new_tokens: int = 400,
+    temperature: float = 0.35,
+    force_new_mc: bool = False,
+) -> dict[str, Any]:
+    """
+    Unified cortex → mouth pipeline used by CLI + /api/ask + UI.
+
+    1) Monte Carlo mind (always)
+    2) Build full workspace pack (theses, lit, contested, bio, memory)
+    3) Qwen narration when weights ready (default on)
+    """
+    from fsot_mc.mind import ask as mind_ask
+
+    query = (query or "").strip()
+    mind_out = mind_ask(
+        query,
+        n_paths=min(int(n_paths), 64),
+        with_chew=chew,
+        force_new_mc=force_new_mc,
+    )
+    thinking = mind_out.get("thinking") or {}
+
+    pack = build_narration_pack(
+        query=query,
+        mind=mind_out,
+        node_id=node_id,
+        n_paths=n_paths,
+        chew=bool(chew),
+    )
+
+    result: dict[str, Any] = {
+        "error": mind_out.get("error"),
+        "method": "fsot_mind_plus_qwen",
+        "free_parameters": 0,
+        "authority": "D1D38A",
+        "query": query,
+        "answer": mind_out.get("answer"),  # raw mind (always present)
+        "thinking": {
+            "routed_domains": thinking.get("routed_domains"),
+            "n_paths": thinking.get("n_paths"),
+            "focus_scalars": thinking.get("focus_scalars"),
+            "adaptive_memory": thinking.get("adaptive_memory"),
+            "emergence_fraction_definition": thinking.get("emergence_fraction_definition"),
+            "biological_emergence": thinking.get("biological_emergence"),
+        },
+        "session": mind_out.get("session"),
+        "pack_summary": {
+            "n_theses": pack.get("n_theses"),
+            "routed_domains": pack.get("routed_domains"),
+            "emergence_fraction_mean": pack.get("emergence_fraction_mean"),
+            "n_lit": len(pack.get("literature") or []),
+        },
+        "qwen": {"used": False, "ready": model_ready().get("ok")},
+        "narration": None,
+    }
+
+    if not use_qwen:
+        result["qwen"]["skipped"] = "use_qwen=false"
+        return result
+
+    st = model_ready()
+    if not st.get("ok"):
+        result["qwen"] = {
+            "used": False,
+            "ready": False,
+            "error": "model_not_downloaded",
+            "hint": st.get("hint"),
+        }
+        return result
+
+    nr = narrate(
+        query,
+        pack=pack,
+        node_id=node_id,
+        n_paths=n_paths,
+        chew=bool(chew),
+        max_new_tokens=max_new_tokens,
+        temperature=temperature,
+        load_if_needed=True,
+    )
+    if nr.get("ok") and nr.get("narration"):
+        result["narration"] = nr["narration"]
+        # Primary spoken answer is Qwen; mind remains under answer_raw
+        result["answer_raw"] = result["answer"]
+        result["answer"] = nr["narration"]
+        result["qwen"] = {
+            "used": True,
+            "ready": True,
+            "model": nr.get("model"),
+            "ok": True,
+        }
+    else:
+        result["qwen"] = {
+            "used": False,
+            "ready": True,
+            "ok": False,
+            "error": nr.get("error"),
+            "detail": nr.get("detail"),
+        }
+    return result
 
 
 def _format_context_text(pack: dict[str, Any]) -> str:
@@ -244,22 +438,69 @@ def _format_context_text(pack: dict[str, Any]) -> str:
             )
     lines.append("")
     lines.append("--- MONTE CARLO MIND ANSWER (primary source for prose) ---")
-    lines.append(_truncate(str(pack.get("mind_answer") or "(none)"), 2400))
+    lines.append(_truncate(str(pack.get("mind_answer") or "(none)"), 2200))
     lines.append("")
-    # Short thesis abstracts only (first ~40 lines or Abstract section)
+
+    lit = pack.get("literature") or []
+    if lit:
+        lines.append("--- LOCAL LITERATURE HITS (observation only) ---")
+        for h in lit[:4]:
+            if h.get("title"):
+                lines.append(
+                    f"* arXiv {h.get('id')}: {h.get('title')} → {h.get('fsot_domains')}"
+                )
+            elif h.get("wiki"):
+                lines.append(f"* wiki: {h.get('wiki')} → {h.get('fsot_domains')}")
+        lines.append("")
+
+    bio = pack.get("biological_emergence") or {}
+    if bio:
+        lines.append("--- BIO EMERGENCE SNAPSHOT ---")
+        lines.append(_truncate(json_safe(bio), 600))
+        lines.append("")
+
+    contested = pack.get("contested") or []
+    if contested:
+        lines.append("--- CONTESTED / DISCOVERY LEADS ---")
+        lines.append(_truncate(json_safe(contested[:3]), 500))
+        lines.append("")
+
+    eng = pack.get("engineering") or []
+    if eng:
+        lines.append("--- ENGINEERING LEADS ---")
+        lines.append(_truncate(json_safe(eng[:3]), 400))
+        lines.append("")
+
+    mem = pack.get("memory_recall") or []
+    if mem:
+        lines.append("--- ADAPTIVE MEMORY RECALL ---")
+        lines.append(_truncate(json_safe(mem[:3]), 400))
+        lines.append("")
+
+    # Short thesis abstracts only
     for i, th in enumerate(pack.get("tissue_theses") or [], 1):
         md = str(th.get("markdown") or "")
-        excerpt = _thesis_excerpt(md, max_chars=900)
+        excerpt = _thesis_excerpt(md, max_chars=700)
         lines.append(f"--- TISSUE EXCERPT [{i}] {th.get('id')} ---")
         lines.append(excerpt)
         lines.append("")
     lines.append("=== END CONTEXT ===")
     lines.append(
         "INSTRUCTIONS: Answer USER_QUERY in clear scientific paragraphs. "
+        "Synthesize mind answer + scalars + tissue + literature + bio/contested leads. "
         "Do not continue markdown tables or dump the context. "
-        "Cite S and D_eff from FOCUS SCALARS when relevant."
+        "Cite S and D_eff from FOCUS SCALARS when relevant. free_parameters=0."
     )
     return "\n".join(lines)
+
+
+def json_safe(obj: Any) -> str:
+    import json
+
+    try:
+        return json.dumps(obj, default=str, ensure_ascii=False)
+    except Exception:
+        return str(obj)
 
 
 def _thesis_excerpt(md: str, max_chars: int = 900) -> str:
@@ -307,137 +548,146 @@ def unload_model() -> None:
 
 def load_model(*, force: bool = False) -> dict[str, Any]:
     """
-    Load Qwen2.5-7B-Instruct from local safetensors.
+    Load Qwen2.5-7B-Instruct from local safetensors (thread-safe).
 
     Prefer 4-bit (bitsandbytes) on ≤12–16 GB GPUs; else fp16 device_map;
     else CPU. Override: FSOT_MC_QWEN_LOAD=4bit|8bit|fp16|cpu
     """
     global _model, _tokenizer, _load_error
-    if _model is not None and _tokenizer is not None and not force:
-        return {"ok": True, "loaded": True, "path": str(model_dir()), "cached": True}
+    with _LOAD_LOCK:
+        if _model is not None and _tokenizer is not None and not force:
+            return {"ok": True, "loaded": True, "path": str(model_dir()), "cached": True}
 
-    st = model_ready()
-    if not st["ok"]:
-        _load_error = st["hint"]
-        return {"ok": False, "error": "model_not_downloaded", **st}
+        st = model_ready()
+        if not st["ok"]:
+            _load_error = st["hint"]
+            return {"ok": False, "error": "model_not_downloaded", **st}
 
-    try:
-        import torch
-        from transformers import AutoModelForCausalLM, AutoTokenizer
-    except ImportError as exc:
-        return {
-            "ok": False,
-            "error": "missing_deps",
-            "detail": str(exc),
-            "hint": "pip install torch transformers accelerate safetensors",
-        }
+        try:
+            import torch
+            from transformers import AutoModelForCausalLM, AutoTokenizer
+        except ImportError as exc:
+            return {
+                "ok": False,
+                "error": "missing_deps",
+                "detail": str(exc),
+                "hint": "pip install torch transformers accelerate safetensors",
+            }
 
-    path = str(model_dir())
-    pref = (os.environ.get("FSOT_MC_QWEN_LOAD") or "").strip().lower()
-    use_cuda = torch.cuda.is_available() and pref != "cpu"
+        path = str(model_dir())
+        pref = (os.environ.get("FSOT_MC_QWEN_LOAD") or "4bit").strip().lower()
+        use_cuda = torch.cuda.is_available() and pref != "cpu"
 
-    def _try_load(**kwargs: Any) -> Any:
-        return AutoModelForCausalLM.from_pretrained(path, **kwargs)
+        def _try_load(**kwargs: Any) -> Any:
+            return AutoModelForCausalLM.from_pretrained(path, **kwargs)
 
-    try:
-        _tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
-        mode = "unknown"
-        # 1) 4-bit when CUDA (fits ~12 GB cards)
-        if use_cuda and pref in ("", "4bit", "auto"):
-            try:
-                from transformers import BitsAndBytesConfig
-
-                bnb = BitsAndBytesConfig(
-                    load_in_4bit=True,
-                    bnb_4bit_compute_dtype=torch.float16,
-                    bnb_4bit_use_double_quant=True,
-                    bnb_4bit_quant_type="nf4",
-                )
-                _model = _try_load(
-                    quantization_config=bnb,
-                    device_map="auto",
-                    trust_remote_code=True,
-                    low_cpu_mem_usage=True,
-                )
-                mode = "4bit"
-            except Exception as exc4:
-                if pref == "4bit":
-                    raise
-                _load_error = f"4bit_failed:{exc4}"
-                _model = None
-
-        # 2) 8-bit
-        if _model is None and use_cuda and pref in ("", "8bit", "auto"):
-            try:
-                from transformers import BitsAndBytesConfig
-
-                bnb8 = BitsAndBytesConfig(load_in_8bit=True)
-                _model = _try_load(
-                    quantization_config=bnb8,
-                    device_map="auto",
-                    trust_remote_code=True,
-                    low_cpu_mem_usage=True,
-                )
-                mode = "8bit"
-            except Exception as exc8:
-                if pref == "8bit":
-                    raise
-                _load_error = f"8bit_failed:{exc8}"
-                _model = None
-
-        # 3) fp16 full with device_map (needs ~14+ GB VRAM)
-        if _model is None and use_cuda and pref in ("", "fp16", "auto"):
-            try:
-                dtype = torch.float16
-                kw: dict[str, Any] = {
-                    "trust_remote_code": True,
-                    "device_map": "auto",
-                    "low_cpu_mem_usage": True,
-                }
-                # transformers 5.x prefers dtype= ; older torch_dtype=
+        try:
+            if force:
+                unload_model()
+            _tokenizer = AutoTokenizer.from_pretrained(path, trust_remote_code=True)
+            mode = "unknown"
+            _model = None
+            # 1) 4-bit when CUDA (fits ~12 GB cards)
+            if use_cuda and pref in ("", "4bit", "auto"):
                 try:
-                    _model = _try_load(dtype=dtype, **kw)
+                    from transformers import BitsAndBytesConfig
+
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    bnb = BitsAndBytesConfig(
+                        load_in_4bit=True,
+                        bnb_4bit_compute_dtype=torch.float16,
+                        bnb_4bit_use_double_quant=True,
+                        bnb_4bit_quant_type="nf4",
+                        llm_int8_enable_fp32_cpu_offload=True,
+                    )
+                    # Leave headroom on 12 GB cards; overflow layers → CPU
+                    max_mem = {0: "10GiB", "cpu": "48GiB"}
+                    _model = _try_load(
+                        quantization_config=bnb,
+                        device_map="auto",
+                        max_memory=max_mem,
+                        trust_remote_code=True,
+                        low_cpu_mem_usage=True,
+                    )
+                    mode = "4bit"
+                except Exception as exc4:
+                    if pref == "4bit":
+                        raise
+                    _load_error = f"4bit_failed:{exc4}"
+                    _model = None
+
+            # 2) 8-bit
+            if _model is None and use_cuda and pref in ("", "8bit", "auto"):
+                try:
+                    from transformers import BitsAndBytesConfig
+
+                    bnb8 = BitsAndBytesConfig(load_in_8bit=True)
+                    _model = _try_load(
+                        quantization_config=bnb8,
+                        device_map="auto",
+                        trust_remote_code=True,
+                        low_cpu_mem_usage=True,
+                    )
+                    mode = "8bit"
+                except Exception as exc8:
+                    if pref == "8bit":
+                        raise
+                    _load_error = f"8bit_failed:{exc8}"
+                    _model = None
+
+            # 3) fp16 full with device_map (needs ~14+ GB VRAM)
+            if _model is None and use_cuda and pref in ("", "fp16", "auto"):
+                try:
+                    dtype = torch.float16
+                    kw: dict[str, Any] = {
+                        "trust_remote_code": True,
+                        "device_map": "auto",
+                        "low_cpu_mem_usage": True,
+                    }
+                    try:
+                        _model = _try_load(dtype=dtype, **kw)
+                    except TypeError:
+                        _model = _try_load(torch_dtype=dtype, **kw)
+                    mode = "fp16"
+                except Exception as exc16:
+                    if pref == "fp16":
+                        raise
+                    _load_error = f"fp16_failed:{exc16}"
+                    _model = None
+
+            # 4) CPU
+            if _model is None:
+                dtype = torch.float32
+                try:
+                    _model = _try_load(
+                        dtype=dtype,
+                        trust_remote_code=True,
+                        low_cpu_mem_usage=True,
+                    )
                 except TypeError:
-                    _model = _try_load(torch_dtype=dtype, **kw)
-                mode = "fp16"
-            except Exception as exc16:
-                if pref == "fp16":
-                    raise
-                _load_error = f"fp16_failed:{exc16}"
-                _model = None
+                    _model = _try_load(
+                        torch_dtype=dtype,
+                        trust_remote_code=True,
+                        low_cpu_mem_usage=True,
+                    )
+                mode = "cpu"
 
-        # 4) CPU fp32/fp16 (slow, always works)
-        if _model is None:
-            dtype = torch.float32
-            try:
-                _model = _try_load(
-                    dtype=dtype,
-                    trust_remote_code=True,
-                    low_cpu_mem_usage=True,
-                )
-            except TypeError:
-                _model = _try_load(
-                    torch_dtype=dtype,
-                    trust_remote_code=True,
-                    low_cpu_mem_usage=True,
-                )
-            mode = "cpu"
-
-        _model.eval()
-        _load_error = None
-        return {
-            "ok": True,
-            "loaded": True,
-            "path": path,
-            "device": "cuda" if use_cuda and mode != "cpu" else "cpu",
-            "load_mode": mode,
-            "free_parameters": 0,
-        }
-    except Exception as exc:
-        _model = None
-        _tokenizer = None
-        _load_error = str(exc)
-        return {"ok": False, "error": "load_failed", "detail": str(exc), "path": path}
+            _model.eval()
+            _load_error = None
+            return {
+                "ok": True,
+                "loaded": True,
+                "path": path,
+                "device": "cuda" if use_cuda and mode != "cpu" else "cpu",
+                "load_mode": mode,
+                "free_parameters": 0,
+            }
+        except Exception as exc:
+            _model = None
+            _tokenizer = None
+            _load_error = str(exc)
+            return {"ok": False, "error": "load_failed", "detail": str(exc), "path": path}
 
 
 def narrate(

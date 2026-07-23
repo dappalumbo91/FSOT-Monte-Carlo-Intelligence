@@ -33,3 +33,16 @@ def test_model_ready_shape():
     assert "ok" in st
     assert "path" in st
     assert st["free_parameters"] == 0
+
+
+def test_full_mind_answer_without_forcing_qwen():
+    from fsot_mc.qwen_narrate import full_mind_answer
+
+    r = full_mind_answer(
+        "What is Biology under FSOT?",
+        n_paths=12,
+        use_qwen=False,
+    )
+    assert r.get("answer")
+    assert r["free_parameters"] == 0
+    assert r.get("qwen", {}).get("skipped") or r.get("qwen", {}).get("used") is False

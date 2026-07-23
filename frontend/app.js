@@ -721,33 +721,96 @@
       }
     };
   }
+  async function refreshQwenStatus() {
+    const el = $("qwen-status");
+    if (!el) return;
+    try {
+      const h = await api("/api/health");
+      const q = (h && h.qwen) || {};
+      if (q.ready) {
+        el.className = "chip gold";
+        el.textContent = "Qwen: ready (articulates full FSOT pack)";
+      } else {
+        el.className = "chip pink";
+        el.textContent = "Qwen: weights missing — run download_qwen25_instruct.py";
+      }
+    } catch (_) {
+      el.textContent = "Qwen: status offline";
+    }
+  }
+
+  async function runMindAsk(query, opts = {}) {
+    const useQwen = opts.useQwen != null ? opts.useQwen : ($("ask-qwen") ? $("ask-qwen").checked : true);
+    const out = $("ask-out");
+    out.textContent = useQwen
+      ? "multipath mind + packing tissue/lit → Qwen articulating… (first load may take ~20s)"
+      : "thinking (multipath only)…";
+    const body = {
+      query,
+      n_paths: opts.n_paths || 28,
+      chew: $("ask-chew") && $("ask-chew").checked ? true : null,
+      narrate: !!useQwen,
+      node_id: opts.node_id || null,
+      max_tokens: 400,
+    };
+    const r = await api("/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    const th = r.thinking || {};
+    const qw = r.qwen || {};
+    const domains = (th.routed_domains || []).map((d) => `<span class="chip">${esc(d)}</span>`).join(" ");
+    const qChip = qw.used
+      ? `<span class="chip gold">Qwen on</span>`
+      : `<span class="chip pink">Qwen off${qw.error ? ": " + esc(String(qw.error)) : ""}</span>`;
+    const ans = r.answer || r.narration || "";
+    const raw = r.answer_raw || "";
+    out.innerHTML = `
+      <div class="answer-block"><span class="label">${qw.used ? "Qwen · FSOT pack" : "Mind answer"}</span>
+      <div style="white-space:pre-wrap">${esc(ans)}</div></div>
+      <div class="answer-block"><span class="label">Folds</span><div>${domains || "—"}</div></div>
+      <div>${qChip}
+        <span class="chip pink">paths ${th.n_paths || "—"}</span>
+        ${r.pack_summary && r.pack_summary.n_theses != null ? `<span class="chip">theses ${r.pack_summary.n_theses}</span>` : ""}
+        ${r.pack_summary && r.pack_summary.n_lit != null ? `<span class="chip">lit ${r.pack_summary.n_lit}</span>` : ""}
+      </div>
+      ${raw && qw.used ? `<details style="margin-top:0.5rem"><summary class="label">Raw multipath mind</summary>
+        <div style="white-space:pre-wrap;font-size:0.8rem;opacity:0.9">${esc(raw.slice(0, 2000))}${raw.length > 2000 ? "…" : ""}</div></details>` : ""}
+    `;
+    loadMemory();
+    return r;
+  }
+
   $("btn-ask").onclick = async () => {
     const q = $("ask-input").value.trim();
     if (!q) return;
-    $("ask-out").textContent = "thinking (multipath)…";
     try {
-      const r = await api("/api/ask", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          query: q,
-          n_paths: 28,
-          chew: $("ask-chew").checked ? true : null,
-        }),
-      });
-      const th = r.thinking || {};
-      const domains = (th.routed_domains || []).map((d) => `<span class="chip">${esc(d)}</span>`).join(" ");
-      $("ask-out").innerHTML = `
-        <div class="answer-block"><span class="label">Answer</span>
-        <div>${esc((r.answer || "").slice(0, 1200))}${(r.answer || "").length > 1200 ? "…" : ""}</div></div>
-        <div class="answer-block"><span class="label">Folds</span><div>${domains}</div></div>
-        <div class="chip pink">paths ${th.n_paths || "—"}</div>
-      `;
-      loadMemory();
+      await runMindAsk(q);
     } catch (e) {
       $("ask-out").textContent = "error: " + e.message;
     }
   };
+
+  if ($("btn-explain")) {
+    $("btn-explain").onclick = async () => {
+      if (!selected) {
+        $("ask-out").textContent = "Select a graph node first, then Explain with Qwen.";
+        return;
+      }
+      const dom = selected.domain || selected.label || selected.id;
+      const q = `Explain the FSOT fold/node "${dom}" using the full workspace pack: S, D_eff, regime, tissue thesis, multipath, and any literature. Clear scientific prose.`;
+      if ($("ask-input")) $("ask-input").value = q;
+      if ($("ask-qwen")) $("ask-qwen").checked = true;
+      try {
+        await runMindAsk(q, { node_id: selected.id || selected.domain, useQwen: true });
+      } catch (e) {
+        $("ask-out").textContent = "error: " + e.message;
+      }
+    };
+  }
+
+  refreshQwenStatus();
 
   $("btn-readings").onclick = async () => {
     $("side-out").textContent = "loading accuracy…";

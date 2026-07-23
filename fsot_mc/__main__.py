@@ -683,38 +683,35 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.command == "ask":
-        from fsot_mc.mind import ask
-        from fsot_mc.language_relay import relay_mind_answer
+        from fsot_mc.qwen_narrate import full_mind_answer
 
         q = (args.query or "").strip() or "What is the state of the FSOT universe?"
-        r = ask(
+        # Default: mind + Qwen. --think still shows multipath steps if raw mind needed.
+        r = full_mind_answer(
             q,
             n_paths=min(args.n_paths, 96),
-            with_eyes=False,
-            with_chew=args.chew,
+            chew=args.chew,
+            node_id=(args.node or None) or None,
+            use_qwen=True,
+            max_new_tokens=args.max_tokens,
+            temperature=args.temperature,
         )
         if args.json:
             print(json.dumps(r, indent=2, default=str))
             return 0 if not r.get("error") else 1
-        print(f"fsot_mc {__version__}  ASK  (FSOT Monte Carlo mind · ToE)")
+        print(f"fsot_mc {__version__}  ASK  (mind + Qwen2.5 · ToE)")
         print(f"  Q: {q}")
         th = r.get("thinking") or {}
+        qw = r.get("qwen") or {}
         print(f"  domains: {', '.join(th.get('routed_domains') or [])}")
-        print(f"  paths: {th.get('n_paths')}  folds_sim: {th.get('n_domains_simulated')}")
-        print(f"  emergence_def: {th.get('emergence_fraction_definition')}")
-        if args.think:
-            print("  --- thinking (simulation) ---")
-            for step in th.get("steps") or []:
-                print(f"  [{step.get('step')}] {step.get('text')}")
-            print("  --- answer ---")
-        ans = relay_mind_answer(str(r.get("answer") or ""), r.get("thinking"))
-        # wrap answer for readability
-        print(f"  A: {ans}")
-        if th.get("chew") and th["chew"].get("ok"):
-            print(f"  chew: {th['chew'].get('source')} | {th['chew'].get('title')}")
-        lang = r.get("language") or {}
-        if (lang.get("pflt_surface") or {}).get("ok"):
-            print(f"  pflt: {(lang.get('pflt_surface') or {}).get('meanings')}")
+        print(f"  paths: {th.get('n_paths')}  qwen_used={qw.get('used')} ready={qw.get('ready')}")
+        if qw.get("error"):
+            print(f"  qwen_error={qw.get('error')} {qw.get('detail') or qw.get('hint') or ''}")
+        if args.think and r.get("answer_raw"):
+            print("  --- mind (raw multipath) ---")
+            print(str(r.get("answer_raw"))[:1500])
+            print("  --- qwen narration ---")
+        print(f"  A: {r.get('answer') or ''}")
         return 0
 
     if args.command == "chat":

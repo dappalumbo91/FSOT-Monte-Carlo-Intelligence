@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import json
 import mimetypes
+import os
 import traceback
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -44,8 +45,10 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
     try:
         if path == "/api/health" and method == "GET":
             from fsot_mc.authority_gate import verify_fsot_gate
+            from fsot_mc.qwen_narrate import model_ready
 
             g = verify_fsot_gate(require_archive=False)
+            qst = model_ready()
             return _json_bytes(
                 {
                     "ok": g.get("ok"),
@@ -54,6 +57,12 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
                     "authority": g.get("authority_sha256"),
                     "free_parameters": 0,
                     "frontend": FRONTEND_DIR.is_dir(),
+                    "qwen": {
+                        "ready": qst.get("ok"),
+                        "path": qst.get("path"),
+                        "n_safetensors": qst.get("n_safetensors"),
+                        "role": "default_articulation_layer",
+                    },
                 }
             )
 
@@ -109,29 +118,43 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
             return _json_bytes(t)
 
         if path == "/api/ask" and method == "POST":
-            from fsot_mc.mind import ask
+            from fsot_mc.qwen_narrate import full_mind_answer
 
             data = json.loads(body.decode("utf-8") or "{}")
-            r = ask(
+            # Default: Qwen articulates the full FSOT pack (mind+tissue+lit+…).
+            # Pass narrate=false only to force raw mind text.
+            use_qwen = data.get("narrate", data.get("use_qwen", True))
+            if isinstance(use_qwen, str):
+                use_qwen = use_qwen.lower() not in ("0", "false", "no")
+            r = full_mind_answer(
                 str(data.get("query") or "What is the FSOT universe state?"),
                 n_paths=int(data.get("n_paths") or 32),
-                with_chew=data.get("chew"),
+                chew=data.get("chew"),
+                node_id=data.get("node_id") or data.get("node"),
+                use_qwen=bool(use_qwen),
+                max_new_tokens=int(data.get("max_tokens") or 400),
+                temperature=float(data.get("temperature") or 0.35),
             )
-            # slim for UI
+            th = r.get("thinking") or {}
             return _json_bytes(
                 {
                     "error": r.get("error"),
                     "answer": r.get("answer"),
+                    "answer_raw": r.get("answer_raw"),
+                    "narration": r.get("narration"),
+                    "qwen": r.get("qwen"),
+                    "pack_summary": r.get("pack_summary"),
                     "thinking": {
-                        "routed_domains": (r.get("thinking") or {}).get("routed_domains"),
-                        "n_paths": (r.get("thinking") or {}).get("n_paths"),
-                        "focus_scalars": (r.get("thinking") or {}).get("focus_scalars"),
-                        "adaptive_memory": (r.get("thinking") or {}).get("adaptive_memory"),
-                        "emergence_fraction_definition": (r.get("thinking") or {}).get(
+                        "routed_domains": th.get("routed_domains"),
+                        "n_paths": th.get("n_paths"),
+                        "focus_scalars": th.get("focus_scalars"),
+                        "adaptive_memory": th.get("adaptive_memory"),
+                        "emergence_fraction_definition": th.get(
                             "emergence_fraction_definition"
                         ),
                     },
                     "session": r.get("session"),
+                    "method": r.get("method"),
                     "free_parameters": 0,
                 }
             )
@@ -396,14 +419,42 @@ class FSOTHandler(BaseHTTPRequestHandler):
         self._send(404, b"not found", "text/plain")
 
 
-def serve(*, host: str = "127.0.0.1", port: int = 8765) -> None:
+def _warm_qwen_background() -> None:
+    """Load Qwen in a daemon thread so first UI ask is not cold."""
+    import threading
+
+    def _run() -> None:
+        try:
+            from fsot_mc.qwen_narrate import model_ready, load_model
+
+            st = model_ready()
+            if not st.get("ok"):
+                print(f"[fsot-serve] Qwen weights missing — {st.get('hint')}")
+                return
+            print("[fsot-serve] warming Qwen2.5-7B (4-bit)…")
+            r = load_model(force=False)
+            if r.get("ok"):
+                print(f"[fsot-serve] Qwen ready mode={r.get('load_mode')} device={r.get('device')}")
+            else:
+                print(f"[fsot-serve] Qwen warm failed: {r.get('error')} {r.get('detail')}")
+        except Exception as exc:
+            print(f"[fsot-serve] Qwen warm error: {exc}")
+
+    threading.Thread(target=_run, name="qwen-warm", daemon=True).start()
+
+
+def serve(*, host: str = "127.0.0.1", port: int = 8765, warm_qwen: bool = True) -> None:
     if not FRONTEND_DIR.is_dir():
         raise SystemExit(f"Frontend missing: {FRONTEND_DIR}")
+    if warm_qwen and os.environ.get("FSOT_MC_QWEN_WARM", "1") not in ("0", "false", "no"):
+        _warm_qwen_background()
     httpd = ThreadingHTTPServer((host, port), FSOTHandler)
     print(f"FSOT Monte Carlo Intelligence  v{__version__}")
     print(f"  visual:  http://{host}:{port}/")
     print(f"  health:  http://{host}:{port}/api/health")
     print(f"  graph:   http://{host}:{port}/api/graph")
+    print(f"  ask:     POST /api/ask  (mind + Qwen default)")
+    print(f"  narrate: POST /api/narrate · GET /api/narrate/status")
     print("  Ctrl+C to stop. free_parameters=0 · pin D1D38A")
     try:
         httpd.serve_forever()
