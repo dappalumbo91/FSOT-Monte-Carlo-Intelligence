@@ -494,33 +494,54 @@
   }, { passive: false });
 
   function simpleMarkdown(md) {
-    // lightweight renderer for tissue theses (not full CommonMark)
-    let html = esc(md);
-    html = html.replace(/^### (.*)$/gm, "<h3>$1</h3>");
-    html = html.replace(/^## (.*)$/gm, "<h2>$1</h2>");
-    html = html.replace(/^# (.*)$/gm, "<h1>$1</h1>");
-    html = html.replace(/^> (.*)$/gm, "<blockquote>$1</blockquote>");
-    html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-    html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
-    html = html.replace(/\$\$([\s\S]+?)\$\$/g, "<pre>$1</pre>");
-    html = html.replace(/\\\[([\s\S]+?)\\\]/g, "<pre>$1</pre>");
-    // tables: simple pipe rows
-    html = html.replace(/(^\\|.*\\|[\\r\\n]+)+/gm, (block) => {
-      const rows = block.trim().split(/\\r?\\n/).filter(Boolean);
-      if (rows.length < 2 || !rows[0].includes("|")) return block;
-      const parse = (r) => r.split("|").slice(1, -1).map((c) => c.trim());
-      let out = "<table>";
-      rows.forEach((r, i) => {
-        if (/^\\s*\\|?[\\s:-]+\\|/.test(r)) return;
-        const cells = parse(r);
-        const tag = i === 0 ? "th" : "td";
-        out += "<tr>" + cells.map((c) => `<${tag}>${c}</${tag}>`).join("") + "</tr>";
-      });
-      return out + "</table>";
-    });
-    html = html.replace(/\\n\\n/g, "</p><p>");
-    html = html.replace(/\\n/g, "<br/>");
-    return `<p>${html}</p>`;
+    // Lightweight thesis renderer — keep regexes simple (must not break the graph script).
+    const lines = String(md || "").split(/\r?\n/);
+    const out = [];
+    let inTable = false;
+    let tableRows = [];
+
+    function flushTable() {
+      if (!tableRows.length) return;
+      let html = "<table>";
+      let headerDone = false;
+      for (const row of tableRows) {
+        if (/^\s*\|?[\s:-]+\|/.test(row)) continue; // alignment row
+        const cells = row.replace(/^\|/, "").replace(/\|$/, "").split("|").map((c) => c.trim());
+        if (!cells.length) continue;
+        const tag = headerDone ? "td" : "th";
+        html += "<tr>" + cells.map((c) => `<${tag}>${inlineFmt(c)}</${tag}>`).join("") + "</tr>";
+        headerDone = true;
+      }
+      html += "</table>";
+      out.push(html);
+      tableRows = [];
+      inTable = false;
+    }
+
+    function inlineFmt(s) {
+      return esc(s)
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>");
+    }
+
+    for (const line of lines) {
+      if (line.trim().startsWith("|")) {
+        inTable = true;
+        tableRows.push(line);
+        continue;
+      }
+      if (inTable) flushTable();
+
+      if (/^### /.test(line)) out.push("<h3>" + inlineFmt(line.slice(4)) + "</h3>");
+      else if (/^## /.test(line)) out.push("<h2>" + inlineFmt(line.slice(3)) + "</h2>");
+      else if (/^# /.test(line)) out.push("<h1>" + inlineFmt(line.slice(2)) + "</h1>");
+      else if (/^> /.test(line)) out.push("<blockquote>" + inlineFmt(line.slice(2)) + "</blockquote>");
+      else if (/^---+$/.test(line.trim())) out.push("<hr/>");
+      else if (line.trim() === "") out.push("");
+      else out.push("<p>" + inlineFmt(line) + "</p>");
+    }
+    if (inTable) flushTable();
+    return out.join("\n");
   }
 
   async function loadThesis(nodeId) {
