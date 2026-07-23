@@ -216,35 +216,74 @@ def build_narration_pack(
 
 
 def _format_context_text(pack: dict[str, Any]) -> str:
+    """
+    Compact, prose-first pack. Prefer mind answer + scalar table over raw
+    full theses (which blow the 2k token window mid-table and confuse generation).
+    """
     lines = [
-        "=== FSOT NARRATION CONTEXT (authoritative for this reply) ===",
-        f"authority: D1D38A · free_parameters={pack.get('free_parameters')}",
-        f"query: {pack.get('query')}",
+        "=== FSOT NARRATION CONTEXT (authoritative) ===",
+        "authority=D1D38A free_parameters=0",
+        f"USER_QUERY: {pack.get('query')}",
         f"routed_domains: {', '.join(pack.get('routed_domains') or [])}",
-        f"emergence_fraction_mean: {pack.get('emergence_fraction_mean')}",
-        f"emergence_definition: {pack.get('emergence_definition')}",
+        f"map_emergence_fraction_mean: {pack.get('emergence_fraction_mean')}",
+        f"emergence_definition: {_truncate(str(pack.get('emergence_definition') or ''), 400)}",
         f"claim_hygiene: {pack.get('claim_hygiene')}",
         "",
-        "--- mind_answer (Monte Carlo mind, structured prose) ---",
-        str(pack.get("mind_answer") or "(none)"),
-        "",
-        "--- focus_scalars (signed S, D_eff) ---",
+        "--- FOCUS SCALARS (use these numbers; do not invent) ---",
     ]
     for row in pack.get("focus_scalars") or []:
         if isinstance(row, dict):
+            try:
+                s = float(row.get("S"))
+                s_txt = f"{s:+.4f}"
+            except Exception:
+                s_txt = str(row.get("S"))
             lines.append(
-                f"  {row.get('domain')}: S={row.get('S')} D_eff={row.get('D_eff')} "
+                f"* {row.get('domain')}: S={s_txt} D_eff={row.get('D_eff')} "
                 f"regime={row.get('regime')}"
             )
-        else:
-            lines.append(f"  {row}")
     lines.append("")
+    lines.append("--- MONTE CARLO MIND ANSWER (primary source for prose) ---")
+    lines.append(_truncate(str(pack.get("mind_answer") or "(none)"), 2400))
+    lines.append("")
+    # Short thesis abstracts only (first ~40 lines or Abstract section)
     for i, th in enumerate(pack.get("tissue_theses") or [], 1):
-        lines.append(f"--- tissue_thesis[{i}] id={th.get('id')} ---")
-        lines.append(str(th.get("markdown") or ""))
+        md = str(th.get("markdown") or "")
+        excerpt = _thesis_excerpt(md, max_chars=900)
+        lines.append(f"--- TISSUE EXCERPT [{i}] {th.get('id')} ---")
+        lines.append(excerpt)
         lines.append("")
     lines.append("=== END CONTEXT ===")
+    lines.append(
+        "INSTRUCTIONS: Answer USER_QUERY in clear scientific paragraphs. "
+        "Do not continue markdown tables or dump the context. "
+        "Cite S and D_eff from FOCUS SCALARS when relevant."
+    )
     return "\n".join(lines)
+
+
+def _thesis_excerpt(md: str, max_chars: int = 900) -> str:
+    """Prefer Abstract / first prose block; avoid mid-table cuts when possible."""
+    md = (md or "").strip()
+    if not md:
+        return "(no thesis)"
+    # strip huge tables lightly
+    lines = []
+    for ln in md.splitlines():
+        if ln.strip().startswith("|") and lines and lines[-1].strip().startswith("|"):
+            # keep table headers only briefly
+            if sum(1 for x in lines if x.strip().startswith("|")) > 6:
+                continue
+        lines.append(ln)
+    text = "\n".join(lines)
+    # try abstract section
+    low = text.lower()
+    for key in ("## abstract", "# abstract", "**abstract**"):
+        i = low.find(key)
+        if i >= 0:
+            chunk = text[i : i + max_chars]
+            return _truncate(chunk, max_chars)
+    return _truncate(text, max_chars)
 
 
 _model = None
