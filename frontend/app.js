@@ -594,11 +594,11 @@
     const rows = [
       `<div class="answer-block"><span class="label">Node</span><div><strong>${esc(n.label)}</strong> <span class="chip">${esc(n.kind)}</span></div></div>`,
       n.domain ? `<div>Domain: <code>${esc(n.domain)}</code></div>` : "",
-      n.cluster ? `<div>Cluster: <span class="chip">${esc(n.cluster)}</span></div>` : "",
+      n.cluster ? `<div>Science family: <span class="chip" style="border-color:${esc(n.color || "#8892a4")}">${esc(n.cluster)}</span></div>` : "",
       n.D_eff != null ? `<div>D<sub>eff</sub> = ${n.D_eff} · ring ${n.ring}</div>` : "",
       n.S != null ? `<div>S = ${Number(n.S).toFixed(4)} · ${esc(n.regime || "")} <span style="opacity:.65">(canonical)</span></div>` : "",
       n.S_path_mean != null ? `<div>S<sub>path</sub> = ${Number(n.S_path_mean).toFixed(4)} <span style="opacity:.65">(multipath)</span></div>` : "",
-      n.median_error_pct != null ? `<div class="chip gold">median_error ${Number(n.median_error_pct).toFixed(4)}% ${Number(n.median_error_pct) <= 0.5 ? "✓ green" : ""}</div>` : "",
+      n.median_error_pct != null ? `<div class="chip gold">median_error ${Number(n.median_error_pct).toFixed(4)}% ${Number(n.median_error_pct) <= 0.5 ? "✓ green gate" : ""}</div>` : "",
       n.coverage_tier ? `<div>coverage: ${esc(n.coverage_tier)}</div>` : "",
       n.record_count != null ? `<div>records: ${n.record_count}</div>` : "",
       n.routes_to_core ? `<div>routes_to_core → <code>${esc(n.routes_to_core)}</code></div>` : "",
@@ -612,7 +612,7 @@
       n.fsot_predicted != null ? `<div class="chip gold">FSOT ${n.fsot_predicted} ${esc(n.unit || "")}</div>` : "",
       n.flip_rate != null ? `<div>flip_rate = ${n.flip_rate}</div>` : "",
       n.is_core ? `<div class="chip pink">core NeuroLab fold</div>` : "",
-      n.kind === "extension" ? `<div class="chip">extension panel</div>` : "",
+      n.kind === "extension" ? `<div class="chip">extension panel · muted family hue (not unknown)</div>` : "",
       n.kind === "problem_route" ? `<div class="chip pink">problem route intent</div>` : "",
     ].filter(Boolean);
     el.innerHTML = rows.join("");

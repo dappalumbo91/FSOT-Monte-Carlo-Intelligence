@@ -67,6 +67,77 @@ def _node_id(domain: str) -> str:
     return f"dom_{domain}"
 
 
+def _infer_cluster_from_name(name: str, routes: Any = None) -> str:
+    """
+    Map panel / formal module names to a science-family cluster for coloring.
+    Avoids dumping hundreds of archive nodes into the generic 'extension' gray.
+    """
+    n = (name or "").lower()
+    r = str(routes or "").lower()
+    blob = f"{n} {r}"
+
+    def hit(*keys: str) -> bool:
+        return any(k in blob for k in keys)
+
+    if hit("cosmo", "hubble", "dark_energy", "dark energy", "s8", "cmb", "inflation", "unification", "quantum_gravity", "string"):
+        return "cosmo_unification"
+    if hit("astro", "planet", "stellar", "galaxy", "solar", "exoplanet"):
+        return "astro_planetary"
+    if hit(
+        "earth",
+        "seismo",
+        "ocean",
+        "atmos",
+        "meteo",
+        "climate",
+        "geo",
+        "ionosph",
+        "magnetosph",
+        "ecology",
+        "economic",
+        "finance",
+        "socio",
+    ):
+        return "earth_complex_systems"
+    if hit(
+        "bio",
+        "neuro",
+        "life",
+        "gene",
+        "protein",
+        "cell",
+        "codon",
+        "ecology",
+        "chem",
+        "fuel",
+        "thermo",
+        "material",
+        "fluid",
+        "energy",
+    ):
+        return "life_matter_energy"
+    if hit("atomic", "optical", "photon", "laser", "spectro", "molecular", "amo"):
+        return "atomic_molecular_optical"
+    if hit(
+        "quantum",
+        "particle",
+        "nuclear",
+        "higgs",
+        "muon",
+        "lepton",
+        "hadron",
+        "codata",
+        "nist",
+        "formal.particle",
+        "formal.quantum",
+    ):
+        return "quantum_particle"
+    if hit("formal.", "lean", "prior"):
+        # formal modules default to cosmo/law spine rather than mute gray
+        return "cosmo_unification"
+    return "extension"
+
+
 def build_compact_connective_tissue(
     *,
     max_lean_overlap_degree: int = 28,
@@ -111,7 +182,33 @@ def build_compact_connective_tissue(
         nid = _node_id(name)
         if nid in nodes:
             if extra:
-                nodes[nid].update({k: v for k, v in extra.items() if v is not None})
+                # Never demote cores; never wipe a good science cluster with "extension"
+                for k, v in extra.items():
+                    if v is None:
+                        continue
+                    if k in ("kind", "atlas_kind") and name in core:
+                        continue
+                    if k in ("cluster", "group") and str(v) in ("extension", "unknown", ""):
+                        continue
+                    cur = nodes[nid].get(k)
+                    if cur in (None, "", [], False) or k in (
+                        "median_error_pct",
+                        "coverage_tier",
+                        "record_count",
+                        "tier",
+                        "lean_module",
+                        "routes_to_core",
+                    ):
+                        nodes[nid][k] = v
+            if name in core:
+                nodes[nid]["is_core"] = True
+                nodes[nid]["kind"] = "domain"
+                nodes[nid]["atlas_kind"] = "core"
+            # repair missing cluster
+            if str(nodes[nid].get("cluster") or "") in ("", "extension", "unknown"):
+                cl = _infer_cluster_from_name(name, routes=nodes[nid].get("routes_to_core"))
+                nodes[nid]["cluster"] = cl
+                nodes[nid]["group"] = cl
             return nid
         # try atlas
         base = domains_meta.get(name) or {}
@@ -121,7 +218,16 @@ def build_compact_connective_tissue(
         except KeyError:
             base = {}
         kind = base.get("kind") or ("core" if name in core else "extension_panel")
-        cluster = base.get("cluster") or ("quantum_particle" if name in core else "extension")
+        # Never demote a NeuroLab core fold if name is in core set
+        if name in core:
+            kind = "core"
+        cluster = base.get("cluster") or ""
+        # Prefer scientific family even for extensions (color graph by domain family)
+        if cluster in (None, "", "unknown", "extension"):
+            cluster = _infer_cluster_from_name(
+                name,
+                routes=(base.get("routes_to_core") or (extra or {}).get("routes_to_core")),
+            )
         D = base.get("D_eff")
         if D is None:
             D = 12 if kind != "core" else 15
@@ -134,7 +240,8 @@ def build_compact_connective_tissue(
             "domain": name,
             "kind": "domain" if kind == "core" else "extension",
             "atlas_kind": kind,
-            "group": cluster if kind == "core" else "extension",
+            # group = science family for coloring (not the word "extension")
+            "group": cluster,
             "cluster": cluster,
             "D_eff": int(D) if D is not None else 12,
             "S": float(S) if S is not None else None,
@@ -176,18 +283,32 @@ def build_compact_connective_tissue(
             )
     for row in exp.get("extension_domains") or []:
         if isinstance(row, dict) and row.get("domain"):
-            ensure_domain(
-                str(row["domain"]),
-                {
-                    "median_error_pct": row.get("median_error_pct"),
-                    "coverage_tier": row.get("coverage_tier"),
-                    "record_count": row.get("record_count"),
-                    "tier": row.get("tier"),
-                    "lean_module": row.get("lean_module"),
-                    "atlas_kind": "extension_panel",
-                    "kind": "extension",
-                },
-            )
+            dname = str(row["domain"])
+            # Do not overwrite true core folds as extension panels
+            if dname in core:
+                ensure_domain(
+                    dname,
+                    {
+                        "median_error_pct": row.get("median_error_pct"),
+                        "coverage_tier": row.get("coverage_tier"),
+                        "record_count": row.get("record_count"),
+                        "tier": row.get("tier"),
+                        "lean_module": row.get("lean_module"),
+                    },
+                )
+            else:
+                ensure_domain(
+                    dname,
+                    {
+                        "median_error_pct": row.get("median_error_pct"),
+                        "coverage_tier": row.get("coverage_tier"),
+                        "record_count": row.get("record_count"),
+                        "tier": row.get("tier"),
+                        "lean_module": row.get("lean_module"),
+                        "atlas_kind": "extension_panel",
+                        "kind": "extension",
+                    },
+                )
 
     # 3) Coupling benchmark nodes
     for row in coup.get("nodes") or []:

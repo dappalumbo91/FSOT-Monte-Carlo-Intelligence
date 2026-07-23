@@ -29,6 +29,8 @@ SEED_PHI = float(PHI)
 SEED_POOF = float(POOF)
 
 # Cluster → hue for frontend (CSS-friendly)
+# Scientific families color BOTH core folds and their extension panels.
+# (Old bug: green-gate extensions were painted flat slate → looked "unknown".)
 CLUSTER_COLORS: dict[str, str] = {
     "quantum_particle": "#7c5cff",
     "atomic_molecular_optical": "#3ecf8e",
@@ -36,7 +38,7 @@ CLUSTER_COLORS: dict[str, str] = {
     "earth_complex_systems": "#f0b429",
     "astro_planetary": "#4cc9f0",
     "cosmo_unification": "#ff8c42",
-    "extension": "#5b6b8a",
+    "extension": "#5b6b8a",  # only when no scientific cluster is known
     "problem_route": "#f472b6",
     "unknown": "#8892a4",
     "seed": "#ffffff",
@@ -48,6 +50,46 @@ CLUSTER_COLORS: dict[str, str] = {
     "coupling": "#22d3ee",
     "validation": "#34d399",
 }
+
+# Scientific cluster keys used for NeuroLab + panel coloring
+SCIENCE_CLUSTERS: tuple[str, ...] = (
+    "quantum_particle",
+    "atomic_molecular_optical",
+    "life_matter_energy",
+    "earth_complex_systems",
+    "astro_planetary",
+    "cosmo_unification",
+)
+
+
+def _blend_hex(hex_color: str, toward: str = "#1a2230", t: float = 0.35) -> str:
+    """Blend hex toward a dark slate (mute extensions without losing family hue)."""
+
+    def _rgb(h: str) -> tuple[int, int, int]:
+        h = (h or "#8892a4").lstrip("#")
+        if len(h) == 3:
+            h = "".join(c * 2 for c in h)
+        try:
+            return int(h[0:2], 16), int(h[2:4], 16), int(h[4:6], 16)
+        except ValueError:
+            return 136, 146, 164
+
+    r1, g1, b1 = _rgb(hex_color)
+    r2, g2, b2 = _rgb(toward)
+    t = max(0.0, min(1.0, float(t)))
+    r = int(r1 * (1 - t) + r2 * t)
+    g = int(g1 * (1 - t) + g2 * t)
+    b = int(b1 * (1 - t) + b2 * t)
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+def _resolve_cluster(n: dict[str, Any]) -> str:
+    """Prefer scientific cluster over the generic 'extension' group label."""
+    for key in ("cluster", "group"):
+        c = str(n.get(key) or "").strip()
+        if c and c not in ("extension", "unknown", ""):
+            return c
+    return "extension"
 
 
 LAYER_EDGE_COLORS: dict[str, str] = {
@@ -425,7 +467,8 @@ def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, 
       ring  = f(D_eff) shells around law K
       angle = even spacing on shell, ordered by signed S (not alphabet)
 
-    Same look as the annealed D_eff-ring graph; organization tracks the SD law.
+    Color = scientific cluster family for cores AND extensions.
+    Extensions are slightly muted so cores still pop; green-gate is a badge, not slate.
     """
     by_ring: dict[int, list[dict[str, Any]]] = {}
     out = []
@@ -446,21 +489,44 @@ def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, 
         group_sorted = sorted(group, key=_s_sort_key)
         for i, n in enumerate(group_sorted):
             kind = n.get("kind") or "domain"
-            group_name = n.get("group") or n.get("cluster") or "unknown"
+            is_core = bool(n.get("is_core") or n.get("atlas_kind") == "core")
+            is_ext = (not is_core) and (
+                kind == "extension" or n.get("atlas_kind") == "extension_panel"
+            )
+            cluster = _resolve_cluster(n)
+            n["cluster"] = cluster
+            # keep group aligned with science family (not the word "extension")
+            if kind != "problem_route" and cluster in SCIENCE_CLUSTERS:
+                n["group"] = cluster
+            elif kind == "problem_route":
+                n["group"] = "problem_route"
+            else:
+                n["group"] = n.get("group") or cluster
+
             if kind == "problem_route":
                 color = CLUSTER_COLORS["problem_route"]
                 size = 10
-            elif kind == "extension" or n.get("atlas_kind") == "extension_panel":
-                color = CLUSTER_COLORS["extension"]
-                err = n.get("median_error_pct")
-                if err is not None and float(err) <= 0.5:
-                    color = "#64748b"
-                size = 4 + min(8, (abs(float(n["S"])) * 8) if n.get("S") is not None else 3)
             else:
-                color = CLUSTER_COLORS.get(group_name, CLUSTER_COLORS["unknown"])
-                size = 6 + min(14, abs(float(n["S"])) * 12) if n.get("S") is not None else 8
+                base = CLUSTER_COLORS.get(cluster, CLUSTER_COLORS["unknown"])
+                if is_core or kind == "domain":
+                    # full-bright NeuroLab / core fold
+                    color = base
+                    size = 6 + min(14, abs(float(n["S"])) * 12) if n.get("S") is not None else 10
+                elif is_ext:
+                    # same family hue, muted — still readable, not "unknown slate"
+                    color = _blend_hex(base, toward="#1a2230", t=0.42)
+                    size = 4 + min(8, (abs(float(n["S"])) * 8) if n.get("S") is not None else 3)
+                else:
+                    color = base
+                    size = 6 + min(14, abs(float(n["S"])) * 12) if n.get("S") is not None else 8
+
+            # Green gate is a *status badge*, not a color wipe to gray
+            err = n.get("median_error_pct")
+            green = err is not None and float(err) <= 0.5
+            n["green_gate"] = bool(green)
             n["color"] = color
             n["size"] = float(size)
+            n["color_family"] = cluster
             # even on shell (original aesthetic) + mild ring phase offset
             n["angle"] = (2 * math.pi * i) / max(len(group_sorted), 1) + ring * 0.07
             n["layout_mode"] = "deff_ring_s_ordered"
@@ -691,12 +757,13 @@ def build_universe_graph(
             "legend": [
                 "White = seeds (π,e,φ,γ,G) → violet K law hub",
                 "Bright cluster hues = 35 core NeuroLab folds (size ∝ |S|)",
-                "Slate nodes = extension panels (367) with archive median_error",
+                "Same hues, slightly muted = extension panels in that science family (not unknown)",
+                "Purple / green / pink / gold / cyan / orange = quantum / AMO / life / earth / astro / cosmo",
                 "Lime axons = routes_to_core (panel → core validation spine)",
                 "Pink hubs = problem routes (navigator intents)",
                 "Cyan axons = archive domain-coupling validations (crosswalk / lean tags)",
                 "Gold = preregistered predictions · Grey = adaptive memory",
-                "Green gate: median_error_pct ≤ 0.5% from Physical Archive panels",
+                "Green-gate ≤0.5% is a status badge on the node — not a gray color wipe",
             ],
         },
         "note": (
