@@ -1,18 +1,18 @@
 # PRED Bench-Closure Ledger
 
-Updated: 2026-07-23T02:50:44.543242+00:00  
+Updated: 2026-07-23T16:27:15.417347+00:00  
 Total PREDs: **177**  
-By status: `{'open': 177}`  
+By status: `{'in_progress': 7, 'open': 170}`  
 
 Status meanings: `open` | `in_progress` | `pass` | `kill` | `blocked`
 
 | ID | Name | Domain | FSOT | SOTA | Status | Discriminant |
 |----|------|--------|-----:|-----:|--------|--------------|
-| PRED-001 | H0_bridge_scalar | Cosmology | 70.75 | 67.36 | **open** | strictly_between_planck_and_sh0es |
-| PRED-002 | S8_effective_lensing | Cosmology | 0.805 | 0.834 | **open** | between_planck_and_des |
+| PRED-001 | H0_bridge_scalar | Cosmology | 70.75 | 67.36 | **in_progress** | strictly_between_planck_and_sh0es |
+| PRED-002 | S8_effective_lensing | Cosmology | 0.805 | 0.834 | **in_progress** | between_planck_and_des |
 | PRED-003 | adversarial_codon_hole_rate | Code_Genome_Structure | 0.85 | 0.35 | **open** | fsot_exceeds_sota_by_0.4 |
-| PRED-004 | muon_g2_excess_direction | Particle_Physics | 2.49e-09 | 0.0 | **open** | same_sign_as_fermilab |
-| PRED-005 | lithium_problem_factor_bridge | Cosmology | 2.85 | 3.0 | **open** | within_10pct_of_observed_gap |
+| PRED-004 | muon_g2_excess_direction | Particle_Physics | 2.49e-09 | 0.0 | **in_progress** | same_sign_as_fermilab |
+| PRED-005 | lithium_problem_factor_bridge | Cosmology | 2.85 | 3.0 | **in_progress** | within_10pct_of_observed_gap |
 | PRED-006 | acoustic_impedance_median_MRayl | Acoustic_Resonance_Materials | 0.41 | 0.45 | **open** | within_10pct_of_observed_gap |
 | PRED-007 | ionospheric_beta_quiet_classifier | Ionospheric_Chemistry_Coupling | 1.0 | 0.55 | **open** | fsot_exceeds_sota_by_0.4 |
 | PRED-008 | phi_glass_Tg_morphogen_K | Phi_Morphogenetic_Scaling | 199.0 | 210.0 | **open** | within_10pct_of_observed_gap |
@@ -31,12 +31,12 @@ Status meanings: `open` | `in_progress` | `pass` | `kill` | `blocked`
 | PRED-021 | Z132_N184_superheavy_shell_peak | Distant_Island_Z128_Z132_Deep_Panel | 31000000.0 | 0.0 | **open** | fsot_exceeds_sota_by_0.4 |
 | PRED-022 | Z164_N228_distant_island | Z164_Distant_Island_Prereg_Scaffold | 1500.0 | 0.0 | **open** | fsot_exceeds_sota_by_0.4 |
 | PRED-023 | periodic_extension_decay_topology_Z164 | Periodic_Extension_Decay_Topology_Scaffold | 164 | 118 | **open** | fsot_exceeds_sota_by_0.4 |
-| PRED-024 | h0_dual_anchor_bubble_bleed | Hubble_Dark_Sector_Crosswalk | 72.1 | 67.4 | **open** | fsot_exceeds_sota_by_0.4 |
+| PRED-024 | h0_dual_anchor_bubble_bleed | Hubble_Dark_Sector_Crosswalk | 72.1 | 67.4 | **in_progress** | fsot_exceeds_sota_by_0.4 |
 | PRED-025 | fpc_cosmological_tau_damping | FPC_Fluidlink_Timing_Deep_Panel | 0.5 | 0.0 | **open** | fsot_exceeds_sota_by_0.4 |
 | PRED-032 | bh_wh_micro_portal_doorway | Warp_BH_WH_Portal_Panel | 0.009663204175 | 0.0 | **open** | fsot_exceeds_sota_by_0.4 |
 | PRED-033 | quantum_entanglement_gate_pair | Warp_BH_WH_Portal_Panel | 0.04803163401 | 0.0 | **open** | fsot_exceeds_sota_by_0.4 |
-| PRED-034 | fsot_designed_fuel_thermochemistry_panel | Fuel_Lab_Live_Panel | 0.039349 | 8.0 | **open** | within_10pct_of_observed_gap |
-| PRED-035 | machine_molecule_species_catalog_precision | Machine_And_Molecule_Live_Panel | 0.01341 | 5.0 | **open** | within_10pct_of_observed_gap |
+| PRED-034 | fsot_designed_fuel_thermochemistry_panel | Fuel_Lab_Live_Panel | 0.039349 | 8.0 | **in_progress** | within_10pct_of_observed_gap |
+| PRED-035 | machine_molecule_species_catalog_precision | Machine_And_Molecule_Live_Panel | 0.01341 | 5.0 | **in_progress** | within_10pct_of_observed_gap |
 | PRED-036 | fsot_transporter_technology_stack | Star_Trek_Transporter_Live_Panel | 0.05256 | 10.0 | **open** | within_10pct_of_observed_gap |
 | PRED-037 | blackhole_whitehole_cycle_constant_drift | BlackHole_WhiteHole_Cycle_Live_Panel | 0.026472 | 6.0 | **open** | within_10pct_of_observed_gap |
 | PRED-038 | transporter_portal_traverse_scalar | Star_Trek_Transporter_Live_Panel | 0.000464139486 | 0.0 | **open** | fsot_exceeds_sota_by_0.4 |

@@ -24,6 +24,8 @@
 | [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | **Clone → install → gate → tests → UI** (start here) |
 | [docs/QWEN_WEIGHTS.md](docs/QWEN_WEIGHTS.md) | **Where the chat model lives** (Hugging Face link + download) |
 | [docs/ARTICULATION_LEARNING.md](docs/ARTICULATION_LEARNING.md) | **Adaptive mouth LoRA** (internalize FSOT identity; never trains seeds) |
+| [docs/IMPROVEMENT_CYCLE.md](docs/IMPROVEMENT_CYCLE.md) | Latest **PRED / flip / soft-court / claims** improvement cycle report |
+| [docs/PRED_PRIORITY_ROADMAP.md](docs/PRED_PRIORITY_ROADMAP.md) | Active lab-closure PRED queue |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the system works scientifically |
 | [docs/CLAIMS.md](docs/CLAIMS.md) | Data-first claims ledger (MEASURED / PREREG / STRUCTURE) |
 | [docs/SCIENTIFIC_AUDIT_REPORT.md](docs/SCIENTIFIC_AUDIT_REPORT.md) | Full-domain scientific audit |
@@ -70,6 +72,11 @@ python -m fsot_mc ask --think -q "What does multipath emergence mean?"
 # visual UI  (or double-click START_FSOT.bat)
 python -m fsot_mc serve --port 8765
 # open http://127.0.0.1:8765/
+
+# improvement cycle: PRED priority + flip protocols + soft court + claims
+python -m fsot_mc improve --n-paths 64
+# optional mouth LoRA micro-train after harvest:
+# python -m fsot_mc improve --train-articulation --max-steps 24
 ```
 
 Linux/macOS: use `source .venv/bin/activate` instead of the PowerShell activate line.

@@ -32,6 +32,7 @@ def main(argv: list[str] | None = None) -> int:
             "articulate-train",
             "articulate-status",
             "articulate-loop",
+            "improve",
             "ask",
             "chat",
             "independent",
@@ -64,6 +65,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--temperature", type=float, default=0.4, help="narrate sampling temperature")
     ap.add_argument("--max-steps", type=int, default=40, help="articulate-train max optimizer steps")
     ap.add_argument("--no-train", action="store_true", help="articulate-loop: harvest only")
+    ap.add_argument(
+        "--train-articulation",
+        action="store_true",
+        help="improve: also micro-train mouth LoRA if queue ready",
+    )
     ap.add_argument("--set", default="", help="pred-bench: PRED id to update")
     ap.add_argument("--status", default="", help="pred-bench status: open|in_progress|pass|kill|blocked")
     ap.add_argument("--measured", default="", help="pred-bench measured value")
@@ -385,6 +391,39 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"  train: {tr.get('error')} {tr.get('hint') or tr.get('detail') or ''}")
             st = r.get("status") or {}
             print(f"  queue untrained={(st.get('n_untrained'))} adapter_ready={st.get('adapter_ready')}")
+        return 0 if r.get("ok") else 1
+
+    if args.command == "improve":
+        from fsot_mc.improvement_cycle import run_improvement_cycle
+
+        r = run_improvement_cycle(
+            n_paths=min(args.n_paths, 96),
+            seed=args.seed,
+            train_articulation=bool(args.train_articulation),
+            max_train_steps=max(1, int(args.max_steps)),
+            advance_preds=True,
+        )
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  IMPROVEMENT CYCLE")
+            if not r.get("ok"):
+                print("  ERROR", r.get("error"))
+                return 1
+            print(f"  gate={(r.get('gate') or {}).get('ok')} free_parameters=0")
+            print(f"  pred by_status={(r.get('pred_summary') or {}).get('by_status')}")
+            ins = r.get("pred_in_silico") or {}
+            print(f"  pred in_silico ok={ins.get('n_ok')} fail={ins.get('n_fail')} skip={ins.get('n_skip')}")
+            fl = r.get("flip") or {}
+            print(f"  flip hotspots={fl.get('n_hotspots')}")
+            sc = r.get("soft_court") or {}
+            print(f"  soft_court promoted={sc.get('n_promoted')} leads={sc.get('n_leads')}")
+            print(f"  claims n={(r.get('claims') or {}).get('n_claims')}")
+            print(f"  summary: {r.get('summary_md')}")
+            print(f"  export: {r.get('export_json')}")
+            if args.train_articulation:
+                tr = ((r.get("articulation") or {}).get("loop") or {}).get("train") or {}
+                print(f"  articulation train ok={tr.get('ok')} steps={tr.get('steps')}")
         return 0 if r.get("ok") else 1
 
     if args.command in ("readings", "accuracy"):

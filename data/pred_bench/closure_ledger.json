@@ -11,7 +11,7 @@
       "discriminant": "strictly_between_planck_and_sh0es",
       "formula_branch": "term1.perceived_adjust",
       "note": "",
-      "status": "open",
+      "status": "in_progress",
       "kill_criteria": [
         "Discriminant fails: strictly_between_planck_and_sh0es",
         "Requires free-parameter retune to match measured value",
@@ -98,9 +98,35 @@
           "status": "open",
           "measured_value": null,
           "note": "reset after smoke"
+        },
+        {
+          "t": "2026-07-23T14:22:03.517184+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "audit smoke"
+        },
+        {
+          "t": "2026-07-23T14:22:03.519188+00:00",
+          "status": "open",
+          "measured_value": null,
+          "note": "reset after smoke"
+        },
+        {
+          "t": "2026-07-23T16:27:15.378057+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "Improvement cycle priority queue \u2014 close under discriminant + pin only; in_silico \u2260 lab pass; free_parameters=0."
         }
       ],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "lo=67.36 fsot=70.75 hi=73.04",
+        "discriminant": "strictly_between_planck_and_sh0es",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-002": {
       "id": "PRED-002",
@@ -113,7 +139,7 @@
       "discriminant": "between_planck_and_des",
       "formula_branch": "term3.acoustic_bleed",
       "note": "",
-      "status": "open",
+      "status": "in_progress",
       "kill_criteria": [
         "Discriminant fails: between_planck_and_des",
         "Requires free-parameter retune to match measured value",
@@ -128,8 +154,23 @@
       "measured_source": null,
       "measured_at": null,
       "evidence_paths": [],
-      "log": [],
-      "free_parameters": 0
+      "log": [
+        {
+          "t": "2026-07-23T16:27:15.383480+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "Improvement cycle priority queue \u2014 close under discriminant + pin only; in_silico \u2260 lab pass; free_parameters=0."
+        }
+      ],
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "band=[0.755,0.884] fsot=0.805",
+        "discriminant": "between_planck_and_des",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-003": {
       "id": "PRED-003",
@@ -158,7 +199,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=0.85 sota=0.35",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-004": {
       "id": "PRED-004",
@@ -171,7 +220,7 @@
       "discriminant": "same_sign_as_fermilab",
       "formula_branch": "term3.chaos_factor",
       "note": "",
-      "status": "open",
+      "status": "in_progress",
       "kill_criteria": [
         "Discriminant fails: same_sign_as_fermilab",
         "Requires free-parameter retune to match measured value",
@@ -186,8 +235,23 @@
       "measured_source": null,
       "measured_at": null,
       "evidence_paths": [],
-      "log": [],
-      "free_parameters": 0
+      "log": [
+        {
+          "t": "2026-07-23T16:27:15.385883+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "Improvement cycle priority queue \u2014 close under discriminant + pin only; in_silico \u2260 lab pass; free_parameters=0."
+        }
+      ],
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot_sign=1",
+        "discriminant": "same_sign_as_fermilab",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-005": {
       "id": "PRED-005",
@@ -200,7 +264,7 @@
       "discriminant": "within_10pct_of_observed_gap",
       "formula_branch": "term3.poof_factor",
       "note": "",
-      "status": "open",
+      "status": "in_progress",
       "kill_criteria": [
         "Discriminant fails: within_10pct_of_observed_gap",
         "Requires free-parameter retune to match measured value",
@@ -215,8 +279,23 @@
       "measured_source": null,
       "measured_at": null,
       "evidence_paths": [],
-      "log": [],
-      "free_parameters": 0
+      "log": [
+        {
+          "t": "2026-07-23T16:27:15.385883+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "Improvement cycle priority queue \u2014 close under discriminant + pin only; in_silico \u2260 lab pass; free_parameters=0."
+        }
+      ],
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "rel_err=0.0500 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-006": {
       "id": "PRED-006",
@@ -245,7 +324,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "rel_err=0.0889 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-007": {
       "id": "PRED-007",
@@ -274,7 +361,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=1.0 sota=0.55",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-008": {
       "id": "PRED-008",
@@ -303,7 +398,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "rel_err=0.0524 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-009": {
       "id": "PRED-009",
@@ -332,7 +435,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=1.85 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-010": {
       "id": "PRED-010",
@@ -361,7 +472,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=1.62 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-011": {
       "id": "PRED-011",
@@ -390,7 +509,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "rel_err=0.0800 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-012": {
       "id": "PRED-012",
@@ -419,7 +546,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=2500000.0 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-013": {
       "id": "PRED-013",
@@ -448,7 +583,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=1200000000.0 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-014": {
       "id": "PRED-014",
@@ -477,7 +620,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=132.0 sota=118.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-015": {
       "id": "PRED-015",
@@ -506,7 +657,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=1850.0 sota=500.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-016": {
       "id": "PRED-016",
@@ -535,7 +694,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "fsot=-1.35 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-017": {
       "id": "PRED-017",
@@ -564,7 +731,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=0.42 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-018": {
       "id": "PRED-018",
@@ -593,7 +768,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=120.0 sota=118.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-019": {
       "id": "PRED-019",
@@ -622,7 +805,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=126.0 sota=118.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-020": {
       "id": "PRED-020",
@@ -651,7 +842,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=0.48 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-021": {
       "id": "PRED-021",
@@ -680,7 +879,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=31000000.0 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-022": {
       "id": "PRED-022",
@@ -709,7 +916,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=1500.0 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.366868+00:00"
+      }
     },
     "PRED-023": {
       "id": "PRED-023",
@@ -738,7 +953,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=164.0 sota=118.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-024": {
       "id": "PRED-024",
@@ -751,7 +974,7 @@
       "discriminant": "fsot_exceeds_sota_by_0.4",
       "formula_branch": "term3.acoustic_bleed",
       "note": "",
-      "status": "open",
+      "status": "in_progress",
       "kill_criteria": [
         "Discriminant fails: fsot_exceeds_sota_by_0.4",
         "Requires free-parameter retune to match measured value",
@@ -766,8 +989,23 @@
       "measured_source": null,
       "measured_at": null,
       "evidence_paths": [],
-      "log": [],
-      "free_parameters": 0
+      "log": [
+        {
+          "t": "2026-07-23T16:27:15.411302+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "Improvement cycle priority queue \u2014 close under discriminant + pin only; in_silico \u2260 lab pass; free_parameters=0."
+        }
+      ],
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=72.1 sota=67.4",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-025": {
       "id": "PRED-025",
@@ -796,7 +1034,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=0.5 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-032": {
       "id": "PRED-032",
@@ -825,7 +1071,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=0.009663204175 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-033": {
       "id": "PRED-033",
@@ -854,7 +1108,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=0.04803163401 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-034": {
       "id": "PRED-034",
@@ -867,7 +1129,7 @@
       "discriminant": "within_10pct_of_observed_gap",
       "formula_branch": "term1.coherence_efficiency",
       "note": "Seven FSOT-designed alternative fuels (hemp grounded/advanced, algae biodiesel, mushroom ester, green hydrogen, optimax, bio_spark) \u2014 thermochemistry + Prius engine simulator outputs vs seed-scalar predictions; novel molecular states not pre-existing in literature; gasoline baseline for comparison only.",
-      "status": "open",
+      "status": "in_progress",
       "kill_criteria": [
         "Discriminant fails: within_10pct_of_observed_gap",
         "Requires free-parameter retune to match measured value",
@@ -882,8 +1144,23 @@
       "measured_source": null,
       "measured_at": null,
       "evidence_paths": [],
-      "log": [],
-      "free_parameters": 0
+      "log": [
+        {
+          "t": "2026-07-23T16:27:15.400690+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "Improvement cycle priority queue \u2014 close under discriminant + pin only; in_silico \u2260 lab pass; free_parameters=0."
+        }
+      ],
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "rel_err=0.9951 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-035": {
       "id": "PRED-035",
@@ -896,7 +1173,7 @@
       "discriminant": "within_10pct_of_observed_gap",
       "formula_branch": "term3.acoustic_bleed",
       "note": "120 catalog properties (metals/molecules) from desktop FSOT species catalog",
-      "status": "open",
+      "status": "in_progress",
       "kill_criteria": [
         "Discriminant fails: within_10pct_of_observed_gap",
         "Requires free-parameter retune to match measured value",
@@ -911,8 +1188,23 @@
       "measured_source": null,
       "measured_at": null,
       "evidence_paths": [],
-      "log": [],
-      "free_parameters": 0
+      "log": [
+        {
+          "t": "2026-07-23T16:27:15.404638+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "Improvement cycle priority queue \u2014 close under discriminant + pin only; in_silico \u2260 lab pass; free_parameters=0."
+        }
+      ],
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "rel_err=0.9973 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-036": {
       "id": "PRED-036",
@@ -941,7 +1233,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "rel_err=0.9947 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-039": {
       "id": "PRED-039",
@@ -970,7 +1270,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "rel_err=0.9969 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-040": {
       "id": "PRED-040",
@@ -999,7 +1307,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "rel_err=0.9961 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-041": {
       "id": "PRED-041",
@@ -1028,7 +1344,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "rel_err=0.9961 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-038": {
       "id": "PRED-038",
@@ -1057,7 +1381,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "fsot=0.000464139486 sota=0.0",
+        "discriminant": "fsot_exceeds_sota_by_0.4",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-037": {
       "id": "PRED-037",
@@ -1086,7 +1418,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": false,
+        "detail": "rel_err=0.9956 (need \u22640.10 vs sota anchor)",
+        "discriminant": "within_10pct_of_observed_gap",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-042": {
       "id": "PRED-042",
@@ -1115,7 +1455,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-043": {
       "id": "PRED-043",
@@ -1144,7 +1492,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-044": {
       "id": "PRED-044",
@@ -1173,7 +1529,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-045": {
       "id": "PRED-045",
@@ -1202,7 +1566,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-046": {
       "id": "PRED-046",
@@ -1231,7 +1603,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-047": {
       "id": "PRED-047",
@@ -1260,7 +1640,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-048": {
       "id": "PRED-048",
@@ -1289,7 +1677,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-049": {
       "id": "PRED-049",
@@ -1318,7 +1714,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-050": {
       "id": "PRED-050",
@@ -1347,7 +1751,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-051": {
       "id": "PRED-051",
@@ -1376,7 +1788,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-052": {
       "id": "PRED-052",
@@ -1405,7 +1825,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-053": {
       "id": "PRED-053",
@@ -1434,7 +1862,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-054": {
       "id": "PRED-054",
@@ -1463,7 +1899,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-055": {
       "id": "PRED-055",
@@ -1492,7 +1936,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-056": {
       "id": "PRED-056",
@@ -1521,7 +1973,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-057": {
       "id": "PRED-057",
@@ -1550,7 +2010,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-058": {
       "id": "PRED-058",
@@ -1579,7 +2047,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-059": {
       "id": "PRED-059",
@@ -1608,7 +2084,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-060": {
       "id": "PRED-060",
@@ -1637,7 +2121,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-061": {
       "id": "PRED-061",
@@ -1666,7 +2158,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-062": {
       "id": "PRED-062",
@@ -1695,7 +2195,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-063": {
       "id": "PRED-063",
@@ -1724,7 +2232,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-064": {
       "id": "PRED-064",
@@ -1753,7 +2269,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-065": {
       "id": "PRED-065",
@@ -1782,7 +2306,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-066": {
       "id": "PRED-066",
@@ -1811,7 +2343,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-067": {
       "id": "PRED-067",
@@ -1840,7 +2380,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-068": {
       "id": "PRED-068",
@@ -1869,7 +2417,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-069": {
       "id": "PRED-069",
@@ -1898,7 +2454,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-070": {
       "id": "PRED-070",
@@ -1927,7 +2491,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-071": {
       "id": "PRED-071",
@@ -1956,7 +2528,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-072": {
       "id": "PRED-072",
@@ -1985,7 +2565,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-073": {
       "id": "PRED-073",
@@ -2014,7 +2602,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-074": {
       "id": "PRED-074",
@@ -2043,7 +2639,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-075": {
       "id": "PRED-075",
@@ -2072,7 +2676,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-076": {
       "id": "PRED-076",
@@ -2101,7 +2713,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-077": {
       "id": "PRED-077",
@@ -2130,7 +2750,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-078": {
       "id": "PRED-078",
@@ -2159,7 +2787,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-079": {
       "id": "PRED-079",
@@ -2188,7 +2824,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-080": {
       "id": "PRED-080",
@@ -2217,7 +2861,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-081": {
       "id": "PRED-081",
@@ -2246,7 +2898,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-082": {
       "id": "PRED-082",
@@ -2275,7 +2935,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-083": {
       "id": "PRED-083",
@@ -2304,7 +2972,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-084": {
       "id": "PRED-084",
@@ -2333,7 +3009,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-085": {
       "id": "PRED-085",
@@ -2362,7 +3046,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-086": {
       "id": "PRED-086",
@@ -2391,7 +3083,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-087": {
       "id": "PRED-087",
@@ -2420,7 +3120,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-088": {
       "id": "PRED-088",
@@ -2449,7 +3157,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-089": {
       "id": "PRED-089",
@@ -2478,7 +3194,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-090": {
       "id": "PRED-090",
@@ -2507,7 +3231,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-091": {
       "id": "PRED-091",
@@ -2536,7 +3268,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-092": {
       "id": "PRED-092",
@@ -2565,7 +3305,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-093": {
       "id": "PRED-093",
@@ -2594,7 +3342,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-094": {
       "id": "PRED-094",
@@ -2623,7 +3379,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-095": {
       "id": "PRED-095",
@@ -2652,7 +3416,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-096": {
       "id": "PRED-096",
@@ -2681,7 +3453,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-097": {
       "id": "PRED-097",
@@ -2710,7 +3490,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-098": {
       "id": "PRED-098",
@@ -2739,7 +3527,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-099": {
       "id": "PRED-099",
@@ -2768,7 +3564,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-100": {
       "id": "PRED-100",
@@ -2797,7 +3601,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-101": {
       "id": "PRED-101",
@@ -2826,7 +3638,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-102": {
       "id": "PRED-102",
@@ -2855,7 +3675,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-103": {
       "id": "PRED-103",
@@ -2884,7 +3712,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-104": {
       "id": "PRED-104",
@@ -2913,7 +3749,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-105": {
       "id": "PRED-105",
@@ -2942,7 +3786,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-106": {
       "id": "PRED-106",
@@ -2971,7 +3823,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-107": {
       "id": "PRED-107",
@@ -3000,7 +3860,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-108": {
       "id": "PRED-108",
@@ -3029,7 +3897,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-109": {
       "id": "PRED-109",
@@ -3058,7 +3934,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-110": {
       "id": "PRED-110",
@@ -3087,7 +3971,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-111": {
       "id": "PRED-111",
@@ -3116,7 +4008,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-112": {
       "id": "PRED-112",
@@ -3145,7 +4045,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-113": {
       "id": "PRED-113",
@@ -3174,7 +4082,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-114": {
       "id": "PRED-114",
@@ -3203,7 +4119,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-115": {
       "id": "PRED-115",
@@ -3232,7 +4156,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-116": {
       "id": "PRED-116",
@@ -3261,7 +4193,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-117": {
       "id": "PRED-117",
@@ -3290,7 +4230,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-118": {
       "id": "PRED-118",
@@ -3319,7 +4267,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-119": {
       "id": "PRED-119",
@@ -3348,7 +4304,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-120": {
       "id": "PRED-120",
@@ -3377,7 +4341,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-121": {
       "id": "PRED-121",
@@ -3406,7 +4378,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-122": {
       "id": "PRED-122",
@@ -3435,7 +4415,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-123": {
       "id": "PRED-123",
@@ -3464,7 +4452,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-124": {
       "id": "PRED-124",
@@ -3493,7 +4489,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-125": {
       "id": "PRED-125",
@@ -3522,7 +4526,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-126": {
       "id": "PRED-126",
@@ -3551,7 +4563,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-127": {
       "id": "PRED-127",
@@ -3580,7 +4600,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-128": {
       "id": "PRED-128",
@@ -3609,7 +4637,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-129": {
       "id": "PRED-129",
@@ -3638,7 +4674,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-130": {
       "id": "PRED-130",
@@ -3667,7 +4711,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-131": {
       "id": "PRED-131",
@@ -3696,7 +4748,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-132": {
       "id": "PRED-132",
@@ -3725,7 +4785,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-133": {
       "id": "PRED-133",
@@ -3754,7 +4822,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-134": {
       "id": "PRED-134",
@@ -3783,7 +4859,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-135": {
       "id": "PRED-135",
@@ -3812,7 +4896,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-136": {
       "id": "PRED-136",
@@ -3841,7 +4933,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-137": {
       "id": "PRED-137",
@@ -3870,7 +4970,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-138": {
       "id": "PRED-138",
@@ -3899,7 +5007,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-139": {
       "id": "PRED-139",
@@ -3928,7 +5044,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-140": {
       "id": "PRED-140",
@@ -3957,7 +5081,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-141": {
       "id": "PRED-141",
@@ -3986,7 +5118,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-142": {
       "id": "PRED-142",
@@ -4015,7 +5155,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-143": {
       "id": "PRED-143",
@@ -4044,7 +5192,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-144": {
       "id": "PRED-144",
@@ -4073,7 +5229,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-145": {
       "id": "PRED-145",
@@ -4102,7 +5266,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-146": {
       "id": "PRED-146",
@@ -4131,7 +5303,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-147": {
       "id": "PRED-147",
@@ -4160,7 +5340,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-148": {
       "id": "PRED-148",
@@ -4189,7 +5377,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-149": {
       "id": "PRED-149",
@@ -4218,7 +5414,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-150": {
       "id": "PRED-150",
@@ -4247,7 +5451,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-151": {
       "id": "PRED-151",
@@ -4276,7 +5488,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-152": {
       "id": "PRED-152",
@@ -4305,7 +5525,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-153": {
       "id": "PRED-153",
@@ -4334,7 +5562,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-154": {
       "id": "PRED-154",
@@ -4363,7 +5599,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-155": {
       "id": "PRED-155",
@@ -4392,7 +5636,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-156": {
       "id": "PRED-156",
@@ -4421,7 +5673,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-157": {
       "id": "PRED-157",
@@ -4450,7 +5710,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-158": {
       "id": "PRED-158",
@@ -4479,7 +5747,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-159": {
       "id": "PRED-159",
@@ -4508,7 +5784,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-160": {
       "id": "PRED-160",
@@ -4537,7 +5821,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-161": {
       "id": "PRED-161",
@@ -4566,7 +5858,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-162": {
       "id": "PRED-162",
@@ -4595,7 +5895,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-163": {
       "id": "PRED-163",
@@ -4624,7 +5932,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-164": {
       "id": "PRED-164",
@@ -4653,7 +5969,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-165": {
       "id": "PRED-165",
@@ -4682,7 +6006,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-166": {
       "id": "PRED-166",
@@ -4711,7 +6043,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-167": {
       "id": "PRED-167",
@@ -4740,7 +6080,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-168": {
       "id": "PRED-168",
@@ -4769,7 +6117,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-169": {
       "id": "PRED-169",
@@ -4798,7 +6154,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-170": {
       "id": "PRED-170",
@@ -4827,7 +6191,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-171": {
       "id": "PRED-171",
@@ -4856,7 +6228,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-172": {
       "id": "PRED-172",
@@ -4885,7 +6265,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-173": {
       "id": "PRED-173",
@@ -4914,7 +6302,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-174": {
       "id": "PRED-174",
@@ -4943,7 +6339,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-175": {
       "id": "PRED-175",
@@ -4972,7 +6376,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-176": {
       "id": "PRED-176",
@@ -5001,7 +6413,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-177": {
       "id": "PRED-177",
@@ -5030,7 +6450,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-178": {
       "id": "PRED-178",
@@ -5059,7 +6487,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-179": {
       "id": "PRED-179",
@@ -5088,7 +6524,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-180": {
       "id": "PRED-180",
@@ -5117,7 +6561,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-181": {
       "id": "PRED-181",
@@ -5146,7 +6598,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-182": {
       "id": "PRED-182",
@@ -5175,7 +6635,15 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     },
     "PRED-183": {
       "id": "PRED-183",
@@ -5204,10 +6672,18 @@
       "measured_at": null,
       "evidence_paths": [],
       "log": [],
-      "free_parameters": 0
+      "free_parameters": 0,
+      "in_silico_check": {
+        "ok": true,
+        "detail": "frontier_scalar_present",
+        "discriminant": "independent_frontier_not_in_benchmark_panel",
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only \u2014 not lab-closed pass.",
+        "checked_at": "2026-07-23T16:27:15.367421+00:00"
+      }
     }
   },
   "n": 177,
-  "updated_at": "2026-07-23T02:50:44.560817+00:00",
+  "updated_at": "2026-07-23T16:27:15.428639+00:00",
   "free_parameters": 0
 }

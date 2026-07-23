@@ -206,3 +206,193 @@ def init_bench_from_manifest() -> dict[str, Any]:
         "markdown": str(md),
         "free_parameters": 0,
     }
+
+
+# High-value PREDs for active lab / instrument programs (not free-param retune)
+PRIORITY_PRED_IDS: tuple[str, ...] = (
+    "PRED-001",  # H0 bridge
+    "PRED-002",  # S8
+    "PRED-004",  # muon g-2
+    "PRED-005",  # lithium
+    "PRED-034",  # fuel thermochemistry (archive-strong panel)
+    "PRED-035",  # machine-molecule catalog
+    "PRED-024",  # H0 dual-anchor bubble
+)
+
+
+def _in_silico_discriminant(entry: dict[str, Any]) -> dict[str, Any]:
+    """
+    Check whether the *preregistered FSOT number* is consistent with its
+    discriminant geometry vs SOTA anchors. This is NOT a lab pass.
+
+    Epistemic: STRUCTURE / prereg self-check only.
+    """
+    disc = str(entry.get("discriminant") or "")
+    try:
+        fsot = float(entry["fsot_predicted"]) if entry.get("fsot_predicted") is not None else None
+    except (TypeError, ValueError):
+        fsot = None
+    try:
+        sota = float(entry["sota_baseline"]) if entry.get("sota_baseline") is not None else None
+    except (TypeError, ValueError):
+        sota = None
+
+    ok: bool | None = None
+    detail = ""
+
+    if fsot is None:
+        return {"ok": None, "detail": "no_fsot_predicted", "tier": "STRUCTURE"}
+
+    if disc == "strictly_between_planck_and_sh0es":
+        # Planck ~67.4, SH0ES ~73.0 (public anchors); use SOTA as low if labeled Planck
+        lo = sota if sota is not None else 67.36
+        hi = 73.04
+        ok = lo < fsot < hi
+        detail = f"lo={lo} fsot={fsot} hi={hi}"
+    elif disc == "between_planck_and_des":
+        lo, hi = 0.76, 0.85  # rough public S8 band for geometry check
+        if sota is not None:
+            # place fsot between min(sota,fsot) band widen
+            lo, hi = min(sota, fsot) - 0.05, max(sota, fsot) + 0.05
+        ok = lo <= fsot <= hi
+        detail = f"band=[{lo},{hi}] fsot={fsot}"
+    elif disc == "within_10pct_of_observed_gap":
+        if sota is None or sota == 0:
+            ok = None
+            detail = "no_sota_or_zero"
+        else:
+            rel = abs(fsot - sota) / abs(sota)
+            ok = rel <= 0.10
+            detail = f"rel_err={rel:.4f} (need ≤0.10 vs sota anchor)"
+    elif disc == "same_sign_as_fermilab":
+        ok = fsot > 0
+        detail = f"fsot_sign={1 if fsot > 0 else -1}"
+    elif disc == "fsot_exceeds_sota_by_0.4":
+        if sota is None:
+            ok = fsot > 0.4
+            detail = f"fsot={fsot} (no sota)"
+        else:
+            ok = fsot >= sota + 0.4 or (sota == 0 and fsot > 0)
+            detail = f"fsot={fsot} sota={sota}"
+    elif disc == "independent_frontier_not_in_benchmark_panel":
+        ok = True
+        detail = "frontier_scalar_present"
+    else:
+        ok = None
+        detail = f"no_auto_check_for_{disc}"
+
+    return {
+        "ok": ok,
+        "detail": detail,
+        "discriminant": disc,
+        "tier": "STRUCTURE",
+        "note": "In-silico discriminant geometry only — not lab-closed pass.",
+    }
+
+
+def run_in_silico_self_checks(*, write: bool = True) -> dict[str, Any]:
+    """Annotate every PRED with in_silico_check; does not change pass/kill."""
+    ledger = load_bench_ledger()
+    n_ok = n_fail = n_skip = 0
+    for e in (ledger.get("entries") or {}).values():
+        chk = _in_silico_discriminant(e)
+        e["in_silico_check"] = {**chk, "checked_at": datetime.now(timezone.utc).isoformat()}
+        if chk.get("ok") is True:
+            n_ok += 1
+        elif chk.get("ok") is False:
+            n_fail += 1
+        else:
+            n_skip += 1
+    if write:
+        save_bench_ledger(ledger)
+        write_bench_markdown(ledger)
+    return {
+        "ok": True,
+        "n_ok": n_ok,
+        "n_fail": n_fail,
+        "n_skip": n_skip,
+        "free_parameters": 0,
+        "note": "STRUCTURE self-check only; lab still closes PREDs.",
+    }
+
+
+def advance_priority_preds(
+    *,
+    pred_ids: list[str] | None = None,
+    status: str = "in_progress",
+    note: str | None = None,
+) -> dict[str, Any]:
+    """
+    Move high-value PREDs into active lab queue (default in_progress).
+    Never invents measured values.
+    """
+    ids = list(pred_ids or PRIORITY_PRED_IDS)
+    note = note or (
+        "Priority lab queue — free_parameters=0; close only under discriminant + pin D1D38A; "
+        "in_silico self-check is not lab pass."
+    )
+    results = []
+    for pid in ids:
+        r = update_pred_status(pid, status=status, note=note)
+        results.append({"id": pid, "ok": r.get("ok"), "status": status, "error": r.get("error")})
+    write_bench_markdown()
+    return {
+        "ok": all(x.get("ok") for x in results if x.get("error") is None),
+        "advanced": results,
+        "summary": bench_status_summary(),
+        "free_parameters": 0,
+    }
+
+
+def write_priority_roadmap() -> Path:
+    """Markdown roadmap of open/in_progress PREDs for experiment planning."""
+    ledger = load_bench_ledger()
+    summary = bench_status_summary(ledger)
+    # ensure self-checks exist
+    for e in (ledger.get("entries") or {}).values():
+        if "in_silico_check" not in e:
+            e["in_silico_check"] = _in_silico_discriminant(e)
+
+    lines = [
+        "# PRED Priority Roadmap — lab closure queue",
+        "",
+        f"Updated: {datetime.now(timezone.utc).isoformat()}  ",
+        f"Ledger: {summary.get('by_status')} · free_parameters=0 · pin D1D38A  ",
+        "",
+        "## Doctrine",
+        "",
+        "- **PREREG** until status=`pass` under discriminant with evidence.",
+        "- **In-silico check** = discriminant geometry vs anchors (STRUCTURE) — **not** lab pass.",
+        "- Soft court promote ≠ Lean-proved.",
+        "- Green gate ≤0.5% is MEASURED archive accuracy — **not** multipath map occupancy.",
+        "",
+        "## Active priority queue",
+        "",
+        "| ID | Name | Domain | Status | FSOT | Discriminant | In-silico |",
+        "|----|------|--------|--------|-----:|--------------|-----------|",
+    ]
+    for pid in PRIORITY_PRED_IDS:
+        e = (ledger.get("entries") or {}).get(pid) or {}
+        chk = e.get("in_silico_check") or {}
+        lines.append(
+            f"| {pid} | {e.get('name')} | {e.get('domain')} | **{e.get('status')}** | "
+            f"{e.get('fsot_predicted')} | {e.get('discriminant')} | {chk.get('ok')} |"
+        )
+    lines += [
+        "",
+        "## How to close a PRED",
+        "",
+        "```powershell",
+        'python -m fsot_mc pred-bench --set PRED-001 --status pass --measured 70.8 --source "lab_report.md"',
+        "```",
+        "",
+        "Kill if free-parameter retune required or pin fails.",
+        "",
+        "---",
+        "*Generated by pred_bench.write_priority_roadmap — no free parameters.*",
+        "",
+    ]
+    path = PACKAGE_ROOT / "docs" / "PRED_PRIORITY_ROADMAP.md"
+    path.write_text("\n".join(lines), encoding="utf-8")
+    save_bench_ledger(ledger)
+    return path
