@@ -68,9 +68,8 @@
     return (40 + r * step) * ringScale;
   }
 
+  /** Home position: prefer server S–D_eff polar (layout_r × layout_angle). */
   function homeFor(n) {
-    const R = ringRadius(n.ring);
-    const a = n.angle != null ? n.angle : 0;
     // seeds/law near origin with small fixed constellation
     if (n.kind === "law") return { x: 0, y: 0 };
     if (n.kind === "seed") {
@@ -78,6 +77,14 @@
       const ang = (i >= 0 ? i : 0) * (Math.PI * 2 / 5) - Math.PI / 2;
       return { x: Math.cos(ang) * 28 * ringScale, y: Math.sin(ang) * 28 * ringScale };
     }
+    // FSOT law geometry: radius ∝ D_eff, angle ∝ signed canonical S
+    if (n.layout_r != null && (n.layout_angle != null || n.angle != null)) {
+      const R = Number(n.layout_r) * ringScale;
+      const a = n.layout_angle != null ? n.layout_angle : n.angle;
+      return { x: Math.cos(a) * R, y: Math.sin(a) * R };
+    }
+    const R = ringRadius(n.ring);
+    const a = n.angle != null ? n.angle : 0;
     return { x: Math.cos(a) * R, y: Math.sin(a) * R };
   }
 
@@ -121,46 +128,48 @@
   function initPositions() {
     const N = nodes.length;
     isFull = N > 80;
-    ringScale = isFull ? Math.max(1.15, Math.sqrt(N / 120)) : 1.0;
+    // S–D_eff layout already spaces by continuous D_eff radius — milder global scale
+    ringScale = isFull ? Math.max(1.05, Math.sqrt(N / 180)) : 1.0;
     temp = 1.0;
     settled = false;
     frame = 0;
     sim = true;
 
-    // assign stable angles if missing (by kind then label)
-    const byRing = {};
-    for (const n of nodes) {
-      const r = Number(n.ring) || 0;
-      (byRing[r] || (byRing[r] = [])).push(n);
-    }
-    for (const r of Object.keys(byRing)) {
-      const g = byRing[r].sort((a, b) =>
-        String(a.domain || a.label || a.id).localeCompare(String(b.domain || b.label || b.id))
-      );
-      g.forEach((n, i) => {
-        if (n.angle == null || isFull) {
-          // even spacing on shell — critical for solidifying a readable pattern
+    // Do NOT re-alphabetize angles — server already set S–D_eff polar layout.
+    // Only fill missing angles as fallback (alphabetical within ring).
+    const missing = nodes.filter((n) => n.layout_r == null && n.angle == null && n.kind !== "law" && n.kind !== "seed");
+    if (missing.length) {
+      const byRing = {};
+      for (const n of missing) {
+        const r = Number(n.ring) || 0;
+        (byRing[r] || (byRing[r] = [])).push(n);
+      }
+      for (const r of Object.keys(byRing)) {
+        const g = byRing[r].sort((a, b) =>
+          String(a.domain || a.label || a.id).localeCompare(String(b.domain || b.label || b.id))
+        );
+        g.forEach((n, i) => {
           n.angle = (2 * Math.PI * i) / Math.max(g.length, 1);
-        }
-      });
+        });
+      }
     }
 
     for (const n of nodes) {
       const h = homeFor(n);
       n.homeX = h.x;
       n.homeY = h.y;
-      // tiny jitter only while hot — pattern is the home shell
-      const j = isFull ? 4 : 12;
+      // tiny jitter only while hot — pattern is the S–D home
+      const j = isFull ? 3 : 10;
       n.x = h.x + (Math.random() - 0.5) * j;
       n.y = h.y + (Math.random() - 0.5) * j;
       n.vx = 0;
       n.vy = 0;
-      // pin strength by role: cores/seeds firmer; extensions softer local wiggle
-      if (n.kind === "seed" || n.kind === "law") n.pin = 0.95;
-      else if (n.is_core || (n.kind === "domain" && n.atlas_kind !== "extension_panel")) n.pin = 0.72;
+      // pin strength by role: cores/seeds firmer; S–D geometry must hold
+      if (n.kind === "seed" || n.kind === "law") n.pin = 0.96;
+      else if (n.is_core || (n.kind === "domain" && n.atlas_kind !== "extension_panel")) n.pin = 0.82;
       else if (n.kind === "problem_route") n.pin = 0.8;
-      else if (n.kind === "extension") n.pin = 0.88; // keep shells clean
-      else n.pin = 0.75;
+      else if (n.kind === "extension") n.pin = 0.86;
+      else n.pin = 0.78;
     }
     classifyEdges();
   }
@@ -243,7 +252,10 @@
       let ideal = 90 * ringScale;
       const knd = e.kind || "";
       if (knd === "seed_to_law") ideal = 36 * ringScale;
-      else if (knd === "law_to_domain") ideal = Math.abs(ringRadius(b.ring || 2) - 10);
+      else if (knd === "law_to_domain") {
+        const Rb = b.layout_r != null ? Number(b.layout_r) * ringScale : ringRadius(b.ring || 2);
+        ideal = Math.max(40, Math.abs(Rb - 10));
+      }
       else if (knd === "routes_to_core") ideal = 70 * ringScale;
       else if (knd === "long_range") ideal = 160 * ringScale;
       else if (knd === "problem_route") ideal = 55 * ringScale;
@@ -299,16 +311,41 @@
     const t = (now - t0) / 1000;
     ctx.clearRect(0, 0, W, H);
 
-    // faint scale rings
+    // D_eff scale rings (continuous radius shells: D≈5,10,15,20,25)
     ctx.save();
     ctx.translate(W / 2 + cam.x, H / 2 + cam.y);
     ctx.scale(cam.scale, cam.scale);
-    for (let r = 1; r <= 8; r++) {
+    const deffMarks = [5, 10, 15, 20, 25];
+    for (const D of deffMarks) {
+      const R = (55 + D * 16) * ringScale;
       ctx.beginPath();
-      ctx.arc(0, 0, ringRadius(r), 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(100, 120, 160, ${0.04 + (r === 1 ? 0.04 : 0)})`;
+      ctx.arc(0, 0, R, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(100, 120, 160, ${D === 15 ? 0.08 : 0.04})`;
       ctx.lineWidth = 1 / cam.scale;
       ctx.stroke();
+      if (cam.scale > 0.55) {
+        ctx.fillStyle = "rgba(140, 160, 190, 0.35)";
+        ctx.font = `${10 / cam.scale}px ui-sans-serif, system-ui`;
+        ctx.fillText(`D=${D}`, R * 0.72, -R * 0.72);
+      }
+    }
+    // S axis: emergence east, dispersal west
+    if (cam.scale > 0.5) {
+      ctx.strokeStyle = "rgba(52, 211, 153, 0.18)";
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(420 * ringScale, 0);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(248, 113, 113, 0.18)";
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-420 * ringScale, 0);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(52, 211, 153, 0.4)";
+      ctx.font = `${11 / cam.scale}px ui-sans-serif, system-ui`;
+      ctx.fillText("S>0 emergence", 200 * ringScale, -8 / cam.scale);
+      ctx.fillStyle = "rgba(248, 113, 113, 0.4)";
+      ctx.fillText("S<0 dispersal", -340 * ringScale, -8 / cam.scale);
     }
     ctx.restore();
 
@@ -586,8 +623,9 @@
       `<div class="answer-block"><span class="label">Node</span><div><strong>${esc(n.label)}</strong> <span class="chip">${esc(n.kind)}</span></div></div>`,
       n.domain ? `<div>Domain: <code>${esc(n.domain)}</code></div>` : "",
       n.cluster ? `<div>Cluster: <span class="chip">${esc(n.cluster)}</span></div>` : "",
-      n.D_eff != null ? `<div>D<sub>eff</sub> = ${n.D_eff} · ring ${n.ring}</div>` : "",
-      n.S != null ? `<div>S = ${Number(n.S).toFixed(4)} · ${esc(n.regime || "")}</div>` : "",
+      n.D_eff != null ? `<div>D<sub>eff</sub> = ${n.D_eff} · r=${n.layout_r != null ? Number(n.layout_r).toFixed(0) : n.ring}</div>` : "",
+      n.S != null ? `<div>S = ${Number(n.S).toFixed(4)} · ${esc(n.regime || "")} <span style="opacity:.7">(canonical)</span></div>` : "",
+      n.S_path_mean != null ? `<div>S<sub>path</sub> = ${Number(n.S_path_mean).toFixed(4)} <span style="opacity:.7">(multipath observer)</span></div>` : "",
       n.median_error_pct != null ? `<div class="chip gold">median_error ${Number(n.median_error_pct).toFixed(4)}% ${Number(n.median_error_pct) <= 0.5 ? "✓ green" : ""}</div>` : "",
       n.coverage_tier ? `<div>coverage: ${esc(n.coverage_tier)}</div>` : "",
       n.record_count != null ? `<div>records: ${n.record_count}</div>` : "",
@@ -644,8 +682,16 @@
       const raw = ac.coupling_raw_edge_count != null
         ? ` · archive raw couples ${ac.coupling_raw_edge_count}`
         : "";
+      const ld = meta.layout_diagnostics || {};
+      const lay = meta.layout_mode || g.layout_mode || "s_deff_polar";
+      const ord = ld.order_score_S_vs_east_x != null
+        ? ` · S↔E ${(100 * ld.order_score_S_vs_east_x).toFixed(0)}%`
+        : "";
+      const ordD = ld.order_score_D_vs_radius != null
+        ? ` · D↔r ${(100 * ld.order_score_D_vs_radius).toFixed(0)}%`
+        : "";
       $("hud-status").textContent =
-        `${scope} · core ${meta.n_core_folds || "—"} · ext ${meta.n_extension_panels || 0}${green}${raw} · solidifying…`;
+        `${scope} · ${lay} · core ${meta.n_core_folds || "—"} · ext ${meta.n_extension_panels || 0}${green}${raw}${ord}${ordD} · solidifying…`;
       renderLegend(g);
       renderRings(meta);
       // show archive connective summary in side panel
@@ -681,9 +727,18 @@
   function renderRings(m) {
     const el = $("rings-out");
     const rings = (m && m.rings) || {};
-    el.innerHTML = Object.entries(rings).map(([k, v]) =>
+    const ld = (m && m.layout_diagnostics) || {};
+    let html = Object.entries(rings).map(([k, v]) =>
       `<div><span class="chip">${esc(k)}</span> ${esc(v)}</div>`
     ).join("") || "—";
+    if (ld.n_with_S != null) {
+      html += `<div style="margin-top:0.4rem;font-size:0.75rem;color:#9aa6b8">
+        S folds: +${ld.n_emergence_S_gt_0 || 0} / −${ld.n_dispersal_S_lt_0 || 0}
+        · order S→east ${ld.order_score_S_vs_east_x != null ? (100 * ld.order_score_S_vs_east_x).toFixed(0) + "%" : "—"}
+        · D→radius ${ld.order_score_D_vs_radius != null ? (100 * ld.order_score_D_vs_radius).toFixed(0) + "%" : "—"}
+      </div>`;
+    }
+    el.innerHTML = html;
   }
 
   async function loadMemory() {

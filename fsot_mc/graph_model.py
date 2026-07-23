@@ -67,6 +67,267 @@ LAYER_EDGE_COLORS: dict[str, str] = {
 }
 
 
+# ── S–D_eff polar layout (FSOT law geometry) ──────────────────────────
+# Radius driven by D_eff (complexity shells). Angle driven by signed S
+# from the same SD / free_parameters=0 fold engine (not multipath path-mean).
+S_LAYOUT_SPAN = 1.15  # |S| clamp for angular map (~atlas range)
+
+
+def deff_to_radius(D: float | int | None, *, base: float = 55.0, step: float = 16.0) -> float:
+    """Continuous radius from D_eff — low-D near law K, high-D outer."""
+    d = float(D if D is not None else 12.0)
+    d = max(0.0, min(32.0, d))
+    return base + d * step
+
+
+def s_to_angle(S: float | None, *, span: float = S_LAYOUT_SPAN) -> float:
+    """
+    Map signed canonical S → polar angle.
+
+    S > 0 (emergence) → right / east half (about −π/2 … +π/2 around 0)
+    S < 0 (dispersal) → left / west half
+    S = 0 → north (π/2) gap edge
+
+    Uses continuous map: θ = (S/span) * π   so +S → +π side, −S → −π side
+    then rotate so emergence is to the RIGHT (0 = +x): θ' = −θ + 0.
+    Final: θ = −(S/span)*π  with S=+span → θ=−π (left? wait)
+
+    Desired: emergence RIGHT (+x), dispersal LEFT (−x).
+      S = +span → θ = 0      (east)
+      S = 0     → θ = π/2    (north) — mid
+      S = −span → θ = π      (west)
+
+    Linear: θ = π/2 * (1 − S/span) clamped, but that only covers 0..π.
+    Full: θ = (π/2) − (S/span)*(π/2)  → S=+1 → 0, S=−1 → π.
+    Extensions/outliers get small φ-jitter later.
+    """
+    if S is None:
+        return math.pi / 2  # unknown → north
+    s = max(-span, min(span, float(S)))
+    # S=+span → 0 (east/emergence), S=−span → π (west/dispersal)
+    return (math.pi / 2.0) * (1.0 - s / span)
+
+
+def apply_sd_layout(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """
+    Assign layout_r / layout_angle / ring / angle from D_eff × signed S.
+
+    Geometry is the ToE phase portrait:
+      radial = D_eff shells
+      angular = S fold sign (emergence ↔ dispersal)
+    Multipath path-mean never drives geometry (stored separately as S_path_mean).
+    """
+    # Index cores by domain for extension inheritance
+    core_by_domain: dict[str, dict[str, Any]] = {}
+    for n in nodes:
+        if n.get("is_core") or (
+            n.get("kind") == "domain" and n.get("atlas_kind") not in ("extension_panel",)
+            and n.get("domain")
+            and n.get("S") is not None
+        ):
+            if n.get("domain"):
+                core_by_domain[str(n["domain"])] = n
+
+    # Collect S range from nodes that have real signed S
+    signed = [
+        float(n["S"])
+        for n in nodes
+        if n.get("S") is not None
+        and n.get("kind") not in ("seed", "law", "memory", "prediction", "problem_route")
+    ]
+    span = S_LAYOUT_SPAN
+    if signed:
+        span = max(S_LAYOUT_SPAN, max(abs(min(signed)), abs(max(signed))) * 1.05)
+
+    # cluster order for micro-jitter (stable, not random)
+    cluster_order = {c: i for i, c in enumerate(sorted(CLUSTER_COLORS.keys()))}
+
+    # pre-pass: resolve S_layout for every domain-like node
+    for n in nodes:
+        kind = n.get("kind") or ""
+        if kind in ("seed", "law"):
+            n["layout_r"] = 0.0 if kind == "law" else 28.0
+            n["layout_angle"] = float(n.get("angle") or 0.0)
+            n["ring"] = 0
+            continue
+
+        if kind == "memory":
+            n["layout_r"] = deff_to_radius(26)
+            n["layout_angle"] = float(n.get("angle") or 0.0)
+            n["ring"] = 7
+            continue
+
+        if kind == "prediction":
+            n["layout_r"] = deff_to_radius(28)
+            n["layout_angle"] = float(n.get("angle") or 0.0)
+            n["ring"] = 8
+            continue
+
+        if kind == "problem_route":
+            n["layout_r"] = deff_to_radius(n.get("D_eff") or 14)
+            # pin intents near their core's S angle if known
+            cdom = n.get("core_domain")
+            parent = core_by_domain.get(str(cdom)) if cdom else None
+            if parent and parent.get("S") is not None:
+                base_ang = s_to_angle(float(parent["S"]), span=span)
+            else:
+                base_ang = float(n.get("angle") or 0.0)
+            n["layout_angle"] = base_ang + 0.12
+            n["ring"] = 5
+            n["angle"] = n["layout_angle"]
+            continue
+
+        # domains / extensions — treat is_core as core even if kind mislabeled
+        is_core = bool(n.get("is_core") or n.get("atlas_kind") == "core")
+        D = n.get("D_eff")
+        S = n.get("S")
+        # extensions: inherit S angle from routes_to_core parent when own S missing
+        if S is None and n.get("routes_to_core"):
+            parent = core_by_domain.get(str(n["routes_to_core"]))
+            if parent and parent.get("S") is not None:
+                S = float(parent["S"])
+                n["S_inherited"] = True
+                n["S_layout"] = S
+        if S is not None:
+            n["S_layout"] = float(S)
+        else:
+            n["S_layout"] = None
+
+        r = deff_to_radius(D)
+        # true extension panels sit slightly outward; cores stay on D shell
+        if (not is_core) and (kind == "extension" or n.get("atlas_kind") == "extension_panel"):
+            r += 22.0
+
+        ang = s_to_angle(n.get("S_layout"), span=span)
+        # micro-jitter by cluster + label so same-S nodes don't stack
+        cl = str(n.get("cluster") or n.get("group") or "")
+        ci = cluster_order.get(cl, 0)
+        name = str(n.get("domain") or n.get("label") or n.get("id") or "")
+        jitter = (ci * 0.035) + ((hash(name) % 1000) / 1000.0 - 0.5) * 0.06
+        # mild golden spiral by D so shells aren't perfect circles of collisions
+        ang = ang + jitter + (float(D or 12) * SEED_PHI % 1.0) * 0.04
+
+        n["layout_r"] = r
+        n["layout_angle"] = ang
+        n["angle"] = ang
+        # discrete ring for legend/HUD only (true geometry uses layout_r)
+        n["ring"] = max(1, min(8, int(round((float(D or 12)) / 4.0))))
+        n["layout_mode"] = "s_deff_polar"
+
+    # second pass: tiny de-overlap only (must NOT destroy S→angle ordering)
+    bins: dict[int, list[dict[str, Any]]] = {}
+    for n in nodes:
+        if n.get("kind") in ("seed", "law", "memory", "prediction"):
+            continue
+        if n.get("layout_r") is None:
+            continue
+        b = int(round(float(n["layout_r"]) / 30.0))
+        bins.setdefault(b, []).append(n)
+    for group in bins.values():
+        if len(group) < 3:
+            continue
+        group.sort(
+            key=lambda x: (
+                float(x.get("S_layout") if x.get("S_layout") is not None else 0.0),
+                str(x.get("domain") or x.get("label") or ""),
+            )
+        )
+        n_g = len(group)
+        # Cap total fan to ±0.12 rad so S hemispheres stay intact
+        step = min(0.012, 0.24 / max(n_g, 1))
+        mid = (n_g - 1) / 2.0
+        for i, n in enumerate(group):
+            primary = s_to_angle(
+                float(n.get("S_layout") if n.get("S_layout") is not None else 0.0),
+                span=span,
+            )
+            n["layout_angle"] = primary + (i - mid) * step
+            n["angle"] = n["layout_angle"]
+
+    return nodes
+
+
+def layout_diagnostics(nodes: list[dict[str, Any]]) -> dict[str, Any]:
+    """Quick test report: how the graph organizes under D_eff and S."""
+    domains = [
+        n for n in nodes
+        if n.get("kind") in ("domain", "extension") or n.get("is_core")
+    ]
+    cores = [n for n in domains if n.get("is_core") or (n.get("kind") == "domain" and n.get("atlas_kind") != "extension_panel" and n.get("S") is not None)]
+    with_s = [n for n in domains if n.get("S") is not None]
+    signed_neg = [n for n in with_s if float(n["S"]) < 0]
+    signed_pos = [n for n in with_s if float(n["S"]) > 0]
+
+    def polar(n: dict[str, Any]) -> tuple[float, float]:
+        r = float(n.get("layout_r") or 0)
+        a = float(n.get("layout_angle") or n.get("angle") or 0)
+        return r * math.cos(a), r * math.sin(a)
+
+    # correlation proxies: mean x should rise with S; mean r should rise with D
+    if with_s:
+        xs_s = [(float(n["S"]), polar(n)[0]) for n in with_s]
+        # Spearman-ish via ranks
+        by_s = sorted(xs_s, key=lambda t: t[0])
+        # count pairs where higher S has higher x (east)
+        pairs = 0
+        agree = 0
+        for i in range(len(by_s)):
+            for j in range(i + 1, len(by_s)):
+                pairs += 1
+                if by_s[j][1] >= by_s[i][1]:
+                    agree += 1
+        s_x_order = agree / pairs if pairs else 0.0
+    else:
+        s_x_order = None
+
+    with_d = [n for n in domains if n.get("D_eff") is not None and n.get("layout_r") is not None]
+    if with_d:
+        by_d = sorted(with_d, key=lambda n: float(n["D_eff"]))
+        pairs = agree = 0
+        for i in range(len(by_d)):
+            for j in range(i + 1, min(i + 40, len(by_d))):  # local pairs for speed
+                pairs += 1
+                if float(by_d[j]["layout_r"]) >= float(by_d[i]["layout_r"]):
+                    agree += 1
+        d_r_order = agree / pairs if pairs else 0.0
+    else:
+        d_r_order = None
+
+    core_table = []
+    for n in sorted(cores, key=lambda x: float(x.get("S") if x.get("S") is not None else 0)):
+        if not n.get("domain"):
+            continue
+        core_table.append(
+            {
+                "domain": n.get("domain"),
+                "S": n.get("S"),
+                "D_eff": n.get("D_eff"),
+                "regime": n.get("regime"),
+                "layout_r": round(float(n.get("layout_r") or 0), 1),
+                "layout_angle_deg": round(math.degrees(float(n.get("layout_angle") or 0)), 1),
+                "x_east": round(polar(n)[0], 1),
+            }
+        )
+
+    return {
+        "method": "fsot_sd_layout_diagnostics",
+        "layout_mode": "s_deff_polar",
+        "free_parameters": 0,
+        "n_domains": len(domains),
+        "n_with_S": len(with_s),
+        "n_emergence_S_gt_0": len(signed_pos),
+        "n_dispersal_S_lt_0": len(signed_neg),
+        "order_score_S_vs_east_x": s_x_order,
+        "order_score_D_vs_radius": d_r_order,
+        "note": (
+            "S→east/west (emergence right, dispersal left); "
+            "D_eff→radius (low-D near K, high-D outer). "
+            "Scores ~1.0 = perfect monotonic organization."
+        ),
+        "core_table": core_table,
+    }
+
+
 def _seed_nodes() -> list[dict[str, Any]]:
     seeds = [
         ("seed_pi", "π", float(PI), "transcendental circle / phase"),
@@ -140,53 +401,44 @@ def build_domain_nodes(*, scope: str = "core", mc: dict[str, Any] | None = None)
 
     de = (mc or {}).get("domain_ensemble") or {}
     nodes = []
-    # group by D_eff for ring layout
-    by_d: dict[int, list[str]] = {}
-    for n in names:
+    for name in names:
         try:
-            d = int(get_domain(n)["D_eff"])
-        except KeyError:
+            base = get_domain(name)
+            D = int(base["D_eff"])
+            # ALWAYS use signed canonical S for geometry/regime (SD law).
+            # Multipath path-mean is observer discovery — attach separately.
+            e = evaluate_domain(name)
+            S_can = float(e["S"])
+            flip = 0.0
+            S_path = None
+            if name in de:
+                S_path = float(de[name].get("S_path_mean", S_can))
+                flip = float(de[name].get("flip_rate") or 0)
+            cluster = base.get("cluster") or "unknown"
+            color = CLUSTER_COLORS.get(cluster, CLUSTER_COLORS["unknown"])
+            size = 6 + min(16, abs(S_can) * 14)
+            nodes.append(
+                {
+                    "id": f"dom_{name}",
+                    "label": name.replace("_", " "),
+                    "domain": name,
+                    "kind": "domain",
+                    "group": cluster,
+                    "color": color,
+                    "size": float(size),
+                    "D_eff": D,
+                    "S": S_can,
+                    "S_canonical": S_can,
+                    "S_path_mean": S_path,
+                    "regime": "emergence" if S_can > 0 else "dispersal",
+                    "flip_rate": flip,
+                    "is_core": name in set(core_names()),
+                    "cluster": cluster,
+                }
+            )
+        except Exception:
             continue
-        by_d.setdefault(d, []).append(n)
-
-    for D, group in sorted(by_d.items()):
-        for i, name in enumerate(sorted(group)):
-            try:
-                base = get_domain(name)
-                if name in de:
-                    S = float(de[name].get("S_path_mean", de[name].get("S_canonical", 0)))
-                    flip = float(de[name].get("flip_rate") or 0)
-                else:
-                    e = evaluate_domain(name)
-                    S = float(e["S"])
-                    flip = 0.0
-                cluster = base.get("cluster") or "unknown"
-                color = CLUSTER_COLORS.get(cluster, CLUSTER_COLORS["unknown"])
-                size = 6 + min(16, abs(S) * 14)
-                angle = (2 * math.pi * i) / max(len(group), 1)
-                # slight φ spiral offset by D
-                angle += (D * SEED_PHI) % (2 * math.pi) * 0.05
-                nodes.append(
-                    {
-                        "id": f"dom_{name}",
-                        "label": name.replace("_", " "),
-                        "domain": name,
-                        "kind": "domain",
-                        "group": cluster,
-                        "color": color,
-                        "size": float(size),
-                        "D_eff": D,
-                        "S": S,
-                        "regime": "emergence" if S > 0 else "dispersal",
-                        "flip_rate": flip,
-                        "ring": max(1, min(6, int(1 + D / 5))),
-                        "angle": angle,
-                        "cluster": cluster,
-                    }
-                )
-            except Exception:
-                continue
-    return nodes
+    return apply_sd_layout(nodes)
 
 
 def build_domain_edges(
@@ -408,36 +660,36 @@ def build_prediction_nodes() -> tuple[list[dict[str, Any]], list[dict[str, Any]]
 
 
 def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """Apply colors/sizes/angles for archive connective nodes."""
-    by_ring: dict[int, list[dict[str, Any]]] = {}
+    """Apply colors/sizes; S–D_eff polar angles applied later via apply_sd_layout."""
     out = []
-    for n in archive_nodes:
-        ring = int(n.get("ring") or max(1, min(8, int(1 + int(n.get("D_eff") or 12) / 4))))
-        n = dict(n)
-        n["ring"] = ring
-        by_ring.setdefault(ring, []).append(n)
-    for ring, group in by_ring.items():
-        for i, n in enumerate(sorted(group, key=lambda x: x.get("domain") or x.get("label") or "")):
-            kind = n.get("kind") or "domain"
-            group_name = n.get("group") or n.get("cluster") or "unknown"
-            if kind == "problem_route":
-                color = CLUSTER_COLORS["problem_route"]
-                size = 10
-            elif kind == "extension" or n.get("atlas_kind") == "extension_panel":
-                color = CLUSTER_COLORS["extension"]
-                err = n.get("median_error_pct")
-                # tighter green = brighter
-                if err is not None and float(err) <= 0.5:
-                    color = "#64748b"
-                size = 4 + min(8, (abs(float(n["S"])) * 8) if n.get("S") is not None else 3)
-            else:
-                color = CLUSTER_COLORS.get(group_name, CLUSTER_COLORS["unknown"])
-                size = 6 + min(14, abs(float(n["S"])) * 12) if n.get("S") is not None else 8
-            n["color"] = color
-            n["size"] = float(size)
-            n["angle"] = (2 * math.pi * i) / max(len(group), 1) + ring * 0.07
-            out.append(n)
-    return out
+    for raw in archive_nodes:
+        n = dict(raw)
+        kind = n.get("kind") or "domain"
+        group_name = n.get("group") or n.get("cluster") or "unknown"
+        # Prefer signed canonical S for regime (do not invent path-mean here)
+        if n.get("S") is not None:
+            try:
+                n["S"] = float(n["S"])
+                n["S_canonical"] = n.get("S_canonical", n["S"])
+                n["regime"] = "emergence" if n["S"] > 0 else "dispersal"
+            except (TypeError, ValueError):
+                pass
+        if kind == "problem_route":
+            color = CLUSTER_COLORS["problem_route"]
+            size = 10
+        elif kind == "extension" or n.get("atlas_kind") == "extension_panel":
+            color = CLUSTER_COLORS["extension"]
+            err = n.get("median_error_pct")
+            if err is not None and float(err) <= 0.5:
+                color = "#64748b"
+            size = 4 + min(8, (abs(float(n["S"])) * 8) if n.get("S") is not None else 3)
+        else:
+            color = CLUSTER_COLORS.get(group_name, CLUSTER_COLORS["unknown"])
+            size = 6 + min(14, abs(float(n["S"])) * 12) if n.get("S") is not None else 8
+        n["color"] = color
+        n["size"] = float(size)
+        out.append(n)
+    return apply_sd_layout(out)
 
 
 def _style_archive_edges(archive_edges: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -516,17 +768,31 @@ def build_universe_graph(
             "source": tissue.get("source"),
         }
         domains = _style_archive_nodes(tissue.get("nodes") or [])
-        # overlay multipath S on core domain nodes
+        # Overlay multipath as observer stats ONLY — never replace signed S for layout
         de = (mc or {}).get("domain_ensemble") or {}
         for n in domains:
             dom = n.get("domain")
-            if dom and dom in de:
-                n["S"] = float(de[dom].get("S_path_mean", de[dom].get("S_canonical", n.get("S") or 0)))
+            if not dom:
+                continue
+            # Re-pin canonical S from atlas when available (truth for SD geometry)
+            try:
+                if n.get("is_core") or n.get("kind") == "domain":
+                    ev = evaluate_domain(str(dom))
+                    n["S"] = float(ev["S"])
+                    n["S_canonical"] = float(ev["S"])
+                    n["D_eff"] = int(ev.get("D_eff") or n.get("D_eff") or 12)
+                    n["regime"] = "emergence" if n["S"] > 0 else "dispersal"
+            except Exception:
+                pass
+            if dom in de:
+                n["S_path_mean"] = float(de[dom].get("S_path_mean", n.get("S") or 0))
                 n["flip_rate"] = de[dom].get("flip_rate")
-                n["regime"] = "emergence" if float(n["S"]) > 0 else "dispersal"
-                if n.get("is_core"):
-                    n["size"] = 6 + min(14, abs(float(n["S"])) * 12)
-                    n["color"] = CLUSTER_COLORS.get(n.get("cluster") or "", CLUSTER_COLORS["unknown"])
+                # path-mean may flip sign under observer coupling — keep as diagnostic
+            if n.get("is_core") and n.get("S") is not None:
+                n["size"] = 6 + min(14, abs(float(n["S"])) * 12)
+                n["color"] = CLUSTER_COLORS.get(n.get("cluster") or "", CLUSTER_COLORS["unknown"])
+        # Re-apply S–D_eff layout after canonical S restore
+        domains = apply_sd_layout(domains)
         # law → core only (not every extension — avoids visual washout)
         law_edges = []
         for n in domains:
@@ -563,6 +829,9 @@ def build_universe_graph(
 
     nodes = seeds + domains + mem_nodes + pred_nodes
     edges = seed_edges + dom_edges + mem_edges + pred_edges
+    # Final S–D_eff polar layout over full node set (memory/pred get outer shells)
+    nodes = apply_sd_layout(nodes)
+    layout_diag = layout_diagnostics(nodes)
 
     # Filter edges whose endpoints exist; dedupe
     ids = {n["id"] for n in nodes}
@@ -594,6 +863,7 @@ def build_universe_graph(
         "authority": "D1D38A",
         "scope": scope,
         "aesthetic": "obsidian_second_brain_x_neural_growth_x_archive_connective",
+        "layout_mode": "s_deff_polar",
         "n_nodes": len(nodes),
         "n_edges": len(edges),
         "nodes": nodes,
@@ -611,10 +881,24 @@ def build_universe_graph(
             "cluster_colors": CLUSTER_COLORS,
             "layer_edge_colors": LAYER_EDGE_COLORS,
             "archive_connective": archive_meta,
+            "layout_mode": "s_deff_polar",
+            "layout_diagnostics": {
+                k: layout_diag.get(k)
+                for k in (
+                    "n_with_S",
+                    "n_emergence_S_gt_0",
+                    "n_dispersal_S_lt_0",
+                    "order_score_S_vs_east_x",
+                    "order_score_D_vs_radius",
+                    "note",
+                )
+            },
             "rings": {
-                "0": "seeds + law K",
-                "1-6": "domain folds / extensions by D_eff",
-                "5": "problem-route intents (navigator)",
+                "geometry": "radius ∝ D_eff · angle ∝ signed S (canonical)",
+                "east S>0": "emergence folds (Particle Physics, QM, Biology…)",
+                "west S<0": "dispersal folds (Cosmology, QG, Fluid Dynamics…)",
+                "inner D~5–10": "low-D near law K",
+                "outer D~20–25": "high-D complex systems / cosmo",
                 "7": "memory engrams (LTM)",
                 "8": "preregistered predictions",
             },
