@@ -40,7 +40,16 @@ cd FSOT-Monte-Carlo-Intelligence
 pip install -e ".[narrate]"
 python scripts/download_qwen25_instruct.py
 python -m fsot_mc serve --port 8765
+# UI: 2D/3D toggle · Talk to the work (this model) · free_parameters=0
 ```
+
+Product UI includes **2D + 3D** connective graph (As Above So Below shells) and docs RAG chat over this base model (+ optional local LoRA adapters, not in this HF repo).
+
+## Related
+
+- Code: https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence  
+- Lean court: https://github.com/dappalumbo91/FSOT-2.1-Lean  
+- Dataset snapshot: https://huggingface.co/datasets/dappalumbo91/fsot-monte-carlo-intelligence  
 
 ## License
 

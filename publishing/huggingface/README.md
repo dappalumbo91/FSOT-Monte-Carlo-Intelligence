@@ -65,4 +65,20 @@ python -m fsot_mc serve --port 8765
 
 Windows: double-click `START_FSOT.bat` after first install.
 
+### Visual UI (v1.5)
+
+- **2D / 3D toggle** in the top bar (Three.js CDN for 3D)
+- **As Above So Below:** hue = physics spine · ring/height = D_eff · pie sectors = kinship
+- **Expansion shells:** center = seeds/K · outer = higher scale · bright axons = domain signals
+
 `free_parameters = 0` · Research only · MIT
+
+### Repos
+
+| Place | URL |
+|-------|-----|
+| Code | https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence |
+| Theory (Lean) | https://github.com/dappalumbo91/FSOT-2.1-Lean |
+| Chat weights | https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct |
+| This dataset | https://huggingface.co/datasets/dappalumbo91/fsot-monte-carlo-intelligence |
+| Kaggle exports | https://www.kaggle.com/datasets/dappalumbo91/fsot-monte-carlo-intelligence |
