@@ -21,6 +21,10 @@
           <option value="full" selected>Full FSOT (archive connective)</option>
           <option value="core">Core 35 only</option>
         </select>
+        <div class="view-toggle" title="Graph projection">
+          <button type="button" id="btn-view-2d" class="toggle-btn">2D</button>
+          <button type="button" id="btn-view-3d" class="toggle-btn active">3D</button>
+        </div>
         <button id="btn-reload" title="Rebuild graph">↻ Graph</button>
         <button id="btn-rebuild" title="Force rebuild connective tissue from archive bundle">⧉ Rebuild tissue</button>
         <button id="btn-readings" title="Accuracy readings">◎ Accuracy</button>
@@ -57,13 +61,15 @@
 
       <section class="stage">
         <canvas id="graph"></canvas>
+        <div id="graph3d" class="graph3d-host" aria-label="FSOT 3D connective graph"></div>
         <div class="hud">
+          <span id="hud-view">view <strong>3D</strong></span>
           <span id="hud-nodes">—</span>
           <span id="hud-edges">—</span>
           <span id="hud-emerge">—</span>
           <span id="hud-status">loading…</span>
         </div>
-        <div class="hint">As Above So Below: hue = physics spine · ring = D<sub>eff</sub> · angle = kinship then S · seeds→K · select → Explain</div>
+        <div class="hint" id="view-hint">3D · drag orbit · scroll zoom · click node · hue=physics · Y/height=D<sub>eff</sub> · ring=scale shell</div>
       </section>
 
       <aside class="sidebar right">
@@ -92,6 +98,14 @@
       </aside>
     </main>
   </div>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
   <script src="/app.js"></script>
 </body>
 </html>

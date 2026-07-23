@@ -10,6 +10,7 @@
 (() => {
   const canvas = document.getElementById("graph");
   const ctx = canvas.getContext("2d");
+  const host3d = document.getElementById("graph3d");
   const $ = (id) => document.getElementById(id);
 
   let W = 0, H = 0, dpr = 1;
@@ -27,6 +28,12 @@
   let frame = 0;
   let ringScale = 1.0;      // grows for dense graphs
   let isFull = false;
+
+  // 2D / 3D projection (default 3D — As Above So Below shells)
+  let viewMode = (localStorage.getItem("fsot_view_mode") || "3d").toLowerCase();
+  if (viewMode !== "2d" && viewMode !== "3d") viewMode = "3d";
+  let graph3d = null;
+  let graph3dLoading = null;
 
   // camera
   let cam = { x: 0, y: 0, scale: 1 };
@@ -59,6 +66,79 @@
     canvas.style.width = W + "px";
     canvas.style.height = H + "px";
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (graph3d) graph3d.resize();
+  }
+
+  function updateViewChrome() {
+    const b2 = $("btn-view-2d");
+    const b3 = $("btn-view-3d");
+    if (b2) b2.classList.toggle("active", viewMode === "2d");
+    if (b3) b3.classList.toggle("active", viewMode === "3d");
+    if ($("hud-view")) $("hud-view").innerHTML = `view <strong>${viewMode.toUpperCase()}</strong>`;
+    if ($("view-hint")) {
+      $("view-hint").innerHTML =
+        viewMode === "3d"
+          ? "3D · drag orbit · scroll zoom · click node · hue=physics · height=D<sub>eff</sub> · ring=scale shell"
+          : "2D · pan/zoom · hue=physics · ring=D<sub>eff</sub> · angle=kinship then S · seeds→K";
+    }
+    canvas.classList.toggle("hidden-view", viewMode === "3d");
+    if (host3d) host3d.classList.toggle("active", viewMode === "3d");
+  }
+
+  async function ensureGraph3D() {
+    if (graph3d) return graph3d;
+    if (graph3dLoading) return graph3dLoading;
+    if (!host3d) return null;
+    graph3dLoading = import("/graph3d.js")
+      .then((mod) => {
+        graph3d = mod.createGraph3D(host3d, {
+          onSelect: (n) => {
+            selected = n;
+            renderSelection(n);
+          },
+        });
+        graph3d.setVisible(viewMode === "3d");
+        if (nodes.length) {
+          graph3d.setGraph(nodes, edges, meta);
+          if (selected) graph3d.setSelected(selected);
+        }
+        return graph3d;
+      })
+      .catch((err) => {
+        console.error("3D graph failed to load", err);
+        graph3dLoading = null;
+        $("hud-status").textContent = "3D unavailable — using 2D (" + (err.message || err) + ")";
+        viewMode = "2d";
+        localStorage.setItem("fsot_view_mode", "2d");
+        updateViewChrome();
+        if (graph3d) graph3d.setVisible(false);
+        return null;
+      });
+    return graph3dLoading;
+  }
+
+  async function setViewMode(mode) {
+    viewMode = mode === "2d" ? "2d" : "3d";
+    localStorage.setItem("fsot_view_mode", viewMode);
+    updateViewChrome();
+    if (viewMode === "3d") {
+      const g3 = await ensureGraph3D();
+      if (g3) {
+        g3.setVisible(true);
+        g3.setGraph(nodes, edges, meta);
+        if (selected) g3.setSelected(selected);
+        g3.resize();
+      }
+    } else if (graph3d) {
+      graph3d.setVisible(false);
+    }
+  }
+
+  function pushGraphTo3D() {
+    if (viewMode === "3d" && graph3d) {
+      graph3d.setGraph(nodes, edges, meta);
+      if (selected) graph3d.setSelected(selected);
+    }
   }
 
   function ringRadius(ring) {
@@ -445,8 +525,18 @@
   }
 
   function loop() {
-    stepPhysics();
-    draw();
+    if (viewMode === "2d") {
+      stepPhysics();
+      draw();
+    } else {
+      // 3D owns its WebGL loop; still advance 2D home slightly until settled so homes are good
+      if (!settled && sim) stepPhysics();
+      // when 3D first settles homes, push once
+      if (settled && graph3d && !graph3d._fsotPushed) {
+        pushGraphTo3D();
+        graph3d._fsotPushed = true;
+      }
+    }
     requestAnimationFrame(loop);
   }
 
@@ -586,9 +676,11 @@
     if (!n) {
       el.className = "panel scroll empty";
       el.textContent = "Click a seed, fold, memory, or prediction";
+      if (graph3d) graph3d.setSelected(null);
       return;
     }
     el.className = "panel scroll";
+    if (graph3d) graph3d.setSelected(n);
     // auto-load thesis on select
     loadThesis(n.id);
     const rows = [
@@ -644,6 +736,7 @@
       meta = g.meta || {};
       initPositions();
       cam = { x: 0, y: 0, scale: scope === "full" ? 0.42 : 0.85 };
+      if (graph3d) graph3d._fsotPushed = false;
       $("hud-nodes").innerHTML = `nodes <strong>${g.n_nodes}</strong>`;
       $("hud-edges").innerHTML = `axons <strong>${g.n_edges}</strong>`;
       const ef = meta.map_emergence_mean;
@@ -656,9 +749,21 @@
         ? ` · archive raw couples ${ac.coupling_raw_edge_count}`
         : "";
       $("hud-status").textContent =
-        `${scope} · core ${meta.n_core_folds || "—"} · ext ${meta.n_extension_panels || 0}${green}${raw} · solidifying…`;
+        `${scope} · ${viewMode.toUpperCase()} · core ${meta.n_core_folds || "—"} · ext ${meta.n_extension_panels || 0}${green}${raw} · solidifying…`;
       renderLegend(g);
       renderRings(meta);
+      // 3D: load module if needed and paint shells from D_eff / physics layout
+      if (viewMode === "3d") {
+        ensureGraph3D().then((g3) => {
+          if (g3) {
+            g3.setVisible(true);
+            g3.setGraph(nodes, edges, meta);
+            g3._fsotPushed = true;
+          }
+        });
+      } else {
+        pushGraphTo3D();
+      }
       // show archive connective summary in side panel
       if (ac && Object.keys(ac).length) {
         $("side-out").innerHTML = `
@@ -727,6 +832,8 @@
   $("btn-reload").onclick = () => loadGraph();
   if ($("btn-rebuild")) $("btn-rebuild").onclick = () => loadGraph({ rebuild: true });
   if ($("scope-select")) $("scope-select").onchange = () => loadGraph();
+  if ($("btn-view-2d")) $("btn-view-2d").onclick = () => setViewMode("2d");
+  if ($("btn-view-3d")) $("btn-view-3d").onclick = () => setViewMode("3d");
   if ($("btn-thesis")) {
     $("btn-thesis").onclick = () => {
       if (selected) loadThesis(selected.id);
@@ -947,6 +1054,9 @@
 
   window.addEventListener("resize", resize);
   resize();
+  updateViewChrome();
+  // Preload 3D module when default view is 3D (CDN Three.js)
+  if (viewMode === "3d") ensureGraph3D();
   loadGraph();
   loop();
 })();

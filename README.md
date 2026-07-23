@@ -72,6 +72,7 @@ python -m fsot_mc ask --think -q "What does multipath emergence mean?"
 # visual UI  (or double-click START_FSOT.bat)
 python -m fsot_mc serve --port 8765
 # open http://127.0.0.1:8765/
+# UI: 2D/3D toggle — 3D shells use D_eff height + physics-spine hue (Three.js CDN)
 
 # improvement cycle: PRED priority + flip protocols + soft court + claims
 python -m fsot_mc improve --n-paths 64
