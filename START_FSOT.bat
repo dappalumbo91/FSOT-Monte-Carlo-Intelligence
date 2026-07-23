@@ -29,12 +29,27 @@ if exist "%~dp0.venv\Scripts\python.exe" (
     echo Install Python 3.11+, then:  python -m venv .venv
     echo   .\.venv\Scripts\Activate.ps1
     echo   pip install -r requirements.txt
+    echo   pip install torch --index-url https://download.pytorch.org/whl/cu128
     echo   pip install -e ".[narrate]"
     pause
     exit /b 1
   )
   set "PY=python"
   echo Using system Python on PATH
+)
+
+REM Chat needs torch in this same Python (UI still works without it).
+"%PY%" -c "import torch" >nul 2>&1
+if errorlevel 1 (
+  echo.
+  echo WARNING: torch not installed in this Python — chat/Qwen will not load.
+  echo Fix once ^(CUDA 12.8 wheel^):
+  echo   "%PY%" -m pip install torch --index-url https://download.pytorch.org/whl/cu128
+  echo   "%PY%" -m pip install -e ".[narrate]"
+  echo UI graph still works; only "Talk to the work" needs torch.
+  echo.
+) else (
+  echo torch OK for Qwen chat
 )
 
 REM Already up? Just open the browser.
