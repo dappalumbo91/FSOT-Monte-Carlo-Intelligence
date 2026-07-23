@@ -65,7 +65,7 @@ def test_signed_s_not_path_mean():
 
 def test_meta_layout_mode():
     g = build_universe_graph(scope="core", with_mc=False, with_archive_connective=False)
-    assert (g.get("meta") or {}).get("layout_mode") == "deff_ring_physics_s"
+    assert (g.get("meta") or {}).get("layout_mode") == "deff_ring_physics_sectors"
     assert (g.get("meta") or {}).get("color_doctrine") == "as_above_so_below"
 
 

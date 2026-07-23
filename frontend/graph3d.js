@@ -1,13 +1,13 @@
 /**
- * FSOT 3D graph — As Above So Below shells.
+ * FSOT 3D graph — cosmological expansion shells (As Above So Below).
  *
- * Layout (frozen from server doctrine):
- *   radius  ∝ D_eff ring (dimensional interface)
- *   angle   = physics spine clumps + S (from server)
- *   height  ∝ D_eff continuous (micro bottom-ish → macro up)
- *   color   = physics spine hue (from server node.color)
+ * Layout (frozen server doctrine — not 2D force soup):
+ *   radius  ∝ D_eff ring  → expansion distance from origin
+ *   angle   = physics pie sector (same longitude across scales)
+ *   height  ∝ D_eff       → dimensional ladder
+ *   color   = physics spine hue
  *
- * Three.js ES module — loaded only when 3D mode is active.
+ * Communication axons (structural edges) stay bright; dense mesh only when zoomed.
  */
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -17,7 +17,10 @@ function parseColor(hex, fallback = 0x8892a4) {
   const h = hex.replace("#", "").trim();
   if (h.length === 6) return parseInt(h, 16);
   if (h.length === 3) {
-    const e = h.split("").map((c) => c + c).join("");
+    const e = h
+      .split("")
+      .map((c) => c + c)
+      .join("");
     return parseInt(e, 16);
   }
   return fallback;
@@ -25,44 +28,70 @@ function parseColor(hex, fallback = 0x8892a4) {
 
 function ringRadius(ring, isFull) {
   const r = Number(ring) || 0;
-  const step = isFull ? 95 : 72;
-  return 40 + r * step;
+  const step = isFull ? 88 : 70;
+  return 36 + r * step;
 }
 
-/**
- * Map node → world position (Three.js Y-up).
- * XZ plane = shell disk; Y = dimensional height from D_eff.
- */
-function nodeWorldPos(n, isFull, scale = 0.045) {
+/** Pure polar layout — ignore 2D anneal homes (those caused chaos). */
+function nodeWorldPos(n, isFull, scale = 0.048) {
   if (n.kind === "law") return new THREE.Vector3(0, 0, 0);
   if (n.kind === "seed") {
     const ids = ["seed_pi", "seed_e", "seed_phi", "seed_gamma", "seed_catalan"];
     const i = Math.max(0, ids.indexOf(n.id));
     const ang = (i * Math.PI * 2) / 5 - Math.PI / 2;
-    const R = 28 * scale * 18;
-    return new THREE.Vector3(Math.cos(ang) * R, 0, Math.sin(ang) * R);
-  }
-  // Prefer solid 2D home if anneal already ran
-  if (n.homeX != null && n.homeY != null) {
-    const d = Number(n.D_eff != null ? n.D_eff : 12);
-    const y = ((d - 12.5) / 12.5) * 55; // ~ -55 .. +55
-    return new THREE.Vector3(n.homeX * scale, y, n.homeY * scale);
+    const R = 22 * scale * 16;
+    return new THREE.Vector3(Math.cos(ang) * R, 2, Math.sin(ang) * R);
   }
   const a = n.angle != null ? Number(n.angle) : 0;
-  const R = ringRadius(n.ring, isFull) * scale;
-  const d = Number(n.D_eff != null ? n.D_eff : 12);
-  const y = ((d - 12.5) / 12.5) * 55;
+  const d = Number(n.D_eff != null ? n.D_eff : n.ring != null ? Number(n.ring) * 4 : 12);
+  // Expansion cone: outer shells + higher D_eff push outward (Big Bang / Hubble layer feel)
+  const expand = 0.75 + 0.55 * Math.min(1, Math.max(0, d / 25));
+  const R = ringRadius(n.ring, isFull) * scale * expand;
+  // Height ladder: micro near mid-plane slightly down, macro up
+  const y = ((d - 8) / 20) * 70;
   return new THREE.Vector3(Math.cos(a) * R, y, Math.sin(a) * R);
 }
 
-function edgeAllowed(e, lodDense, lodUltra) {
+const STRUCT_KINDS = new Set([
+  "seed_to_law",
+  "law_to_domain",
+  "routes_to_core",
+  "long_range",
+  "ladder",
+  "problem_route",
+  "cluster",
+  "prediction_link",
+  "memory_link",
+  "coupling_crosswalk_module",
+  "coupling_magnetosphere_cluster",
+  "coupling_fsot_prediction_cross_ratio",
+  "coupling_fluidlink_fpc_timing",
+]);
+
+function isStructuralEdge(e) {
   const k = e.kind || "";
-  const tier =
-    e.density_tier ||
-    (k === "coupling_lean_overlap" || k === "by_core_membership" ? "dense" : "base");
-  if (tier === "base") return true;
-  if (tier === "dense") return lodDense;
-  return lodUltra;
+  if (STRUCT_KINDS.has(k)) return true;
+  if (k.startsWith("coupling_crosswalk")) return true;
+  if (k.startsWith("coupling_magnetosphere")) return true;
+  if (k.startsWith("coupling_fsot_prediction")) return true;
+  if (k.startsWith("coupling_fluidlink")) return true;
+  return false;
+}
+
+function isDenseMesh(e) {
+  const k = e.kind || "";
+  return (
+    k === "coupling_lean_overlap" ||
+    k === "by_core_membership" ||
+    e.density_tier === "dense"
+  );
+}
+
+function edgeAllowed(e, lodDense, lodUltra) {
+  if (isDenseMesh(e)) return lodUltra; // only ultra-close shows soup
+  if (isStructuralEdge(e)) return true;
+  // other base edges when somewhat close
+  return lodDense || lodUltra;
 }
 
 /**
@@ -82,13 +111,15 @@ export function createGraph3D(container, opts = {}) {
   let disposed = false;
   let lodDense = false;
   let lodUltra = false;
+  let pulseT = 0;
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x07080d);
-  scene.fog = new THREE.FogExp2(0x07080d, 0.006);
+  scene.background = new THREE.Color(0x0a0c14);
+  // lighter fog so structure stays readable
+  scene.fog = new THREE.FogExp2(0x0a0c14, 0.0028);
 
-  const camera = new THREE.PerspectiveCamera(50, 1, 0.5, 5000);
-  camera.position.set(0, 90, 160);
+  const camera = new THREE.PerspectiveCamera(48, 1, 0.5, 5000);
+  camera.position.set(0, 70, 150);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -101,41 +132,47 @@ export function createGraph3D(container, opts = {}) {
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-  controls.dampingFactor = 0.06;
-  controls.minDistance = 20;
-  controls.maxDistance = 420;
-  controls.target.set(0, 0, 0);
+  controls.dampingFactor = 0.07;
+  controls.minDistance = 18;
+  controls.maxDistance = 480;
+  controls.target.set(0, 10, 0);
 
-  // lights
-  scene.add(new THREE.AmbientLight(0xb0b8c8, 0.55));
-  const key = new THREE.DirectionalLight(0xffffff, 0.85);
-  key.position.set(40, 80, 30);
+  // brighter key lighting
+  scene.add(new THREE.AmbientLight(0xd0d8e8, 0.72));
+  const key = new THREE.DirectionalLight(0xffffff, 1.05);
+  key.position.set(50, 90, 40);
   scene.add(key);
-  const fill = new THREE.DirectionalLight(0x88aaff, 0.25);
-  fill.position.set(-50, 20, -40);
+  const fill = new THREE.DirectionalLight(0xaaccff, 0.4);
+  fill.position.set(-60, 30, -50);
   scene.add(fill);
+  const rim = new THREE.PointLight(0xc4b5fd, 0.55, 400);
+  rim.position.set(0, 20, 0);
+  scene.add(rim);
 
-  // groups rebuilt on setGraph
   let shellGroup = new THREE.Group();
   let edgeGroup = new THREE.Group();
   let nodeGroup = new THREE.Group();
+  let pulseGroup = new THREE.Group();
   scene.add(shellGroup);
   scene.add(edgeGroup);
   scene.add(nodeGroup);
+  scene.add(pulseGroup);
 
-  const nodeMeshes = new Map(); // id -> mesh
+  const nodeMeshes = new Map();
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   let labelEl = null;
+  let structSegments = []; // for pulse animation [{pa,pb,kind}]
 
   function ensureLabel() {
     if (labelEl) return labelEl;
     labelEl = document.createElement("div");
     labelEl.className = "graph3d-label";
     labelEl.style.cssText =
-      "position:absolute;pointer-events:none;padding:0.2rem 0.45rem;border-radius:6px;" +
-      "background:rgba(8,10,16,0.85);border:1px solid rgba(120,140,180,0.25);" +
-      "font-size:0.72rem;color:#e8ecf4;display:none;z-index:5;white-space:nowrap;";
+      "position:absolute;pointer-events:none;padding:0.25rem 0.5rem;border-radius:6px;" +
+      "background:rgba(10,14,22,0.9);border:1px solid rgba(140,160,200,0.35);" +
+      "font-size:0.72rem;color:#eef2fa;display:none;z-index:5;white-space:nowrap;" +
+      "box-shadow:0 0 12px rgba(103,232,249,0.15);";
     container.style.position = container.style.position || "relative";
     container.appendChild(labelEl);
     return labelEl;
@@ -154,33 +191,61 @@ export function createGraph3D(container, opts = {}) {
 
   function buildShells() {
     clearGroup(shellGroup);
-    const maxRing = 8;
-    for (let r = 1; r <= maxRing; r++) {
-      const R = ringRadius(r, isFull) * 0.045;
-      const geo = new THREE.RingGeometry(R * 0.98, R * 1.02, 64);
-      geo.rotateX(-Math.PI / 2);
-      const mat = new THREE.MeshBasicMaterial({
-        color: 0x3a4560,
-        transparent: true,
-        opacity: 0.12 + (r === 1 ? 0.06 : 0),
-        side: THREE.DoubleSide,
-        depthWrite: false,
-      });
-      const mesh = new THREE.Mesh(geo, mat);
-      // place shell at typical D_eff height for that ring band
-      const dMid = (r - 1) * 4 + 2;
-      mesh.position.y = ((dMid - 12.5) / 12.5) * 55;
-      shellGroup.add(mesh);
+    for (let r = 1; r <= 8; r++) {
+      const R = ringRadius(r, isFull) * 0.048 * (0.75 + 0.08 * r);
+      // translucent disk (expansion shell)
+      const disk = new THREE.Mesh(
+        new THREE.CircleGeometry(R, 64),
+        new THREE.MeshBasicMaterial({
+          color: 0x4a5a80,
+          transparent: true,
+          opacity: 0.045 + r * 0.008,
+          side: THREE.DoubleSide,
+          depthWrite: false,
+        })
+      );
+      disk.rotation.x = -Math.PI / 2;
+      const dMid = (r - 1) * 4 + 4;
+      disk.position.y = ((dMid - 8) / 20) * 70;
+      shellGroup.add(disk);
+
+      // bright rim
+      const rimGeo = new THREE.RingGeometry(R * 0.985, R * 1.015, 96);
+      rimGeo.rotateX(-Math.PI / 2);
+      const rimMesh = new THREE.Mesh(
+        rimGeo,
+        new THREE.MeshBasicMaterial({
+          color: 0x89a0d0,
+          transparent: true,
+          opacity: 0.22 + (r === 1 ? 0.1 : 0),
+          side: THREE.DoubleSide,
+          depthWrite: false,
+        })
+      );
+      rimMesh.position.y = disk.position.y;
+      shellGroup.add(rimMesh);
     }
-    // vertical axis (law → scale)
+    // origin glow (singularity / law hub)
+    const coreGlow = new THREE.Mesh(
+      new THREE.SphereGeometry(3.2, 24, 18),
+      new THREE.MeshBasicMaterial({
+        color: 0xc4b5fd,
+        transparent: true,
+        opacity: 0.25,
+        depthWrite: false,
+      })
+    );
+    shellGroup.add(coreGlow);
+
+    // vertical expansion axis
     const axisGeo = new THREE.BufferGeometry().setFromPoints([
-      new THREE.Vector3(0, -70, 0),
-      new THREE.Vector3(0, 70, 0),
+      new THREE.Vector3(0, -40, 0),
+      new THREE.Vector3(0, 95, 0),
     ]);
     shellGroup.add(
       new THREE.Line(
         axisGeo,
-        new THREE.LineBasicMaterial({ color: 0xc4b5fd, transparent: true, opacity: 0.35 })
+        new THREE.LineBasicMaterial({ color: 0xc4b5fd, transparent: true, opacity: 0.5 })
       )
     );
   }
@@ -189,23 +254,37 @@ export function createGraph3D(container, opts = {}) {
     clearGroup(nodeGroup);
     nodeMeshes.clear();
     for (const n of nodes) {
+      // full graph: de-emphasize tiny extensions so cores/comms read first
+      const isCore = !!(
+        n.is_core ||
+        n.kind === "domain" ||
+        n.kind === "seed" ||
+        n.kind === "law" ||
+        n.kind === "problem_route"
+      );
+      const isExt = n.kind === "extension" || n.atlas_kind === "extension_panel";
+      if (isFull && isExt && !n.is_core && Math.abs(Number(n.S) || 0) < 0.15 && !n.green_gate) {
+        // keep most extensions but smaller; skip ultra-weak noise
+        // still show — size handles emphasis
+      }
+
       const pos = nodeWorldPos(n, isFull);
       const col = parseColor(n.color);
-      const isCore = !!(n.is_core || n.kind === "domain" || n.kind === "seed" || n.kind === "law");
-      const baseR = Math.max(0.6, (n.size || 8) * 0.12);
-      const radius = isCore ? baseR * 1.15 : baseR * 0.75;
-      const geo = new THREE.SphereGeometry(radius, isCore ? 16 : 10, isCore ? 12 : 8);
+      const baseR = Math.max(0.55, (n.size || 8) * (isCore ? 0.14 : 0.09));
+      const radius = n.kind === "law" ? baseR * 1.8 : isCore ? baseR * 1.2 : baseR * 0.7;
+      const geo = new THREE.SphereGeometry(radius, isCore ? 18 : 10, isCore ? 14 : 8);
       const mat = new THREE.MeshStandardMaterial({
         color: col,
         emissive: col,
-        emissiveIntensity: n.kind === "seed" || n.kind === "law" ? 0.45 : 0.18,
-        metalness: 0.15,
-        roughness: 0.45,
+        emissiveIntensity: n.kind === "seed" || n.kind === "law" ? 0.65 : isCore ? 0.38 : 0.22,
+        metalness: 0.12,
+        roughness: 0.38,
+        transparent: isExt && isFull,
+        opacity: isExt && isFull ? 0.82 : 1,
       });
       const mesh = new THREE.Mesh(geo, mat);
       mesh.position.copy(pos);
       mesh.userData.node = n;
-      mesh.userData.baseScale = 1;
       nodeGroup.add(mesh);
       nodeMeshes.set(n.id, mesh);
     }
@@ -214,74 +293,143 @@ export function createGraph3D(container, opts = {}) {
 
   function buildEdges() {
     clearGroup(edgeGroup);
+    clearGroup(pulseGroup);
+    structSegments = [];
     const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
-    const positions = [];
-    const colors = [];
-    let count = 0;
-    const maxEdges = lodUltra ? 8000 : lodDense ? 4000 : 2200;
 
+    // pass 1: structural communication axons (always prioritized)
+    const structList = [];
+    const meshList = [];
     for (const e of edges) {
       if (!edgeAllowed(e, lodDense, lodUltra)) continue;
+      if (isStructuralEdge(e)) structList.push(e);
+      else meshList.push(e);
+    }
+    // sort structural by strength / kind importance
+    const kindPri = {
+      seed_to_law: 0,
+      law_to_domain: 1,
+      routes_to_core: 2,
+      long_range: 3,
+      ladder: 4,
+      problem_route: 5,
+    };
+    structList.sort(
+      (a, b) =>
+        (kindPri[a.kind] ?? 9) - (kindPri[b.kind] ?? 9) ||
+        (b.strength || 0) - (a.strength || 0)
+    );
+
+    const maxStruct = isFull ? 900 : 500;
+    const maxMesh = lodUltra ? 2500 : lodDense ? 800 : 0;
+    const chosen = structList.slice(0, maxStruct).concat(meshList.slice(0, maxMesh));
+
+    const positions = [];
+    const colors = [];
+
+    for (const e of chosen) {
       const a = byId[e.source];
       const b = byId[e.target];
       if (!a || !b) continue;
+      // law→extension only for cores when full (keep axons clean)
+      if (
+        e.kind === "law_to_domain" &&
+        isFull &&
+        b &&
+        !b.is_core &&
+        b.kind === "extension"
+      ) {
+        continue;
+      }
       const pa = nodeWorldPos(a, isFull);
       const pb = nodeWorldPos(b, isFull);
       positions.push(pa.x, pa.y, pa.z, pb.x, pb.y, pb.z);
 
       const k = e.kind || "";
-      let c = new THREE.Color(0x67e8f9);
-      let alpha = 0.35;
-      if (k === "law_to_domain") {
-        c = new THREE.Color(0xc4b5fd);
-        alpha = isFull ? 0.08 : 0.18;
+      let c = new THREE.Color(0x7dd3fc);
+      let gain = 0.9;
+      if (k === "seed_to_law") {
+        c = new THREE.Color(0xffffff);
+        gain = 1.4;
+      } else if (k === "law_to_domain") {
+        c = new THREE.Color(0xd8b4fe);
+        gain = isFull ? 0.75 : 1.15;
       } else if (k === "routes_to_core") {
         c = new THREE.Color(0xa3e635);
-        alpha = 0.45;
-      } else if (k === "coupling_lean_overlap" || k === "by_core_membership") {
-        c = new THREE.Color(0x22d3ee);
-        alpha = lodUltra ? 0.12 : 0.07;
+        gain = 1.25;
       } else if (k === "long_range" || k === "ladder") {
-        c = new THREE.Color(0x67e8f9);
-        alpha = 0.55;
+        c = new THREE.Color(0x22d3ee);
+        gain = 1.2;
       } else if (k === "problem_route") {
         c = new THREE.Color(0xf472b6);
-        alpha = 0.5;
-      } else if (k === "seed_to_law") {
-        c = new THREE.Color(0xffffff);
-        alpha = 0.7;
+        gain = 1.1;
+      } else if (k === "prediction_link") {
+        c = new THREE.Color(0xfbbf24);
+        gain = 0.95;
+      } else if (isDenseMesh(e)) {
+        c = new THREE.Color(0x38bdf8);
+        gain = 0.25;
       }
-      // vertex colors (rgb only; opacity via material)
-      colors.push(c.r * alpha * 2, c.g * alpha * 2, c.b * alpha * 2);
-      colors.push(c.r * alpha * 2, c.g * alpha * 2, c.b * alpha * 2);
-      count += 1;
-      if (count >= maxEdges) break;
+
+      colors.push(c.r * gain, c.g * gain, c.b * gain);
+      colors.push(c.r * gain, c.g * gain, c.b * gain);
+
+      if (isStructuralEdge(e) && !isDenseMesh(e)) {
+        structSegments.push({ pa: pa.clone(), pb: pb.clone(), kind: k });
+      }
     }
 
-    if (!positions.length) return;
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-    geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
-    const mat = new THREE.LineBasicMaterial({
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.85,
-      depthWrite: false,
-    });
-    edgeGroup.add(new THREE.LineSegments(geo, mat));
+    if (positions.length) {
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+      geo.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+      edgeGroup.add(
+        new THREE.LineSegments(
+          geo,
+          new THREE.LineBasicMaterial({
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.95,
+            depthWrite: false,
+            blending: THREE.AdditiveBlending,
+          })
+        )
+      );
+    }
+
+    // communication pulse sprites along top structural axons
+    const pulseN = Math.min(structSegments.length, isFull ? 80 : 120);
+    for (let i = 0; i < pulseN; i++) {
+      const seg = structSegments[i];
+      if (!seg) continue;
+      const pgeo = new THREE.SphereGeometry(0.55, 8, 6);
+      const pmat = new THREE.MeshBasicMaterial({
+        color: 0xe0f2fe,
+        transparent: true,
+        opacity: 0.9,
+        depthWrite: false,
+      });
+      const m = new THREE.Mesh(pgeo, pmat);
+      m.userData.seg = seg;
+      m.userData.phase = Math.random();
+      pulseGroup.add(m);
+    }
   }
 
   function highlightSelection() {
     for (const [id, mesh] of nodeMeshes) {
       const sel = id === selectedId;
-      mesh.scale.setScalar(sel ? 1.55 : 1);
+      mesh.scale.setScalar(sel ? 1.65 : 1);
       if (mesh.material && mesh.material.emissiveIntensity != null) {
         const n = mesh.userData.node || {};
+        const isCore = !!(n.is_core || n.kind === "domain" || n.kind === "seed" || n.kind === "law");
         mesh.material.emissiveIntensity = sel
-          ? 0.7
+          ? 0.85
           : n.kind === "seed" || n.kind === "law"
-            ? 0.45
-            : 0.18;
+            ? 0.65
+            : isCore
+              ? 0.38
+              : 0.22;
       }
     }
   }
@@ -293,14 +441,13 @@ export function createGraph3D(container, opts = {}) {
     buildShells();
     buildNodes();
     buildEdges();
-    // frame camera
     const box = new THREE.Box3().setFromObject(nodeGroup);
     if (!box.isEmpty()) {
       const size = box.getSize(new THREE.Vector3());
       const center = box.getCenter(new THREE.Vector3());
       controls.target.copy(center);
-      const dist = Math.max(size.length() * 0.55, 80);
-      camera.position.set(center.x + dist * 0.45, center.y + dist * 0.35, center.z + dist * 0.55);
+      const dist = Math.max(size.length() * 0.5, 90);
+      camera.position.set(center.x + dist * 0.35, center.y + dist * 0.28, center.z + dist * 0.55);
       controls.update();
     }
   }
@@ -312,9 +459,8 @@ export function createGraph3D(container, opts = {}) {
 
   function setLodFromDistance() {
     const d = camera.position.distanceTo(controls.target);
-    // closer → denser mesh
-    const nextDense = d < 140;
-    const nextUltra = d < 70;
+    const nextDense = d < 160;
+    const nextUltra = d < 85;
     if (nextDense !== lodDense || nextUltra !== lodUltra) {
       lodDense = nextDense;
       lodUltra = nextUltra;
@@ -358,7 +504,11 @@ export function createGraph3D(container, opts = {}) {
       return;
     }
     const rect = container.getBoundingClientRect();
-    el.textContent = `${n.label || n.id}${n.physics_spine ? " · " + n.physics_spine : ""}${n.D_eff != null ? " · D_eff " + n.D_eff : ""}`;
+    const bits = [n.label || n.id];
+    if (n.physics_spine) bits.push(n.physics_spine);
+    if (n.D_eff != null) bits.push("D_eff " + n.D_eff);
+    if (n.scale_band) bits.push(n.scale_band);
+    el.textContent = bits.join(" · ");
     el.style.display = "block";
     el.style.left = `${clientX - rect.left + 12}px`;
     el.style.top = `${clientY - rect.top + 12}px`;
@@ -372,7 +522,6 @@ export function createGraph3D(container, opts = {}) {
   });
 
   renderer.domElement.addEventListener("click", (ev) => {
-    // ignore if user was orbiting (small move threshold handled by OrbitControls)
     const n = pick(ev.clientX, ev.clientY);
     if (n) {
       setSelected(n);
@@ -393,11 +542,19 @@ export function createGraph3D(container, opts = {}) {
     if (!visible) return;
     controls.update();
     setLodFromDistance();
+    pulseT += 0.016;
+    // travel communication pulses along structural axons
+    for (const m of pulseGroup.children) {
+      const seg = m.userData.seg;
+      if (!seg) continue;
+      const ph = (m.userData.phase + pulseT * 0.22) % 1;
+      m.position.lerpVectors(seg.pa, seg.pb, ph);
+      m.material.opacity = 0.35 + 0.55 * Math.sin(ph * Math.PI);
+    }
     renderer.render(scene, camera);
   }
   animate();
 
-  // initial size
   resize();
   setVisible(false);
 
@@ -413,6 +570,7 @@ export function createGraph3D(container, opts = {}) {
       clearGroup(shellGroup);
       clearGroup(edgeGroup);
       clearGroup(nodeGroup);
+      clearGroup(pulseGroup);
       renderer.dispose();
       if (renderer.domElement.parentNode) {
         renderer.domElement.parentNode.removeChild(renderer.domElement);

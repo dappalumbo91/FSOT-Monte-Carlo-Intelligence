@@ -401,14 +401,14 @@ def build_domain_nodes(*, scope: str = "core", mc: dict[str, Any] | None = None)
                         "scale_band": paint["scale_band"],
                         "color_family": spine,
                         "is_core": True,
-                        "layout_mode": "deff_ring_physics_s",
+                        "layout_mode": "deff_ring_physics_sectors",
                     }
                 )
             except Exception:
                 continue
         for row in rows:
             nodes.append(row)
-    # One even spacing per ring (multiple D_eff can share a shell via int(1+D/5))
+    # Sector-pack each D_eff shell (physics pie wedges)
     return reassign_ring_angles_by_s(nodes)
 
 
@@ -630,6 +630,22 @@ def build_prediction_nodes() -> tuple[list[dict[str, Any]], list[dict[str, Any]]
     return nodes, edges
 
 
+# Fixed pie sectors around each D_eff shell — cosmology-style "lanes"
+# (micro→macro expansion keeps the same azimuthal family).
+SPINE_SECTOR_ORDER: tuple[str, ...] = (
+    "particle_quantum",
+    "atomic_optical",
+    "matter_energy",
+    "life_mind",
+    "earth_complex",
+    "astro_structure",
+    "cosmo_unification",
+    "formal_math",
+    "problem_route",
+    "unknown",
+)
+
+
 def _s_sort_key(n: dict[str, Any]) -> tuple:
     """
     Order within a D_eff ring (dimensional shell):
@@ -639,23 +655,62 @@ def _s_sort_key(n: dict[str, Any]) -> tuple:
       4) name
     """
     spine = str(n.get("physics_spine") or resolve_physics_spine(n))
-    # stable order around the wheel matching hue families roughly
-    spine_order = {
-        "particle_quantum": 0,
-        "atomic_optical": 1,
-        "matter_energy": 2,
-        "life_mind": 3,
-        "earth_complex": 4,
-        "astro_structure": 5,
-        "cosmo_unification": 6,
-        "formal_math": 7,
-        "problem_route": 8,
-        "unknown": 9,
-    }
+    try:
+        spine_i = SPINE_SECTOR_ORDER.index(spine)
+    except ValueError:
+        spine_i = len(SPINE_SECTOR_ORDER) - 1
     is_core = 0 if (n.get("is_core") or n.get("atlas_kind") == "core") else 1
     s = float(n["S"]) if n.get("S") is not None else 0.0
     name = str(n.get("domain") or n.get("label") or n.get("id") or "")
-    return (spine_order.get(spine, 9), is_core, s, name)
+    return (spine_i, is_core, s, name)
+
+
+def _assign_sector_angles(group: list[dict[str, Any]], *, ring: int = 0) -> None:
+    """
+    Pack nodes into physics-spine pie wedges with small gaps (less visual soup).
+
+    Cosmology metaphor: same physics keeps a constant sky longitude while
+    D_eff / ring is the expansion radius (Hubble-flow shells).
+    """
+    if not group:
+        return
+    # preserve sort
+    ordered = sorted(group, key=_s_sort_key)
+    # count per spine
+    buckets: dict[str, list[dict[str, Any]]] = {}
+    for n in ordered:
+        sp = str(n.get("physics_spine") or resolve_physics_spine(n))
+        n["physics_spine"] = sp
+        buckets.setdefault(sp, []).append(n)
+
+    active = [sp for sp in SPINE_SECTOR_ORDER if buckets.get(sp)]
+    # also any unknown spines
+    for sp in buckets:
+        if sp not in active:
+            active.append(sp)
+    if not active:
+        return
+
+    n_sec = len(active)
+    gap = 0.07  # radians gap between sectors (~4°)
+    usable = 2 * math.pi - gap * n_sec
+    # weight sector width by sqrt(count) so big families don't dominate entirely
+    weights = [max(1.0, math.sqrt(len(buckets[sp]))) for sp in active]
+    wsum = sum(weights) or 1.0
+    cursor = -math.pi / 2 + ring * 0.03  # slight ring twist for depth reading
+    for sp, w in zip(active, weights):
+        width = usable * (w / wsum)
+        members = buckets[sp]
+        m = len(members)
+        for i, n in enumerate(members):
+            # pack inside sector with small inner padding
+            pad = width * 0.08
+            inner = max(width - 2 * pad, 1e-6)
+            frac = (i + 0.5) / max(m, 1)
+            n["angle"] = cursor + pad + frac * inner
+            n["sector"] = sp
+            n["sector_index"] = active.index(sp)
+        cursor += width + gap
 
 
 def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -688,8 +743,8 @@ def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, 
         n["scale_band"] = scale_band(n.get("D_eff"))
         by_ring.setdefault(ring, []).append(n)
     for ring, group in by_ring.items():
-        group_sorted = sorted(group, key=_s_sort_key)
-        for i, n in enumerate(group_sorted):
+        _assign_sector_angles(group, ring=int(ring))
+        for n in group:
             kind = n.get("kind") or "domain"
             is_core = bool(n.get("is_core") or n.get("atlas_kind") == "core")
             is_ext = (not is_core) and (
@@ -731,15 +786,13 @@ def _style_archive_nodes(archive_nodes: list[dict[str, Any]]) -> list[dict[str, 
             n["size"] = float(size)
             n["color_family"] = spine
             n["scale_band"] = paint.get("scale_band")
-            # even on shell; phase offset by ring keeps shells readable
-            n["angle"] = (2 * math.pi * i) / max(len(group_sorted), 1) + ring * 0.07
-            n["layout_mode"] = "deff_ring_physics_s"
+            n["layout_mode"] = "deff_ring_physics_sectors"
             out.append(n)
     return out
 
 
 def reassign_ring_angles_by_s(nodes: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    """After S updates, re-space each D_eff ring by physics spine then S."""
+    """After S updates, re-pack each D_eff ring into physics pie sectors."""
     by_ring: dict[int, list[dict[str, Any]]] = {}
     for n in nodes:
         if n.get("kind") in ("seed", "law", "memory", "prediction"):
@@ -750,10 +803,9 @@ def reassign_ring_angles_by_s(nodes: list[dict[str, Any]]) -> list[dict[str, Any
         n["ring"] = ring
         by_ring.setdefault(ring, []).append(n)
     for ring, group in by_ring.items():
-        group_sorted = sorted(group, key=_s_sort_key)
-        for i, n in enumerate(group_sorted):
-            n["angle"] = (2 * math.pi * i) / max(len(group_sorted), 1) + ring * 0.07
-            n["layout_mode"] = "deff_ring_physics_s"
+        _assign_sector_angles(group, ring=int(ring))
+        for n in group:
+            n["layout_mode"] = "deff_ring_physics_sectors"
     return nodes
 
 
@@ -955,14 +1007,14 @@ def build_universe_graph(
             "layer_edge_colors": LAYER_EDGE_COLORS,
             "archive_connective": archive_meta,
             "rings": {
-                "0": "seeds (π e φ γ G) + law K",
-                "1-6": "D_eff shells — dimensional interface (As Above So Below scale)",
-                "layout": "ring = D_eff · angle = physics spine then S · color = spine hue / D_eff lightness",
+                "0": "seeds (π e φ γ G) + law K — origin of expansion",
+                "1-6": "D_eff shells — expansion radius (Hubble-flow style layers)",
+                "layout": "ring=D_eff · pie sector=physics spine · within sector=S · color=spine+scale",
                 "5": "problem-route intents (navigator)",
                 "7": "memory engrams (LTM)",
                 "8": "preregistered predictions",
             },
-            "layout_mode": "deff_ring_physics_s",
+            "layout_mode": "deff_ring_physics_sectors",
             "color_doctrine": "as_above_so_below",
             "layers": [
                 "seed_to_law",
@@ -975,14 +1027,13 @@ def build_universe_graph(
                 "memory / prediction",
             ],
             "legend": [
-                "As Above So Below: same physics spine → same hue family",
-                "Ring radius = D_eff dimensional interface (micro inner → macro outer)",
-                "Lightness tracks D_eff (brighter=micro, deeper=macro) within a spine",
-                "Angle on shell: physics kinship clumps, then signed S vitality",
-                "Violet particle/QM · teal AMO · rose matter/energy · magenta life/mind",
-                "Gold earth · cyan astro · orange cosmo · steel formal math",
-                "Lime axons = routes_to_core · cyan = archive couplings · gold = PREDs",
-                "Green-gate ≤0.5% is a status badge — not a gray wipe",
+                "Expansion metaphor: center = seeds/K · outer rings = higher D_eff",
+                "Pie sectors = physics spines (same sky longitude across scales)",
+                "As Above So Below: same hue family = same physics at every shell",
+                "Bright axons = domain communication (law, routes_to_core, long-range)",
+                "Violet particle · teal AMO · rose matter · magenta life · gold earth",
+                "Cyan astro · orange cosmo · steel formal · lime routes · gold PREDs",
+                "Dense lean-overlap mesh only when zoomed (keeps structure readable)",
             ],
         },
         "note": (

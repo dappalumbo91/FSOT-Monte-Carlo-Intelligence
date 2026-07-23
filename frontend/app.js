@@ -78,8 +78,8 @@
     if ($("view-hint")) {
       $("view-hint").innerHTML =
         viewMode === "3d"
-          ? "3D · drag orbit · scroll zoom · click node · hue=physics · height=D<sub>eff</sub> · ring=scale shell"
-          : "2D · pan/zoom · hue=physics · ring=D<sub>eff</sub> · angle=kinship then S · seeds→K";
+          ? "3D expansion · sectors=physics · ring/height=D<sub>eff</sub> · bright axons=domain signals · zoom for dense mesh"
+          : "2D · pan/zoom · pie sectors=physics · ring=D<sub>eff</sub> · bright structural axons · seeds→K";
     }
     canvas.classList.toggle("hidden-view", viewMode === "3d");
     if (host3d) host3d.classList.toggle("active", viewMode === "3d");
@@ -436,19 +436,25 @@
       ctx.moveTo(sa.x, sa.y);
       ctx.quadraticCurveTo(midX + nx, midY + ny, sb.x, sb.y);
       if (knd === "law_to_domain") {
-        ctx.strokeStyle = `rgba(196,181,253,${isFull ? 0.06 : 0.12})`;
-        ctx.lineWidth = 0.7;
+        ctx.strokeStyle = `rgba(216,180,254,${isFull ? 0.14 : 0.28})`;
+        ctx.lineWidth = 1.0;
       } else if (isDense) {
-        // denser mesh when zoomed — still faint so structure reads
-        const a0 = lodUltra ? 0.12 : (lodDense ? 0.08 : 0.04);
-        ctx.strokeStyle = `rgba(34,211,238,${settled ? a0 : a0 * 0.7})`;
-        ctx.lineWidth = lodUltra ? 0.7 : 0.5;
+        // denser mesh only when zoomed — keep quiet so axons read
+        const a0 = lodUltra ? 0.1 : (lodDense ? 0.05 : 0.02);
+        ctx.strokeStyle = `rgba(56,189,248,${settled ? a0 : a0 * 0.7})`;
+        ctx.lineWidth = lodUltra ? 0.65 : 0.45;
       } else if (knd === "routes_to_core") {
-        ctx.strokeStyle = `rgba(163,230,53,${settled ? 0.45 : 0.3})`;
-        ctx.lineWidth = 1.1;
+        ctx.strokeStyle = `rgba(163,230,53,${settled ? 0.65 : 0.45})`;
+        ctx.lineWidth = 1.4;
+      } else if (knd === "seed_to_law") {
+        ctx.strokeStyle = "rgba(255,255,255,0.75)";
+        ctx.lineWidth = 1.5;
+      } else if (knd === "long_range" || knd === "ladder") {
+        ctx.strokeStyle = `rgba(34,211,238,${settled ? 0.55 : 0.4})`;
+        ctx.lineWidth = 1.5;
       } else {
-        ctx.strokeStyle = e.color || `rgba(103,232,249,${0.25 + 0.25 * (e.strength || 0.5)})`;
-        ctx.lineWidth = knd === "long_range" ? 1.6 : 0.9;
+        ctx.strokeStyle = e.color || `rgba(125,211,252,${0.35 + 0.25 * (e.strength || 0.5)})`;
+        ctx.lineWidth = isStruct ? 1.15 : 0.85;
       }
       ctx.globalAlpha = 1;
       ctx.stroke();
