@@ -27,6 +27,7 @@
 | [docs/IMPROVEMENT_CYCLE.md](docs/IMPROVEMENT_CYCLE.md) | Latest **PRED / flip / soft-court / claims** improvement cycle report |
 | [docs/PRED_PRIORITY_ROADMAP.md](docs/PRED_PRIORITY_ROADMAP.md) | Active lab-closure PRED queue |
 | [docs/PATHWAY_ALIGNMENT.md](docs/PATHWAY_ALIGNMENT.md) | **Lean + physical archive pathway alignment** + gated graph expansion |
+| [docs/PRE_FSOT_CONCEPT_VISION.md](docs/PRE_FSOT_CONCEPT_VISION.md) | Pre-FSOT (`I:\fsuft aasb`) **concepts only** — math not authority |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the system works scientifically |
 | [docs/CLAIMS.md](docs/CLAIMS.md) | Data-first claims ledger (MEASURED / PREREG / STRUCTURE) |
 | [docs/SCIENTIFIC_AUDIT_REPORT.md](docs/SCIENTIFIC_AUDIT_REPORT.md) | Full-domain scientific audit |

@@ -13,6 +13,9 @@ Serves:
   /api/protocols    → experiment protocol cards
   /api/solidify     → batch chew → LTM
   /api/mc           → multipath ensemble snapshot
+  /api/pathways     → live pathway queue / alignment status / scaffold deltas
+  /api/pathways/expand → POST gated expansion proposals (JSON)
+  /api/queue        → alias of pathways status + recent chat/expand activity
 """
 
 from __future__ import annotations
@@ -109,6 +112,7 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
                             "coupling_raw_edge_count",
                             "coupling_raw_node_count",
                             "expansion_summary",
+                            "scaffold_deltas",
                             "source",
                             "note",
                             "free_parameters",
@@ -116,6 +120,65 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
                     }
                 )
             return _json_bytes(t)
+
+        # ── Live pathway / expansion queue (monitor while UI runs) ─────────
+        if path in ("/api/pathways", "/api/queue") and method == "GET":
+            from fsot_mc.pathway_alignment import load_scaffold_deltas, pathway_status
+            from fsot_mc.formal_bridge import formal_status
+            from pathlib import Path
+
+            st = pathway_status()
+            deltas = load_scaffold_deltas()
+            # recent scaffold edges (tail)
+            recent_edges = list(deltas.get("edges") or [])[-int(q1("limit", "25")) :]
+            recent_nodes = list(deltas.get("nodes") or [])[-int(q1("limit", "25")) :]
+            # pending / promoted obligation filenames
+            root = Path(__file__).resolve().parents[1] / "data"
+            pending = sorted((root / "obligations_pending").glob("*.json")) if (root / "obligations_pending").is_dir() else []
+            promoted = sorted((root / "obligations_promoted").glob("*.json")) if (root / "obligations_promoted").is_dir() else []
+            return _json_bytes(
+                {
+                    "ok": True,
+                    "free_parameters": 0,
+                    "status": st,
+                    "formal": formal_status(),
+                    "queue": {
+                        "scaffold_edges_total": deltas.get("n_edges"),
+                        "scaffold_nodes_total": deltas.get("n_nodes"),
+                        "pending_obligations": len(pending),
+                        "promoted_obligations": len(promoted),
+                        "pending_sample": [p.name for p in pending[-15:]],
+                        "promoted_sample": [p.name for p in promoted[-15:]],
+                        "recent_scaffold_edges": recent_edges,
+                        "recent_scaffold_nodes": recent_nodes,
+                    },
+                    "monitor_hint": (
+                        "GET /api/queue while serve runs. "
+                        "POST /api/pathways/expand with {proposals:[...]} or connect-text. "
+                        "POST /api/ask mode=chat to talk to Qwen; pathway_expand field if expansion triggered."
+                    ),
+                }
+            )
+
+        if path == "/api/pathways/expand" and method == "POST":
+            from fsot_mc.pathway_alignment import propose_expansion_from_text, rebuild_tissue_with_deltas
+
+            data = json.loads(body.decode("utf-8") or "{}")
+            # accept raw text, or proposals list, or full JSON object as string
+            if data.get("proposals"):
+                blob = json.dumps({"proposals": data["proposals"]})
+            else:
+                blob = str(data.get("text") or data.get("query") or data.get("message") or "")
+            if not blob.strip():
+                return _json_bytes({"ok": False, "error": "text_or_proposals_required"}, 400)
+            r = propose_expansion_from_text(
+                blob,
+                source=str(data.get("source") or "api"),
+                run_court=bool(data.get("run_court", True)),
+            )
+            if r.get("ok") and data.get("rebuild", True):
+                r["rebuild"] = rebuild_tissue_with_deltas(force=True)
+            return _json_bytes(r)
 
         if path == "/api/ask" and method == "POST":
             """
@@ -533,6 +596,8 @@ def serve(*, host: str = "127.0.0.1", port: int = 8765, warm_qwen: bool = True) 
     print(f"  health:  http://{host}:{port}/api/health")
     print(f"  graph:   http://{host}:{port}/api/graph")
     print(f"  ask:     POST /api/ask  (mind + Qwen default)")
+    print(f"  queue:   GET  /api/queue  (pathway / soft-court / scaffold live)")
+    print(f"  expand:  POST /api/pathways/expand  (gated graph growth)")
     print(f"  narrate: POST /api/narrate · GET /api/narrate/status")
     print("  Ctrl+C to stop. free_parameters=0 · pin D1D38A")
     try:
