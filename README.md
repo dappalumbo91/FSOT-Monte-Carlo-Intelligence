@@ -38,6 +38,15 @@
 
 Requires **Python ≥ 3.11**. No I:/D: drives, no API keys for core path.
 
+### Double-click (Windows, after first install)
+
+| File | Action |
+|------|--------|
+| **[START_FSOT.bat](START_FSOT.bat)** | Starts the server, opens **http://127.0.0.1:8765/** in your browser |
+| **[STOP_FSOT.bat](STOP_FSOT.bat)** | Stops whatever is listening on port 8765 |
+
+First-time setup still needs the clone + `pip install` steps below (once). After that, double-click **START_FSOT.bat**.
+
 ```powershell
 git clone https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence.git
 cd FSOT-Monte-Carlo-Intelligence
@@ -57,7 +66,7 @@ python -m pytest tests/ -q
 python -m fsot_mc readings --n-paths 64
 python -m fsot_mc ask --think -q "What does multipath emergence mean?"
 
-# visual UI
+# visual UI  (or double-click START_FSOT.bat)
 python -m fsot_mc serve --port 8765
 # open http://127.0.0.1:8765/
 ```
