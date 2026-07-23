@@ -49,6 +49,12 @@ Ground every answer in the DOCUMENTS and LIVE_SCALARS for this turn. Conversatio
 9. Do NOT peer-review social recognition / mainstream status unless the user asks.
 10. Answer the user's actual question. If they ask for the green-gate vs multipath split, you MUST state both and contrast them explicitly.
 11. If they ask what FSOT is / stands for / what their work is: answer Fluid Spacetime Omni-Theory first, then this Monte Carlo intelligence product under that law.
+12. META questions ("what do you think", "where improve", "how's FSOT so far", "critique", "gaps"):
+    - Speak as a colleague inside this workspace, NOT as an external peer reviewer of "credibility" or "mainstream status".
+    - Structure: (A) what is MEASURED here with numbers from docs, (B) what is STRUCTURE/multipath (not green gate), (C) open PREREG PREDs / lab closures, (D) product/engineering next steps.
+    - Do NOT invent missing validation. Prefer CLAIMS.md / ACHIEVEMENTS / PRED_BENCH / audit figures when present.
+    - Never imply free parameters or that soft court = Lean-proved.
+    - Keep green gate vs multipath distinct even when discussing "accuracy".
 
 You are connected to this workspace's documentation. Documents + live scalars are the source of truth for explanation."""
 
@@ -58,6 +64,7 @@ DOCTRINE_CARD = """DOCTRINE CARD (must obey):
 - S = vitality: S>0 emergence, S≤0 dispersal; NOT importance.
 - Green gate ≤0.5% median error ≠ multipath co-emergence fraction (~60–70% map occupancy).
 - free_parameters=0, pin D1D38A; soft court ≠ proved.
+- Meta/improve answers: data-first claim tiers, not generic peer-review essays.
 """
 
 IDENTITY_BLOCK = (
@@ -141,6 +148,66 @@ def _looks_like_identity_query(text: str) -> bool:
     return False
 
 
+def _looks_like_meta_eval_query(text: str) -> bool:
+    """Strengths / improve / critique / status-of-the-work questions."""
+    low = (text or "").lower()
+    keys = (
+        "what do you think",
+        "what do u think",
+        "how do you think",
+        "where can we improve",
+        "where do we improve",
+        "where improve",
+        "how to improve",
+        "areas for improvement",
+        "so far",
+        "critique",
+        "strengths",
+        "weaknesses",
+        "next steps",
+        "what next",
+        "gap",
+        "gaps",
+        "roadmap",
+        "how's fsot",
+        "how is fsot",
+        "status of",
+        "honest assessment",
+    )
+    return any(k in low for k in keys)
+
+
+def _inject_doc_chunk(hits: list[dict[str, Any]], rel: str, *, max_chars: int = 2400) -> None:
+    from pathlib import Path
+
+    from fsot_mc.paths import PACKAGE_ROOT
+
+    rel_norm = rel.replace("\\", "/")
+    if any((h.get("path") or "").replace("\\", "/").endswith(rel_norm.split("/", 1)[-1]) for h in hits):
+        # still allow if path matches fully
+        if any((h.get("path") or "").replace("\\", "/") == rel_norm for h in hits):
+            return
+        # if only partial match by name, skip re-add
+        if any(rel_norm.split("/")[-1] in (h.get("path") or "").replace("\\", "/") for h in hits):
+            return
+    p = PACKAGE_ROOT / rel
+    if not p.is_file():
+        return
+    try:
+        text = p.read_text(encoding="utf-8", errors="replace")[:max_chars]
+    except OSError:
+        return
+    hits.insert(
+        0,
+        {
+            "path": rel_norm,
+            "title": p.stem,
+            "body": text,
+            "score": 1e6,
+        },
+    )
+
+
 def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, Any]:
     """Retrieve docs + live scalars for one user message."""
     ensure_doc_index()
@@ -149,16 +216,21 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
     for d in domains:
         prefer.append(f"domains/{d}")
         prefer.append(d.lower())
-    if _looks_like_identity_query(user_message):
+    if _looks_like_identity_query(user_message) or _looks_like_meta_eval_query(user_message):
         prefer.extend(
             [
                 "METHODOLOGY",
                 "REPRODUCIBILITY",
                 "ACHIEVEMENTS",
                 "CLAIMS",
+                "PRED_BENCH",
+                "SCIENTIFIC_AUDIT",
                 "Fluid Spacetime Omni-Theory",
             ]
         )
+    # meta eval needs more doc room for claims numbers
+    if _looks_like_meta_eval_query(user_message):
+        limit_docs = max(limit_docs, 10)
     retrieved = search_docs(user_message, limit=limit_docs, prefer_paths=prefer)
     # force-pull full primary domain theses when named
     hits = list(retrieved.get("hits") or [])
@@ -179,29 +251,18 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
             for h in extra.get("hits") or []:
                 if not any(x.get("path") == h.get("path") for x in hits):
                     hits.insert(0, h)
-        # hard-inject first chunks of key product docs if still missing
-        from pathlib import Path
-        from fsot_mc.paths import PACKAGE_ROOT
-
-        for rel in ("docs/METHODOLOGY.md", "docs/ACHIEVEMENTS.md"):
-            if any((h.get("path") or "").replace("\\", "/").endswith(rel.split("/", 1)[-1]) for h in hits):
-                continue
-            p = PACKAGE_ROOT / rel
-            if not p.is_file():
-                continue
-            try:
-                text = p.read_text(encoding="utf-8", errors="replace")[:2200]
-            except OSError:
-                continue
-            hits.insert(
-                0,
-                {
-                    "path": rel.replace("\\", "/"),
-                    "title": p.stem,
-                    "body": text,
-                    "score": 1e6,
-                },
-            )
+        _inject_doc_chunk(hits, "docs/METHODOLOGY.md")
+        _inject_doc_chunk(hits, "docs/ACHIEVEMENTS.md")
+    # meta / improve: force claims ledger + achievements + pred closure + audit head
+    if _looks_like_meta_eval_query(user_message):
+        for rel, n in (
+            ("docs/CLAIMS.md", 3200),
+            ("docs/ACHIEVEMENTS.md", 2200),
+            ("docs/PRED_BENCH_CLOSURE.md", 2000),
+            ("docs/SCIENTIFIC_AUDIT_REPORT.md", 1800),
+            ("docs/METHODOLOGY.md", 1600),
+        ):
+            _inject_doc_chunk(hits, rel, max_chars=n)
     hits = hits[:limit_docs]
     scalars = _live_scalars(domains)
     docs_text = format_hits_for_prompt(hits, max_total_chars=5500)
@@ -291,6 +352,14 @@ def chat(
         if role in ("user", "assistant") and content:
             messages.append({"role": role, "content": content[:2000]})
 
+    meta_hint = ""
+    if _looks_like_meta_eval_query(message):
+        meta_hint = (
+            "This is a META evaluation question. Answer with claim tiers and project numbers: "
+            "MEASURED (pin, free_parameters=0, green-gate counts if in docs) vs STRUCTURE (multipath) "
+            "vs open PREREG PREDs. Propose concrete next engineering steps from docs. "
+            "Do not write a generic peer-review essay about 'credibility' or mainstream status. "
+        )
     user_payload = (
         f"{DOCTRINE_CARD}\n"
         f"{ctx['context_block']}\n\n"
@@ -299,6 +368,7 @@ def chat(
         "FSOT always expands to Fluid Spacetime Omni-Theory; this project is that work. "
         "Define S only as vitality (emergence/dispersal). "
         "If the question touches multipath or green gate, keep those two metrics distinct. "
+        f"{meta_hint}"
         "Do not continue a document mid-stream. Do not invent free parameters."
     )
     messages.append({"role": "user", "content": user_payload})
