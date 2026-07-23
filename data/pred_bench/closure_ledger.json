@@ -74,6 +74,30 @@
           "status": "open",
           "measured_value": null,
           "note": "reset after smoke"
+        },
+        {
+          "t": "2026-07-23T02:29:15.999138+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "audit smoke"
+        },
+        {
+          "t": "2026-07-23T02:29:16.003742+00:00",
+          "status": "open",
+          "measured_value": null,
+          "note": "reset after smoke"
+        },
+        {
+          "t": "2026-07-23T02:50:44.555309+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "audit smoke"
+        },
+        {
+          "t": "2026-07-23T02:50:44.560817+00:00",
+          "status": "open",
+          "measured_value": null,
+          "note": "reset after smoke"
         }
       ],
       "free_parameters": 0
@@ -5184,6 +5208,6 @@
     }
   },
   "n": 177,
-  "updated_at": "2026-07-23T02:20:57.101789+00:00",
+  "updated_at": "2026-07-23T02:50:44.560817+00:00",
   "free_parameters": 0
 }

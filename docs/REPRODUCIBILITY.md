@@ -140,29 +140,86 @@ Never mutate the archive from this repo. Sync is one-way into `vendor/archive_bu
 
 ---
 
-## 9. Formal soft court
+## 9. Formal soft court + audit promote
 
 ```powershell
 python -m fsot_mc formal
+python -m fsot_mc scientific-audit
+python -m fsot_mc audit-promote
 ```
 
-Soft obligations are batch-oriented. Full Lean per multipath step is intentionally **out of design** (see architecture doc).
+Soft obligations are batch-oriented. **Promoted ≠ Lean-proved.** Full Lean per multipath step is intentionally out of design.
 
 ---
 
-## 10. What is *not* required to reproduce
+## 10. Visual graph UI (clone-reproducible)
 
-- Physical Archive drive letter  
+```powershell
+python -m fsot_mc serve --port 8765
+# open http://127.0.0.1:8765/
+```
+
+Shipped assets (no rebuild required on first load):
+
+| Path | Role |
+|------|------|
+| `frontend/` | canvas UI (app.js, index.html, styles) |
+| `vendor/archive_bundle/data__connective_tissue_compact.json` | portable multi-scale tissue |
+| `fsot_mc/full_atlas.json` | 402 domain folds + S_canonical |
+| `fsot_mc/graph_model.py` | D_eff rings + S-order layout |
+
+Layout: classic multi-scale **D_eff shells** around seed→K hub; nodes on each ring ordered by **signed S**. Zoom densifies coupling mesh.
+
+```powershell
+python -m fsot_mc graph --scope core   # JSON summary if CLI supports; else serve UI
+curl http://127.0.0.1:8765/api/health
+curl "http://127.0.0.1:8765/api/graph?scope=core&n_paths=16"
+```
+
+---
+
+## 11. PRED bench + flip protocols (v1.5)
+
+```powershell
+python -m fsot_mc pred-bench
+python -m fsot_mc pred-bench --set PRED-001 --status in_progress --source "note"
+python -m fsot_mc flip-protocols --n-paths 64
+```
+
+Ledger template ships under `data/pred_bench/closure_ledger.json` and `docs/PRED_BENCH_CLOSURE.md`.  
+Lab still closes `pass`/`kill` with measured evidence — preregistered ≠ lab-closed.
+
+---
+
+## 12. Optional local literature index
+
+Not required for gate / tests / UI. If you have an arXiv OAI JSONL dump:
+
+```powershell
+$env:FSOT_MC_ARXIV_JSON = "C:\path\to\arxiv-metadata-oai-snapshot.json"
+python -m fsot_mc literature-index --max-papers 100000 --arxiv-only
+python -m fsot_mc literature-search -q "fluid spacetime cosmology"
+```
+
+Index SQLite lives under `data/literature/` (gitignored; rebuild locally).
+
+---
+
+## 13. What is *not* required to reproduce
+
+- Physical Archive drive letter (`I:\…`)  
+- Local `D:\training data\…` arXiv / wiki dumps  
 - Live Realities OS kernel (snapshot is enough)  
 - Live network (unless testing online chew)  
-- GPU / Torch (CPU polar student fallback)
+- GPU / Torch (CPU polar student fallback)  
+- Pre-built literature FTS database  
 
 ---
 
-## 11. Citation / related work
+## 14. Citation / related work
 
 - Theory / formal: https://github.com/dappalumbo91/FSOT-2.1-Lean  
-- This product: FSOT Monte Carlo Intelligence (universe discovery)  
+- This product: https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence  
 - Author: Damian Arthur Palumbo  
 
-`free_parameters = 0`. Seeds never move.
+`free_parameters = 0`. Seeds never move. Version **1.5.0**.

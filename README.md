@@ -5,7 +5,8 @@
 | | |
 |--|--|
 | **Author** | Damian Arthur Palumbo |
-| **Version** | 1.3.0 |
+| **Version** | 1.5.0 |
+| **License** | [MIT](LICENSE) |
 | **Authority pin** | **D1D38A** · `free_parameters = 0` |
 | **Theory law court** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | **Product** | Universe multipath intelligence (**not** markets) |
@@ -19,16 +20,21 @@
 
 | Document | Purpose |
 |----------|---------|
+| [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | **Clone → install → gate → tests → UI** (start here) |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the system works scientifically |
-| [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | Clone → gate → tests → readings |
-| [docs/ACHIEVEMENTS.md](docs/ACHIEVEMENTS.md) | What we achieved and why |
-| [docs/MEMORY_ARCHITECTURE.md](docs/MEMORY_ARCHITECTURE.md) | FSOT-derived STM/LTM adaptive memory |
-| [docs/UNIVERSE_INTELLIGENCE_ARCHITECTURE.md](docs/UNIVERSE_INTELLIGENCE_ARCHITECTURE.md) | Full stack architecture |
+| [docs/CLAIMS.md](docs/CLAIMS.md) | Data-first claims ledger (MEASURED / PREREG / STRUCTURE) |
+| [docs/SCIENTIFIC_AUDIT_REPORT.md](docs/SCIENTIFIC_AUDIT_REPORT.md) | Full-domain scientific audit |
+| [docs/PRED_BENCH_CLOSURE.md](docs/PRED_BENCH_CLOSURE.md) | PRED lab-closure ledger + kill criteria |
+| [docs/FLIP_HOTSPOT_PROTOCOLS.md](docs/FLIP_HOTSPOT_PROTOCOLS.md) | Observer flip-hotspot experiment cards |
+| [docs/LITERATURE_CORPUS.md](docs/LITERATURE_CORPUS.md) | Optional local arXiv / wiki index |
+| [docs/MEMORY_ARCHITECTURE.md](docs/MEMORY_ARCHITECTURE.md) | STM/LTM adaptive memory |
 | [HANDOFF.md](HANDOFF.md) | Maintainer handoff |
 
 ---
 
-## Quick start
+## Quick start (fully offline-reproducible)
+
+Requires **Python ≥ 3.11**. No I:/D: drives, no API keys for core path.
 
 ```powershell
 git clone https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence.git
@@ -36,25 +42,42 @@ cd FSOT-Monte-Carlo-Intelligence
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-python -m pytest tests/ -q
+pip install -e ".[dev]"   # optional: editable + pytest
+
+# authority + independence (must pass)
 python -m fsot_mc gate
 python -m fsot_mc independent
+
+# tests
+python -m pytest tests/ -q
+
+# accuracy readings + multipath mind
 python -m fsot_mc readings --n-paths 64
 python -m fsot_mc ask --think -q "What does multipath emergence mean?"
+
+# visual UI
 python -m fsot_mc serve --port 8765
-# open http://127.0.0.1:8765/  — neural / Obsidian multi-scale graph UI
+# open http://127.0.0.1:8765/
 ```
+
+Linux/macOS: use `source .venv/bin/activate` instead of the PowerShell activate line.
 
 ### Requirements
 
-See [`requirements.txt`](requirements.txt):
+See [`requirements.txt`](requirements.txt) / [`pyproject.toml`](pyproject.toml):
 
 - numpy ≥ 1.26  
 - pandas ≥ 2.2  
 - mpmath ≥ 1.3  
-- pytest ≥ 8.3  
+- pytest ≥ 8.3 (dev)
 
-Optional: network for live arXiv/Wikipedia (`FSOT_MC_ONLINE=1`); Torch for GPU polar student.
+**Shipped for offline use:** `fsot_mc/` law+atlas, `vendor/archive_bundle/` (navigator, certificates, compact connective tissue), `vendor/pflt/`, `frontend/`, `docs/tissue/`.
+
+**Optional (not required to reproduce gate/tests/UI):**
+
+- Local arXiv OAI dump / Simple Wikipedia → set `FSOT_MC_ARXIV_JSON` / `FSOT_MC_WIKI_ROOT`
+- Live web chew: `FSOT_MC_ONLINE=1`
+- Torch polar student: `FSOT_MC_USE_TORCH=1`
 
 ---
 
@@ -67,46 +90,53 @@ python -m fsot_mc atlas | build-atlas
 python -m fsot_mc intel --n-paths 128 --with-formal --with-apis
 python -m fsot_mc discover
 python -m fsot_mc readings          # cross-domain accuracy vs ≤0.5% / 15% baselines
+python -m fsot_mc claims            # data-first claims ledger
+python -m fsot_mc scientific-audit  # full audit (+ auto formal promote)
+python -m fsot_mc audit-promote     # audit → soft-court obligations
+python -m fsot_mc flip-protocols    # high-flip domain experiment cards
+python -m fsot_mc pred-bench        # PRED closure ledger (open/pass/kill)
 python -m fsot_mc ask | chat        # multipath mind
 python -m fsot_mc memory-status     # STM/LTM adaptive memory
-python -m fsot_mc graph             # multi-scale connective graph JSON summary
+python -m fsot_mc graph             # multi-scale connective graph JSON
 python -m fsot_mc solidify          # chew corpus → LTM
 python -m fsot_mc protocols         # experiment protocol cards
 python -m fsot_mc serve --port 8765 # full-stack visual UI + API
 python -m fsot_mc eyes | relay | formal | realities | apis
+python -m fsot_mc literature-status | literature-index | literature-search
 ```
 
 ---
 
-## Visual full stack (v1.0)
+## Visual full stack (v1.5)
 
-Neural connective map × Obsidian second-brain aesthetic:
+Neural connective map × Obsidian second-brain aesthetic (**clone-reproducible**):
 
-- **Seeds** (π, e, φ, γ, G) feed **law K** at the hub  
-- **Domain folds** on D_eff rings (cluster colors, size ∝ |S|)  
-- **Ladder + long-range bridges** as pulsing neural axons  
-- **Memory engrams** + **preregistered predictions** as satellites  
-- Sidebar: multipath mind ask, accuracy readings, solidify, experiment protocols  
+- **Seeds** (π, e, φ, γ, G) → **law K** hub (always connected)  
+- **Domain folds** on classic **D_eff rings**, ordered by **signed S** on each shell  
+- Compact archive tissue from `vendor/archive_bundle/data__connective_tissue_compact.json`  
+- Zoom densifies lean-overlap coupling; pattern anneals then solidifies  
+- Sidebar: multipath mind, accuracy, solidify, protocols, per-node tissue theses  
 
 ```powershell
-python -m fsot_mc serve
+python -m fsot_mc serve --port 8765
 # → http://127.0.0.1:8765/
+# scope: Full FSOT (archive) | Core 35
 ```
 
-API: `/api/graph` `/api/ask` `/api/readings` `/api/memory` `/api/protocols` `/api/solidify` `/api/mc` `/api/tissue/{id}`
+API: `/api/graph` `/api/ask` `/api/readings` `/api/memory` `/api/protocols` `/api/solidify` `/api/mc` `/api/tissue?id=…` `/api/health`
 
-### Local literature (arXiv dump + Simple Wikipedia)
+### Local literature (optional)
 
-Offline cross-ref of verified research into FSOT folds (does not rewrite seeds):
+Offline cross-ref of verified research into FSOT folds (does **not** rewrite seeds). Not needed for gate/tests/UI.
 
 ```powershell
 python -m fsot_mc literature-status
 python -m fsot_mc literature-index --max-papers 100000 --max-articles 50000
+# full OAI (long): python -m fsot_mc literature-index --max-papers 0 --arxiv-only
 python -m fsot_mc literature-search -q "Hubble tension dark energy"
 ```
 
-Default arXiv path: `D:\training data\arXiv Dataset\arxiv-metadata-oai-snapshot.json`  
-Wiki: `D:\training data\nlp\simple-wiki` (override with `FSOT_MC_ARXIV_JSON` / `FSOT_MC_WIKI_ROOT`)  
+Override paths: `FSOT_MC_ARXIV_JSON` / `FSOT_MC_WIKI_ROOT`  
 Docs: [docs/LITERATURE_CORPUS.md](docs/LITERATURE_CORPUS.md)
 
 ### Scientific tissue theses (per node)
