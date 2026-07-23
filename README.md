@@ -5,7 +5,7 @@
 | | |
 |--|--|
 | **Author** | Damian Arthur Palumbo |
-| **Version** | 1.0.0 |
+| **Version** | 1.2.0 |
 | **Authority pin** | **D1D38A** · `free_parameters = 0` |
 | **Theory law court** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | **Product** | Universe multipath intelligence (**not** markets) |
@@ -93,7 +93,19 @@ python -m fsot_mc serve
 # → http://127.0.0.1:8765/
 ```
 
-API: `/api/graph` `/api/ask` `/api/readings` `/api/memory` `/api/protocols` `/api/solidify` `/api/mc`
+API: `/api/graph` `/api/ask` `/api/readings` `/api/memory` `/api/protocols` `/api/solidify` `/api/mc` `/api/tissue/{id}`
+
+### Scientific tissue theses (per node)
+
+Every seed, domain fold, extension panel, problem route, and preregistered prediction has a
+**miniature research markdown** under [`docs/tissue/`](docs/tissue/INDEX.md):
+
+- Abstract · Ontology · Mathematical formulation · Results · Application · Connective tissue · Epistemics  
+
+```powershell
+python -m fsot_mc tissue-docs
+# open docs/tissue/INDEX.md  or click a node in the UI
+```
 
 ---
 

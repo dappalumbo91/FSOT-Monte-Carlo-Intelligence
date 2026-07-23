@@ -493,6 +493,59 @@
     cam.scale = Math.min(3.5, Math.max(0.25, cam.scale * factor));
   }, { passive: false });
 
+  function simpleMarkdown(md) {
+    // lightweight renderer for tissue theses (not full CommonMark)
+    let html = esc(md);
+    html = html.replace(/^### (.*)$/gm, "<h3>$1</h3>");
+    html = html.replace(/^## (.*)$/gm, "<h2>$1</h2>");
+    html = html.replace(/^# (.*)$/gm, "<h1>$1</h1>");
+    html = html.replace(/^> (.*)$/gm, "<blockquote>$1</blockquote>");
+    html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
+    html = html.replace(/\$\$([\s\S]+?)\$\$/g, "<pre>$1</pre>");
+    html = html.replace(/\\\[([\s\S]+?)\\\]/g, "<pre>$1</pre>");
+    // tables: simple pipe rows
+    html = html.replace(/(^\\|.*\\|[\\r\\n]+)+/gm, (block) => {
+      const rows = block.trim().split(/\\r?\\n/).filter(Boolean);
+      if (rows.length < 2 || !rows[0].includes("|")) return block;
+      const parse = (r) => r.split("|").slice(1, -1).map((c) => c.trim());
+      let out = "<table>";
+      rows.forEach((r, i) => {
+        if (/^\\s*\\|?[\\s:-]+\\|/.test(r)) return;
+        const cells = parse(r);
+        const tag = i === 0 ? "th" : "td";
+        out += "<tr>" + cells.map((c) => `<${tag}>${c}</${tag}>`).join("") + "</tr>";
+      });
+      return out + "</table>";
+    });
+    html = html.replace(/\\n\\n/g, "</p><p>");
+    html = html.replace(/\\n/g, "<br/>");
+    return `<p>${html}</p>`;
+  }
+
+  async function loadThesis(nodeId) {
+    const el = $("thesis-out");
+    if (!el) return;
+    if (!nodeId) {
+      el.className = "panel scroll empty thesis";
+      el.textContent = "Select a node, then open its research markdown";
+      return;
+    }
+    el.className = "panel scroll thesis";
+    el.textContent = "loading scientific tissue thesis…";
+    try {
+      const r = await api("/api/tissue/" + encodeURIComponent(nodeId));
+      if (!r.ok) {
+        el.innerHTML = `<div class="chip pink">no thesis yet for <code>${esc(nodeId)}</code></div>
+          <div>Run <code>python -m fsot_mc tissue-docs</code> to regenerate the library.</div>`;
+        return;
+      }
+      el.innerHTML = `<div class="chip gold">${esc(r.path || "")}</div>` + simpleMarkdown(r.markdown || "");
+    } catch (e) {
+      el.textContent = "error: " + e.message;
+    }
+  }
+
   function renderSelection(n) {
     const el = $("sel-out");
     if (!n) {
@@ -501,6 +554,8 @@
       return;
     }
     el.className = "panel scroll";
+    // auto-load thesis on select
+    loadThesis(n.id);
     const rows = [
       `<div class="answer-block"><span class="label">Node</span><div><strong>${esc(n.label)}</strong> <span class="chip">${esc(n.kind)}</span></div></div>`,
       n.domain ? `<div>Domain: <code>${esc(n.domain)}</code></div>` : "",
@@ -621,6 +676,15 @@
   $("btn-reload").onclick = () => loadGraph();
   if ($("btn-rebuild")) $("btn-rebuild").onclick = () => loadGraph({ rebuild: true });
   if ($("scope-select")) $("scope-select").onchange = () => loadGraph();
+  if ($("btn-thesis")) {
+    $("btn-thesis").onclick = () => {
+      if (selected) loadThesis(selected.id);
+      else if ($("thesis-out")) {
+        $("thesis-out").className = "panel scroll empty thesis";
+        $("thesis-out").textContent = "Click a node first";
+      }
+    };
+  }
   $("btn-ask").onclick = async () => {
     const q = $("ask-input").value.trim();
     if (!q) return;

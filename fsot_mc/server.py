@@ -29,6 +29,7 @@ from fsot_mc import __version__
 from fsot_mc.paths import PACKAGE_ROOT
 
 FRONTEND_DIR = PACKAGE_ROOT / "frontend"
+TISSUE_DIR = PACKAGE_ROOT / "docs" / "tissue"
 
 
 def _json_bytes(obj: Any, code: int = 200) -> tuple[int, bytes, str]:
@@ -218,6 +219,36 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
             pub = {k: v for k, v in mc.items() if not k.startswith("_") and k != "sample_paths"}
             pub["sample_paths"] = (mc.get("sample_paths") or [])[:4]
             return _json_bytes(pub)
+
+        if path == "/api/tissue" and method == "GET":
+            from fsot_mc.tissue_docs import TISSUE_ROOT, get_tissue_doc
+
+            node_id = q1("id", "")
+            if node_id:
+                return _json_bytes(get_tissue_doc(node_id))
+            man = TISSUE_ROOT / "manifest.json"
+            if man.is_file():
+                return _json_bytes(json.loads(man.read_text(encoding="utf-8")))
+            return _json_bytes(
+                {
+                    "ok": False,
+                    "error": "tissue_not_generated",
+                    "hint": "python -m fsot_mc tissue-docs",
+                }
+            )
+
+        if path.startswith("/api/tissue/") and method == "GET":
+            from fsot_mc.tissue_docs import get_tissue_doc
+
+            node_id = path[len("/api/tissue/") :]
+            node_id = urllib.parse.unquote(node_id)
+            return _json_bytes(get_tissue_doc(node_id))
+
+        if path == "/api/tissue-generate" and method in ("POST", "GET"):
+            from fsot_mc.tissue_docs import generate_all_tissue_docs
+
+            m = generate_all_tissue_docs(write=True)
+            return _json_bytes({"ok": True, **m})
 
         return _json_bytes({"ok": False, "error": "not_found", "path": path}, 404)
     except Exception as exc:

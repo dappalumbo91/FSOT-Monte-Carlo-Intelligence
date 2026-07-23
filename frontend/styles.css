@@ -134,3 +134,34 @@ textarea {
 }
 .chip.gold { background: rgba(251, 191, 36, 0.12); border-color: rgba(251, 191, 36, 0.35); color: var(--gold); }
 .chip.pink { background: rgba(255, 107, 157, 0.12); border-color: rgba(255, 107, 157, 0.35); color: var(--pink); }
+
+.panel.thesis {
+  max-height: min(48vh, 420px);
+  font-size: 0.74rem;
+  line-height: 1.5;
+}
+.panel.thesis h1, .panel.thesis h2, .panel.thesis h3 {
+  color: var(--accent);
+  font-size: 0.85rem;
+  margin: 0.65rem 0 0.35rem;
+}
+.panel.thesis h1 { font-size: 0.95rem; color: var(--text); }
+.panel.thesis table {
+  width: 100%; border-collapse: collapse; margin: 0.35rem 0 0.6rem;
+  font-size: 0.7rem;
+}
+.panel.thesis th, .panel.thesis td {
+  border: 1px solid var(--border); padding: 0.2rem 0.35rem; text-align: left;
+}
+.panel.thesis th { color: var(--muted); font-weight: 600; }
+.panel.thesis code {
+  font-family: var(--mono); font-size: 0.68rem;
+  background: rgba(124, 92, 255, 0.12); padding: 0.05rem 0.25rem; border-radius: 4px;
+}
+.panel.thesis blockquote {
+  margin: 0.4rem 0; padding: 0.35rem 0.55rem;
+  border-left: 3px solid var(--accent); color: var(--muted);
+  background: rgba(16, 20, 32, 0.6);
+}
+.panel.thesis a { color: var(--cyan); }
+button.full { width: 100%; }

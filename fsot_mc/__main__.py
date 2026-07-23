@@ -39,6 +39,7 @@ def main(argv: list[str] | None = None) -> int:
             "graph",
             "solidify",
             "protocols",
+            "tissue-docs",
         ],
     )
     ap.add_argument("--host", default="127.0.0.1", help="serve host")
@@ -378,6 +379,19 @@ def main(argv: list[str] | None = None) -> int:
             for c in r.get("cards") or []:
                 print(f"  {c.get('id')}: {c.get('title')}")
                 print(f"    FSOT={c.get('fsot_predicted')} {c.get('unit')}  disc={c.get('discriminant')}")
+        return 0
+
+    if args.command == "tissue-docs":
+        from fsot_mc.tissue_docs import generate_all_tissue_docs
+
+        m = generate_all_tissue_docs(write=True)
+        if args.json:
+            print(json.dumps(m, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  TISSUE SCIENTIFIC DOCS")
+            print(f"  documents={m.get('n_docs')} errors={m.get('n_errors')}")
+            print("  root=docs/tissue/  index=docs/tissue/INDEX.md")
+            print("  each node = miniature thesis (math · results · application · connective tissue)")
         return 0
 
     if args.command == "ask":
