@@ -363,6 +363,22 @@ def chat(
         if len(hist) > 40:
             _SESSIONS[sid] = hist[-40:]
 
+    # Optional online articulation learning (gated LoRA queue; never trains seeds)
+    learn_info: dict[str, Any] | None = None
+    try:
+        from fsot_mc.articulation_learn import harvest_from_chat_turn
+
+        g = grade_reply(text, expect={})
+        learn_info = harvest_from_chat_turn(
+            message,
+            text,
+            docs_used=[{"path": h.get("path")} for h in ctx["hits"]],
+            live_scalars=ctx["live_scalars"],
+            grade=g,
+        )
+    except Exception as exc_learn:
+        learn_info = {"ok": False, "error": "learn_hook_failed", "detail": str(exc_learn)}
+
     return {
         "ok": True,
         "method": "fsot_qwen_doc_chat",
@@ -378,6 +394,7 @@ def chat(
         "domains": ctx["domains"],
         "live_scalars": ctx["live_scalars"],
         "qwen": {"used": True, "ready": True, "ok": True},
+        "articulation_learn": learn_info,
         "note": "Conversation grounded in project documentation RAG + live fold scalars.",
     }
 

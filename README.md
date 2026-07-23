@@ -23,6 +23,7 @@
 |----------|---------|
 | [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) | **Clone → install → gate → tests → UI** (start here) |
 | [docs/QWEN_WEIGHTS.md](docs/QWEN_WEIGHTS.md) | **Where the chat model lives** (Hugging Face link + download) |
+| [docs/ARTICULATION_LEARNING.md](docs/ARTICULATION_LEARNING.md) | **Adaptive mouth LoRA** (internalize FSOT identity; never trains seeds) |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the system works scientifically |
 | [docs/CLAIMS.md](docs/CLAIMS.md) | Data-first claims ledger (MEASURED / PREREG / STRUCTURE) |
 | [docs/SCIENTIFIC_AUDIT_REPORT.md](docs/SCIENTIFIC_AUDIT_REPORT.md) | Full-domain scientific audit |

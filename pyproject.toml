@@ -23,6 +23,7 @@ narrate = [
   "safetensors>=0.4.0",
   "huggingface_hub>=0.23.0",
   "bitsandbytes>=0.43.0",  # 4-bit load for ≤12–16 GB GPUs
+  "peft>=0.12.0",  # adaptive articulation LoRA (mouth only; never trains seeds)
 ]
 
 [project.urls]

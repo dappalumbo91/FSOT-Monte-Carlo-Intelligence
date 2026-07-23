@@ -28,6 +28,10 @@ def main(argv: list[str] | None = None) -> int:
             "apis",
             "relay",
             "polar-train",
+            "articulate-seed",
+            "articulate-train",
+            "articulate-status",
+            "articulate-loop",
             "ask",
             "chat",
             "independent",
@@ -53,12 +57,13 @@ def main(argv: list[str] | None = None) -> int:
             "download-qwen",
             "docs-index",
             "docs-search",
-            "chat",
         ],
     )
     ap.add_argument("--node", default="", help="narrate: tissue node id or domain name")
     ap.add_argument("--max-tokens", type=int, default=700, help="narrate max_new_tokens")
     ap.add_argument("--temperature", type=float, default=0.4, help="narrate sampling temperature")
+    ap.add_argument("--max-steps", type=int, default=40, help="articulate-train max optimizer steps")
+    ap.add_argument("--no-train", action="store_true", help="articulate-loop: harvest only")
     ap.add_argument("--set", default="", help="pred-bench: PRED id to update")
     ap.add_argument("--status", default="", help="pred-bench status: open|in_progress|pass|kill|blocked")
     ap.add_argument("--measured", default="", help="pred-bench measured value")
@@ -308,6 +313,79 @@ def main(argv: list[str] | None = None) -> int:
             if r.get("torch"):
                 print(f"  torch={r['torch']}")
         return 0
+
+    if args.command == "articulate-status":
+        from fsot_mc.articulation_learn import status as articulate_status
+
+        r = articulate_status()
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  ARTICULATION LEARN (mouth LoRA only)")
+            print(f"  gate_ok={r.get('authority_gate_ok')} free_parameters={r.get('free_parameters')}")
+            print(f"  samples={r.get('n_samples')} untrained={r.get('n_untrained')}")
+            print(f"  adapter_ready={r.get('adapter_ready')} dir={r.get('adapter_dir')}")
+            d = r.get("doctrine") or {}
+            print(f"  trains: {d.get('trains')}")
+            print(f"  never:  {d.get('never_trains')}")
+        return 0
+
+    if args.command == "articulate-seed":
+        from fsot_mc.articulation_learn import harvest_from_docs, harvest_identity_seeds
+
+        r1 = harvest_identity_seeds()
+        r2 = harvest_from_docs()
+        r = {"ok": bool(r1.get("ok") and r2.get("ok")), "identity": r1, "docs": r2}
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  ARTICULATE SEED HARVEST")
+            if not r["ok"]:
+                print("  ERROR", r1.get("error") or r2.get("error"))
+                return 1
+            print(f"  identity admitted={r1.get('admitted')} skipped={r1.get('skipped')}")
+            print(f"  docs admitted={r2.get('admitted')} queue={r2.get('n_queue')}")
+            print("  Next: python -m fsot_mc articulate-train")
+        return 0 if r["ok"] else 1
+
+    if args.command == "articulate-train":
+        from fsot_mc.articulation_learn import micro_train
+
+        r = micro_train(max_steps=max(1, int(args.max_steps)))
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  ARTICULATE QLoRA TRAIN")
+            if not r.get("ok"):
+                print("  ERROR", r.get("error"), r.get("detail") or r.get("hint") or "")
+                return 1
+            print(f"  steps={r.get('steps')} mean_loss={r.get('mean_loss')} samples={r.get('n_samples')}")
+            print(f"  adapter={r.get('adapter_dir')}")
+            print(f"  {r.get('note')}")
+        return 0 if r.get("ok") else 1
+
+    if args.command == "articulate-loop":
+        from fsot_mc.articulation_learn import articulate_loop
+
+        r = articulate_loop(max_steps=max(1, int(args.max_steps)), train=not args.no_train)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  ARTICULATE LOOP (gated self-improve mouth)")
+            if not r.get("ok"):
+                print("  ERROR", r.get("error"))
+                return 1
+            id_r = r.get("identity") or {}
+            doc_r = r.get("docs") or {}
+            tr = r.get("train") or {}
+            print(f"  identity admitted={id_r.get('admitted')} docs={doc_r.get('admitted')}")
+            if tr.get("ok"):
+                print(f"  train steps={tr.get('steps')} loss={tr.get('mean_loss')} adapter={tr.get('adapter_dir')}")
+            else:
+                print(f"  train: {tr.get('error')} {tr.get('hint') or tr.get('detail') or ''}")
+            st = r.get("status") or {}
+            print(f"  queue untrained={(st.get('n_untrained'))} adapter_ready={st.get('adapter_ready')}")
+        return 0 if r.get("ok") else 1
 
     if args.command in ("readings", "accuracy"):
         from fsot_mc.accuracy_gate import format_readings_text, run_accuracy_readings

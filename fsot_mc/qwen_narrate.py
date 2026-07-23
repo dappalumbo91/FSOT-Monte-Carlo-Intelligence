@@ -676,6 +676,29 @@ def load_model(*, force: bool = False) -> dict[str, Any]:
                 mode = "cpu"
 
             _model.eval()
+            # Optional adaptive articulation LoRA (mouth only; seeds never trained)
+            adapter_info: dict[str, Any] = {"attached": False}
+            try:
+                from fsot_mc.articulation_learn import try_attach_adapter
+
+                att = try_attach_adapter(_model)
+                if att.get("attached") and att.get("model") is not None:
+                    _model = att["model"]
+                    _model.eval()
+                    adapter_info = {
+                        "attached": True,
+                        "path": att.get("path"),
+                        "free_parameters": 0,
+                    }
+                else:
+                    adapter_info = {
+                        "attached": False,
+                        "reason": att.get("reason"),
+                        "detail": att.get("detail"),
+                    }
+            except Exception as exc_ad:
+                adapter_info = {"attached": False, "reason": "attach_error", "detail": str(exc_ad)}
+
             _load_error = None
             return {
                 "ok": True,
@@ -683,6 +706,7 @@ def load_model(*, force: bool = False) -> dict[str, Any]:
                 "path": path,
                 "device": "cuda" if use_cuda and mode != "cpu" else "cpu",
                 "load_mode": mode,
+                "articulation_adapter": adapter_info,
                 "free_parameters": 0,
             }
         except Exception as exc:

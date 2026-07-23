@@ -12,7 +12,8 @@
 |-------------|---------------|---------------------------|
 | Gradient weight update | **Forbidden** for seeds / \(K\) / core law | Nothing in the pin |
 | Context window | **Short-term (STM)** session buffer | Turn history, last MC, recent chew |
-| Fine-tuning / LoRA | **Long-term (LTM)** solidify of engrams | Routing biases, recalled facts, pathway keys |
+| Fine-tuning / LoRA (conceptual) | **Long-term (LTM)** solidify of engrams | Routing biases, recalled facts, pathway keys |
+| Fine-tuning / LoRA (optional GPU) | **Articulation adapters only** — see [ARTICULATION_LEARNING.md](./ARTICULATION_LEARNING.md) | Small Qwen LoRA under `data/models/articulation/lora/` — **never** seeds / pin |
 | RAG retrieval | Recall from LTM + archive predictions | Retrieved text + domain tags |
 | RLHF reward | Pathway quality + accuracy co-sign | Hit/miss under φ-EWMA bars |
 | Catastrophic forgetting mitigation | Soften on fails; Fib trial floors | Strength decays if contradicted |
