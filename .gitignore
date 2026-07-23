@@ -26,6 +26,11 @@ data/connective_tissue_compact.json
 # Local rebuilds / full multi-GB arXiv index (prefer vendor/literature shipped pack)
 data/literature/
 
+# Large local LLM weights (download via scripts/download_qwen25_instruct.py)
+vendor/models/**
+!vendor/models/README.md
+*.safetensors
+
 # Optional full coupling is now shipped via Git LFS (see .gitattributes)
 # vendor/archive_bundle/data__domain_coupling_simulation_benchmark.json
 

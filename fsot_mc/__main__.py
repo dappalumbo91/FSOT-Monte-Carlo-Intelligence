@@ -48,8 +48,14 @@ def main(argv: list[str] | None = None) -> int:
             "audit-promote",
             "flip-protocols",
             "pred-bench",
+            "narrate",
+            "narrate-status",
+            "download-qwen",
         ],
     )
+    ap.add_argument("--node", default="", help="narrate: tissue node id or domain name")
+    ap.add_argument("--max-tokens", type=int, default=700, help="narrate max_new_tokens")
+    ap.add_argument("--temperature", type=float, default=0.4, help="narrate sampling temperature")
     ap.add_argument("--set", default="", help="pred-bench: PRED id to update")
     ap.add_argument("--status", default="", help="pred-bench status: open|in_progress|pass|kill|blocked")
     ap.add_argument("--measured", default="", help="pred-bench measured value")
@@ -613,6 +619,68 @@ def main(argv: list[str] | None = None) -> int:
             for h in ((r.get("wikipedia") or {}).get("hits") or [])[:3]:
                 print(f"  Wiki: {h.get('title')} → {h.get('fsot_domains')}")
         return 0 if r.get("ok") else 1
+
+    if args.command == "download-qwen":
+        # thin wrapper → scripts/download_qwen25_instruct.py
+        import subprocess
+        from fsot_mc.paths import PACKAGE_ROOT
+
+        script = PACKAGE_ROOT / "scripts" / "download_qwen25_instruct.py"
+        return subprocess.call([sys.executable, str(script)])
+
+    if args.command == "narrate-status":
+        from fsot_mc.qwen_narrate import model_ready, model_dir, DEFAULT_HF_ID
+
+        st = model_ready()
+        if args.json:
+            print(json.dumps(st, indent=2))
+        else:
+            print(f"fsot_mc {__version__}  QWEN NARRATE STATUS")
+            print(f"  hf_id={DEFAULT_HF_ID}")
+            print(f"  path={model_dir()}")
+            print(f"  ready={st.get('ok')} safetensors={st.get('n_safetensors')}")
+            print(f"  hint={st.get('hint')}")
+        return 0 if st.get("ok") else 1
+
+    if args.command == "narrate":
+        from fsot_mc.qwen_narrate import narrate, build_narration_pack, model_ready
+
+        q = (args.query or "").strip() or "Explain multipath emergence under FSOT for biology."
+        node = (args.node or "").strip() or None
+        if args.json and not model_ready().get("ok"):
+            # still emit pack-only for CI without weights
+            pack = build_narration_pack(query=q, node_id=node, n_paths=min(args.n_paths, 48), chew=args.chew)
+            print(json.dumps({"ok": False, "error": "model_not_downloaded", "pack": pack}, indent=2, default=str))
+            return 1
+        r = narrate(
+            q,
+            node_id=node,
+            n_paths=min(args.n_paths, 48),
+            chew=args.chew,
+            max_new_tokens=args.max_tokens,
+            temperature=args.temperature,
+        )
+        if args.json:
+            # drop huge full pack unless requested
+            out = {k: v for k, v in r.items() if k != "pack"}
+            print(json.dumps(out, indent=2, default=str))
+            return 0 if r.get("ok") else 1
+        print(f"fsot_mc {__version__}  NARRATE  (Qwen2.5-Instruct 7B · FSOT pack)")
+        print(f"  Q: {q}")
+        if node:
+            print(f"  node: {node}")
+        print(f"  ok={r.get('ok')} model={r.get('model')}")
+        if r.get("error"):
+            print(f"  error={r.get('error')} detail={r.get('detail')}")
+            if r.get("fallback_answer"):
+                print("  --- mind_answer (fallback) ---")
+                print(r.get("fallback_answer"))
+            return 1
+        ps = r.get("pack_summary") or {}
+        print(f"  domains: {ps.get('routed_domains')} theses={ps.get('n_theses')}")
+        print("  --- narration ---")
+        print(r.get("narration") or "")
+        return 0
 
     if args.command == "ask":
         from fsot_mc.mind import ask

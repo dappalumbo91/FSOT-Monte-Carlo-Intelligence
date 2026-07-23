@@ -41,6 +41,8 @@ from fsot_mc.fast import PHI as SEED_PHI
 from fsot_mc.fast import POOF as SEED_POOF
 
 __version__ = "1.5.0"
+
+# Optional narrate export (heavy deps — import lazily via fsot_mc.qwen_narrate)
 __all__ = [
     "run_intelligence",
     "run_universe_scan",

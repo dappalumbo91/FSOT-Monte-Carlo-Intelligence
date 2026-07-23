@@ -16,6 +16,14 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.3.0"]
 publish = ["huggingface_hub>=0.23.0"]
+narrate = [
+  "torch>=2.0.0",
+  "transformers>=4.44.0",
+  "accelerate>=0.33.0",
+  "safetensors>=0.4.0",
+  "huggingface_hub>=0.23.0",
+  "bitsandbytes>=0.43.0",  # 4-bit load for ≤12–16 GB GPUs
+]
 
 [project.urls]
 Homepage = "https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence"

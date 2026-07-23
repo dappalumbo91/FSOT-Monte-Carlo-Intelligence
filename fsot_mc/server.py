@@ -136,6 +136,68 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
                 }
             )
 
+        if path == "/api/narrate/status" and method == "GET":
+            from fsot_mc.qwen_narrate import model_ready, DEFAULT_HF_ID, model_dir
+
+            st = model_ready()
+            st["hf_id"] = DEFAULT_HF_ID
+            st["model_dir"] = str(model_dir())
+            return _json_bytes(st)
+
+        if path == "/api/narrate" and method == "POST":
+            from fsot_mc.qwen_narrate import narrate, build_narration_pack, model_ready
+
+            data = json.loads(body.decode("utf-8") or "{}")
+            query = str(data.get("query") or data.get("q") or "").strip()
+            if not query:
+                return _json_bytes({"ok": False, "error": "query_required"}, 400)
+            node_id = data.get("node_id") or data.get("node")
+            pack_only = bool(data.get("pack_only"))
+            if pack_only or not model_ready().get("ok"):
+                pack = build_narration_pack(
+                    query=query,
+                    node_id=str(node_id) if node_id else None,
+                    n_paths=int(data.get("n_paths") or 32),
+                    chew=bool(data.get("chew")),
+                )
+                return _json_bytes(
+                    {
+                        "ok": False if pack_only else False,
+                        "pack_only": True,
+                        "model_ready": model_ready().get("ok"),
+                        "query": query,
+                        "mind_answer": pack.get("mind_answer"),
+                        "pack_summary": {
+                            "n_theses": pack.get("n_theses"),
+                            "routed_domains": pack.get("routed_domains"),
+                        },
+                        "context_preview": (pack.get("context_text") or "")[:2000],
+                        "free_parameters": 0,
+                        "hint": "Download weights: python scripts/download_qwen25_instruct.py",
+                    }
+                )
+            r = narrate(
+                query,
+                node_id=str(node_id) if node_id else None,
+                n_paths=int(data.get("n_paths") or 32),
+                chew=bool(data.get("chew")),
+                max_new_tokens=int(data.get("max_tokens") or 700),
+                temperature=float(data.get("temperature") or 0.4),
+            )
+            return _json_bytes(
+                {
+                    "ok": r.get("ok"),
+                    "error": r.get("error"),
+                    "detail": r.get("detail"),
+                    "narration": r.get("narration"),
+                    "mind_answer": r.get("mind_answer"),
+                    "pack_summary": r.get("pack_summary"),
+                    "model": r.get("model"),
+                    "free_parameters": 0,
+                    "note": r.get("note"),
+                }
+            )
+
         if path == "/api/readings" and method == "GET":
             from fsot_mc.accuracy_gate import run_accuracy_readings
 

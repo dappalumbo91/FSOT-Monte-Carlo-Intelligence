@@ -96,6 +96,16 @@ python -m fsot_mc literature-search -q "quantum gravity fluid spacetime"
 
 - Live web chew: `FSOT_MC_ONLINE=1`
 - Torch polar student: `FSOT_MC_USE_TORCH=1`
+- **Qwen2.5-Instruct 7B narration** (local safetensors):
+
+```powershell
+pip install -e ".[narrate]"   # torch transformers accelerate safetensors huggingface_hub
+python scripts/download_qwen25_instruct.py   # ~15 GB → vendor/models/Qwen2.5-7B-Instruct/
+python -m fsot_mc narrate-status
+python -m fsot_mc narrate -q "Explain multipath emergence for biology under FSOT"
+```
+
+Weights are **gitignored** (download per machine). MC mind + tissue theses = intelligence; Qwen = articulate mouth only.
 
 ---
 
