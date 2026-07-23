@@ -314,16 +314,17 @@
 
     const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
 
-    // edges = neural axons (dense lean-overlap drawn faint; structural pulse)
-    const maxDraw = isFull ? 2200 : edges.length;
-    const drawEdges = isFull && edges.length > maxDraw
-      ? edges.filter((e) => {
-          const k = e.kind || "";
-          return k !== "coupling_lean_overlap" && k !== "by_core_membership";
-        }).concat(
-          edges.filter((e) => e.kind === "coupling_lean_overlap").slice(0, 400)
-        )
-      : edges;
+    // LOD: zoom densifies lean-overlap + membership mesh
+    // cam.scale ~0.4 default full; ≥0.7 early dense; ≥1.2 ultra mesh
+    const lodDense = cam.scale >= 0.7;
+    const lodUltra = cam.scale >= 1.2;
+    const drawEdges = edges.filter((e) => {
+      const k = e.kind || "";
+      const tier = e.density_tier || (k === "coupling_lean_overlap" || k === "by_core_membership" ? "dense" : "base");
+      if (tier === "base") return true;
+      if (tier === "dense") return lodDense;
+      return lodUltra;
+    });
 
     for (const e of drawEdges) {
       const a = byId[e.source], b = byId[e.target];
@@ -339,7 +340,7 @@
       const dx = sb.x - sa.x, dy = sb.y - sa.y;
       const nx = -dy * 0.06, ny = dx * 0.06;
       const knd = e.kind || "";
-      const isDense = knd === "coupling_lean_overlap" || knd === "by_core_membership";
+      const isDense = knd === "coupling_lean_overlap" || knd === "by_core_membership" || e.density_tier === "dense";
       const isStruct = structuralIds.has(e.id || `${e.source}->${e.target}`) || knd === "seed_to_law" || knd === "routes_to_core" || knd === "long_range" || knd === "problem_route";
 
       ctx.beginPath();
@@ -349,8 +350,10 @@
         ctx.strokeStyle = `rgba(196,181,253,${isFull ? 0.06 : 0.12})`;
         ctx.lineWidth = 0.7;
       } else if (isDense) {
-        ctx.strokeStyle = `rgba(34,211,238,${settled ? 0.06 : 0.04})`;
-        ctx.lineWidth = 0.5;
+        // denser mesh when zoomed — still faint so structure reads
+        const a0 = lodUltra ? 0.12 : (lodDense ? 0.08 : 0.04);
+        ctx.strokeStyle = `rgba(34,211,238,${settled ? a0 : a0 * 0.7})`;
+        ctx.lineWidth = lodUltra ? 0.7 : 0.5;
       } else if (knd === "routes_to_core") {
         ctx.strokeStyle = `rgba(163,230,53,${settled ? 0.45 : 0.3})`;
         ctx.lineWidth = 1.1;

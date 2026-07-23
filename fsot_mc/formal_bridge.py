@@ -287,3 +287,105 @@ def promote_from_intelligence(
         "court": court,
         "formal_status": formal_status(),
     }
+
+
+def promote_from_audit(
+    audit: dict[str, Any] | None = None,
+    *,
+    min_score: float = 0.0,
+    only_failures: bool = False,
+    also_improvements: bool = True,
+    run_court: bool = True,
+) -> dict[str, Any]:
+    """
+    Wire scientific-audit results → pending obligations → soft court.
+
+    Every check becomes a formal lead (scaffold/measured_application).
+    High-score measured tiers can promote_candidate; never claims Lean-proved.
+    """
+    if audit is None:
+        from fsot_mc.scientific_audit import run_scientific_audit
+
+        audit = run_scientific_audit(write=False, include_self=True)
+
+    leads: list[dict[str, Any]] = []
+    for c in audit.get("checks") or []:
+        if only_failures and c.get("ok"):
+            continue
+        score = float(c.get("score") or 0.0)
+        if score < min_score and c.get("ok"):
+            continue
+        # Map audit severity to epistemic tier
+        sev = str(c.get("severity") or "medium")
+        if c.get("id", "").startswith("EMP") or c.get("id", "").startswith("AUTH"):
+            tier = "measured_application"
+            lead_score = max(score, 0.85 if c.get("ok") else 0.5)
+        elif not c.get("ok"):
+            tier = "scaffold"
+            lead_score = max(0.7, 1.0 - score)  # failures are high-priority work
+        else:
+            tier = "scaffold"
+            lead_score = score
+
+        leads.append(
+            {
+                "id": f"AUDIT-{c.get('id')}",
+                "class": "scientific_audit",
+                "title": c.get("title"),
+                "score": lead_score,
+                "epistemic_tier": tier,
+                "hypothesis": c.get("finding"),
+                "improvement": c.get("improvement"),
+                "audit_ok": c.get("ok"),
+                "audit_score": score,
+                "audit_severity": sev,
+                "audit_layer": c.get("layer"),
+                "evidence": c.get("evidence"),
+                "free_parameters": 0,
+            }
+        )
+
+    if also_improvements:
+        for imp in audit.get("improvement_ledger") or []:
+            leads.append(
+                {
+                    "id": f"IMPROVE-{imp.get('id')}",
+                    "class": "improvement_ledger",
+                    "title": imp.get("title"),
+                    "score": max(0.75, 1.0 - float(imp.get("score") or 0.5)),
+                    "epistemic_tier": "scaffold",
+                    "hypothesis": imp.get("finding"),
+                    "improvement": imp.get("improvement"),
+                    "audit_severity": imp.get("severity"),
+                    "free_parameters": 0,
+                }
+            )
+
+    # Dedup by id
+    seen = set()
+    uniq = []
+    for lead in leads:
+        lid = lead["id"]
+        if lid in seen:
+            continue
+        seen.add(lid)
+        uniq.append(lead)
+
+    paths = [str(export_lead_obligation(lead)) for lead in uniq]
+    court = run_soft_court(promote=True) if run_court else {"skipped": True}
+
+    return {
+        "method": "fsot_promote_from_audit",
+        "free_parameters": 0,
+        "n_leads": len(uniq),
+        "exported_paths": paths,
+        "pending_dir": str(PENDING),
+        "court": court,
+        "formal_status": formal_status(),
+        "audit_grade": audit.get("grade"),
+        "audit_score": audit.get("overall_score"),
+        "note": (
+            "Audit → pending obligations → soft court. "
+            "Promoted = candidate for Lean/strict panel, NOT proved."
+        ),
+    }

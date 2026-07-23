@@ -1,7 +1,7 @@
 # Handoff — FSOT Universe Monte Carlo Intelligence
 
 **Workspace:** `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence`  
-**Version:** 1.0.0  
+**Version:** 1.5.0  
 **Mode:** **Independent** — no I:/D:/Desktop required at runtime
 
 ## Independence
@@ -72,12 +72,31 @@ python -m fsot_mc protocols
 - **177 preregistered archive predictions** fused into discovery + mind (fuels, H0, devices…).
 - Engineering leads are ToE designs with discriminants — experiment still closes the loop.
 
+## Gap refinements (v1.5 — claim-critical)
+
+| Gap | Status | How |
+|-----|--------|-----|
+| Full OAI dump | **in progress** | `python -m fsot_mc literature-index --max-papers 0` (full dump, no category filter). Live index under `data/literature/arxiv_fts.sqlite`. |
+| Formal auto-promote | **done** | `scientific-audit` auto-feeds obligations; also `audit-promote`. Soft court ≠ Lean-proved. |
+| Coupling edge LOD | **done** | Compact tissue ~15k edges (base/dense tiers); zoom ≥0.7 densifies mesh. |
+| Flip-hotspot protocols | **done** | `flip-protocols` → `docs/FLIP_HOTSPOT_PROTOCOLS.md` |
+| PRED bench closure | **done** | `pred-bench` ledger + kill/pass criteria; lab still closes status. |
+
+```powershell
+python -m fsot_mc literature-index --max-papers 0 --arxiv-only   # full OAI (long)
+python -m fsot_mc scientific-audit                                 # + auto-promote
+python -m fsot_mc audit-promote                                    # re-feed from latest
+python -m fsot_mc flip-protocols --n-paths 96
+python -m fsot_mc pred-bench
+python -m fsot_mc pred-bench --set PRED-001 --status pass --measured 70.8 --source "lab.md"
+```
+
 ## Next deepening (ongoing)
 
-- Live online chew corpus + pathway solidification from literature  
+- Finish full OAI index → literature cross-ref on all cores  
+- Lab-close PRED ledger entries (status pass/kill with evidence)  
 - Torch/GPU polar student (`FSOT_MC_USE_TORCH=1`)  
-- Per-prediction experiment protocol cards in mind answers  
-- Live Realities kernel optional alongside snapshot  
+- Live Realities kernel optional alongside snapshot
 
 ## Doctrine
 

@@ -1,0 +1,5189 @@
+{
+  "entries": {
+    "PRED-001": {
+      "id": "PRED-001",
+      "name": "H0_bridge_scalar",
+      "domain": "Cosmology",
+      "fsot_predicted": 70.75,
+      "unit": "km/s/Mpc",
+      "sota_baseline": 67.36,
+      "sota_label": "Planck2018 \u039bCDM",
+      "discriminant": "strictly_between_planck_and_sh0es",
+      "formula_branch": "term1.perceived_adjust",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: strictly_between_planck_and_sh0es",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: strictly_between_planck_and_sh0es",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [
+        {
+          "t": "2026-07-23T02:16:41.616996+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "audit smoke"
+        },
+        {
+          "t": "2026-07-23T02:16:41.621005+00:00",
+          "status": "open",
+          "measured_value": null,
+          "note": "reset after smoke"
+        },
+        {
+          "t": "2026-07-23T02:20:05.398780+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "audit smoke"
+        },
+        {
+          "t": "2026-07-23T02:20:05.403013+00:00",
+          "status": "open",
+          "measured_value": null,
+          "note": "reset after smoke"
+        },
+        {
+          "t": "2026-07-23T02:20:28.022160+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "audit smoke"
+        },
+        {
+          "t": "2026-07-23T02:20:28.029182+00:00",
+          "status": "open",
+          "measured_value": null,
+          "note": "reset after smoke"
+        },
+        {
+          "t": "2026-07-23T02:20:57.097779+00:00",
+          "status": "in_progress",
+          "measured_value": null,
+          "note": "audit smoke"
+        },
+        {
+          "t": "2026-07-23T02:20:57.101789+00:00",
+          "status": "open",
+          "measured_value": null,
+          "note": "reset after smoke"
+        }
+      ],
+      "free_parameters": 0
+    },
+    "PRED-002": {
+      "id": "PRED-002",
+      "name": "S8_effective_lensing",
+      "domain": "Cosmology",
+      "fsot_predicted": 0.805,
+      "unit": "S8",
+      "sota_baseline": 0.834,
+      "sota_label": "Planck2018",
+      "discriminant": "between_planck_and_des",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: between_planck_and_des",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: between_planck_and_des",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-003": {
+      "id": "PRED-003",
+      "name": "adversarial_codon_hole_rate",
+      "domain": "Code_Genome_Structure",
+      "fsot_predicted": 0.85,
+      "unit": "fraction",
+      "sota_baseline": 0.35,
+      "sota_label": "Semgrep heuristic hit rate",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.quirkMod",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-004": {
+      "id": "PRED-004",
+      "name": "muon_g2_excess_direction",
+      "domain": "Particle_Physics",
+      "fsot_predicted": 2.49e-09,
+      "unit": "delta_a_mu",
+      "sota_baseline": 0.0,
+      "sota_label": "SM_only",
+      "discriminant": "same_sign_as_fermilab",
+      "formula_branch": "term3.chaos_factor",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: same_sign_as_fermilab",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: same_sign_as_fermilab",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-005": {
+      "id": "PRED-005",
+      "name": "lithium_problem_factor_bridge",
+      "domain": "Cosmology",
+      "fsot_predicted": 2.85,
+      "unit": "underproduction_factor",
+      "sota_baseline": 3.0,
+      "sota_label": "BBN theory gap",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.poof_factor",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-006": {
+      "id": "PRED-006",
+      "name": "acoustic_impedance_median_MRayl",
+      "domain": "Acoustic_Resonance_Materials",
+      "fsot_predicted": 0.41,
+      "unit": "MRayl",
+      "sota_baseline": 0.45,
+      "sota_label": "Empirical air-water impedance mean",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-007": {
+      "id": "PRED-007",
+      "name": "ionospheric_beta_quiet_classifier",
+      "domain": "Ionospheric_Chemistry_Coupling",
+      "fsot_predicted": 1.0,
+      "unit": "stability_score",
+      "sota_baseline": 0.55,
+      "sota_label": "Dst-Kp decoupled heuristic",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.acoustic_inflow",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-008": {
+      "id": "PRED-008",
+      "name": "phi_glass_Tg_morphogen_K",
+      "domain": "Phi_Morphogenetic_Scaling",
+      "fsot_predicted": 199.0,
+      "unit": "K",
+      "sota_baseline": 210.0,
+      "sota_label": "Polymer Tg phenomenology",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term1.term1_base",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-009": {
+      "id": "PRED-009",
+      "name": "pd_deuterium_lattice_excess_heat",
+      "domain": "Cold_Fusion_Candidate_Prereg_Scaffold",
+      "fsot_predicted": 1.85,
+      "unit": "enhancement_factor",
+      "sota_baseline": 0.0,
+      "sota_label": "Null baseline (no reproducible excess heat)",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-010": {
+      "id": "PRED-010",
+      "name": "lattice_boundary_cold_fusion_channel",
+      "domain": "Cold_Fusion_Candidate_Prereg_Scaffold",
+      "fsot_predicted": 1.62,
+      "unit": "enhancement_factor",
+      "sota_baseline": 0.0,
+      "sota_label": "Null baseline",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.boundary_partition",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-011": {
+      "id": "PRED-011",
+      "name": "muon_catalyzed_dd_rate_bridge",
+      "domain": "Cold_Fusion_Candidate_Prereg_Scaffold",
+      "fsot_predicted": 108000000.0,
+      "unit": "fusions/mol/s",
+      "sota_baseline": 100000000.0,
+      "sota_label": "Published muon-catalyzed D-D rate",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term1.initiation_transformation",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-012": {
+      "id": "PRED-012",
+      "name": "unbinilium_Z120_N184_half_life",
+      "domain": "Undiscovered_Element_Candidate_Prereg_Scaffold",
+      "fsot_predicted": 2500000.0,
+      "unit": "half_life_s",
+      "sota_baseline": 0.0,
+      "sota_label": "Not yet synthesized",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.boundary_partition",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-013": {
+      "id": "PRED-013",
+      "name": "unbihexium_Z126_island_stability",
+      "domain": "Undiscovered_Element_Candidate_Prereg_Scaffold",
+      "fsot_predicted": 1200000000.0,
+      "unit": "half_life_s",
+      "sota_baseline": 0.0,
+      "sota_label": "Not yet synthesized",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.term1_base",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-014": {
+      "id": "PRED-014",
+      "name": "natural_formation_Z132_fusion_decay",
+      "domain": "Natural_Formation_Element_Simulation",
+      "fsot_predicted": 132,
+      "unit": "atomic_number",
+      "sota_baseline": 118,
+      "sota_label": "IUPAC confirmed ceiling",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-015": {
+      "id": "PRED-015",
+      "name": "pd_lattice_cold_fusion_metamaterial_heat_transfer",
+      "domain": "Metamaterial_Fluid_Design_Prereg_Scaffold",
+      "fsot_predicted": 1850,
+      "unit": "W/m2/K",
+      "sota_baseline": 500,
+      "sota_label": "Conventional Pd heat exchanger baseline",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-016": {
+      "id": "PRED-016",
+      "name": "acoustic_bleed_phononic_negative_index",
+      "domain": "Metamaterial_Fluid_Design_Prereg_Scaffold",
+      "fsot_predicted": -1.35,
+      "unit": "refractive_index",
+      "sota_baseline": 0.0,
+      "sota_label": "No negative-index phononic crystal demonstrated",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-017": {
+      "id": "PRED-017",
+      "name": "Z119_Ti_Bk_heavy_ion_lab_synthesis",
+      "domain": "Heavy_Ion_Lab_Synthesis_Panel",
+      "fsot_predicted": 0.42,
+      "unit": "viability_score",
+      "sota_baseline": 0.0,
+      "sota_label": "Z=119 not yet synthesized",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.boundary_partition",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-018": {
+      "id": "PRED-018",
+      "name": "pd_d_to_Z120_fusion_decay_cascade",
+      "domain": "Fusion_Decay_Chain_Prereg_Scaffold",
+      "fsot_predicted": 120,
+      "unit": "atomic_number",
+      "sota_baseline": 118,
+      "sota_label": "IUPAC confirmed ceiling",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-019": {
+      "id": "PRED-019",
+      "name": "muon_dd_to_Z126_fusion_decay_cascade",
+      "domain": "Fusion_Decay_Chain_Prereg_Scaffold",
+      "fsot_predicted": 126,
+      "unit": "atomic_number",
+      "sota_baseline": 118,
+      "sota_label": "IUPAC confirmed ceiling",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.initiation_transformation",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-020": {
+      "id": "PRED-020",
+      "name": "Z126_N184_unbihexium_beam_synthesis",
+      "domain": "Z120_Z126_Beam_Synthesis_Panel",
+      "fsot_predicted": 0.48,
+      "unit": "viability_score",
+      "sota_baseline": 0.0,
+      "sota_label": "Z=126 not yet synthesized",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.boundary_partition",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-021": {
+      "id": "PRED-021",
+      "name": "Z132_N184_superheavy_shell_peak",
+      "domain": "Distant_Island_Z128_Z132_Deep_Panel",
+      "fsot_predicted": 31000000.0,
+      "unit": "half_life_s",
+      "sota_baseline": 0.0,
+      "sota_label": "Not yet synthesized",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.term1_base",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-022": {
+      "id": "PRED-022",
+      "name": "Z164_N228_distant_island",
+      "domain": "Z164_Distant_Island_Prereg_Scaffold",
+      "fsot_predicted": 1500.0,
+      "unit": "half_life_s",
+      "sota_baseline": 0.0,
+      "sota_label": "Not yet synthesized",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.boundary_partition",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-023": {
+      "id": "PRED-023",
+      "name": "periodic_extension_decay_topology_Z164",
+      "domain": "Periodic_Extension_Decay_Topology_Scaffold",
+      "fsot_predicted": 164,
+      "unit": "atomic_number",
+      "sota_baseline": 118,
+      "sota_label": "IUPAC confirmed ceiling",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.initiation_transformation",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-024": {
+      "id": "PRED-024",
+      "name": "h0_dual_anchor_bubble_bleed",
+      "domain": "Hubble_Dark_Sector_Crosswalk",
+      "fsot_predicted": 72.1,
+      "unit": "km/s/Mpc",
+      "sota_baseline": 67.4,
+      "sota_label": "Planck CMB H0",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-025": {
+      "id": "PRED-025",
+      "name": "fpc_cosmological_tau_damping",
+      "domain": "FPC_Fluidlink_Timing_Deep_Panel",
+      "fsot_predicted": 0.5,
+      "unit": "dimensionless_tau",
+      "sota_baseline": 0.0,
+      "sota_label": "No unified FPC tau baseline",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.coherence_efficiency",
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-032": {
+      "id": "PRED-032",
+      "name": "bh_wh_micro_portal_doorway",
+      "domain": "Warp_BH_WH_Portal_Panel",
+      "fsot_predicted": 0.009663204175,
+      "unit": "dimensionless_portal",
+      "sota_baseline": 0.0,
+      "sota_label": "No synthetic BH/WH doorway baseline",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term3.poof_factor",
+      "note": "Value locked from legacy warp_actuation_formula_fsot21.json psi_portal_doorway at build time",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-033": {
+      "id": "PRED-033",
+      "name": "quantum_entanglement_gate_pair",
+      "domain": "Warp_BH_WH_Portal_Panel",
+      "fsot_predicted": 0.04803163401,
+      "unit": "dimensionless_entanglement",
+      "sota_baseline": 0.0,
+      "sota_label": "No paired-gate entanglement baseline",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.perceived_adjust",
+      "note": "Value locked from legacy formula psi_entangle_gate at build time",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-034": {
+      "id": "PRED-034",
+      "name": "fsot_designed_fuel_thermochemistry_panel",
+      "domain": "Fuel_Lab_Live_Panel",
+      "fsot_predicted": 0.039349,
+      "unit": "pooled_median_error_pct",
+      "sota_baseline": 8.0,
+      "sota_label": "Desktop engine simulator typical fuel-property error",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term1.coherence_efficiency",
+      "note": "Seven FSOT-designed alternative fuels (hemp grounded/advanced, algae biodiesel, mushroom ester, green hydrogen, optimax, bio_spark) \u2014 thermochemistry + Prius engine simulator outputs vs seed-scalar predictions; novel molecular states not pre-existing in literature; gasoline baseline for comparison only.",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-035": {
+      "id": "PRED-035",
+      "name": "machine_molecule_species_catalog_precision",
+      "domain": "Machine_And_Molecule_Live_Panel",
+      "fsot_predicted": 0.01341,
+      "unit": "pooled_median_error_pct",
+      "sota_baseline": 5.0,
+      "sota_label": "Typical materials property lookup error",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "120 catalog properties (metals/molecules) from desktop FSOT species catalog",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-036": {
+      "id": "PRED-036",
+      "name": "fsot_transporter_technology_stack",
+      "domain": "Star_Trek_Transporter_Live_Panel",
+      "fsot_predicted": 0.05256,
+      "unit": "pooled_median_error_pct",
+      "sota_baseline": 10.0,
+      "sota_label": "Quantum teleportation + warp portal typical modeling gap",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.poof_factor",
+      "note": "FSOT transporter technology stack \u2014 warp actuation portal doorway (psi_portal, psi_traverse), entanglement gate pairs, poof/suction matter-stream, pattern-buffer/reassembly engineering observables verified against seed-scalar engine at sub-0.1% precision on portal channel.",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-039": {
+      "id": "PRED-039",
+      "name": "transporter_pattern_buffer_beam_grid",
+      "domain": "Star_Trek_Transporter_Live_Panel",
+      "fsot_predicted": 0.031159,
+      "unit": "pooled_median_error_pct",
+      "sota_baseline": 10.0,
+      "sota_label": "Pattern buffer / beam-forming typical modeling gap",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "Desktop pattern_buffer_beam_simulator \u2014 85M voxel grid, T3 valve acoustic phase lock per scan step, layer fidelity vs FSOT seed-scalar predictions.",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-040": {
+      "id": "PRED-040",
+      "name": "transporter_t3_acoustic_valve_hardware",
+      "domain": "Star_Trek_Transporter_Live_Panel",
+      "fsot_predicted": 0.031159,
+      "unit": "pooled_median_error_pct",
+      "sota_baseline": 8.0,
+      "sota_label": "Ultrasonic phase-valve actuator typical modeling gap",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "Desktop t3_acoustic_valve_hardware_simulator \u2014 piezo-stack PZT prototype, 40 kHz resonant cavity phase lock on pad A emitter, impedance match + beam coupling vs FSOT seed-scalar.",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-041": {
+      "id": "PRED-041",
+      "name": "transporter_pad_b_receiver_hardware",
+      "domain": "Star_Trek_Transporter_Live_Panel",
+      "fsot_predicted": 0.031159,
+      "unit": "pooled_median_error_pct",
+      "sota_baseline": 8.0,
+      "sota_label": "Reassembly receiver phase-capture typical modeling gap",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.acoustic_bleed",
+      "note": "Pad B receiver hardware simulator \u2014 capture-coil phase conjugate lock coupled to psi_gate_pair two-gate entanglement channel; matter-stream reassembly fidelity.",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-038": {
+      "id": "PRED-038",
+      "name": "transporter_portal_traverse_scalar",
+      "domain": "Star_Trek_Transporter_Live_Panel",
+      "fsot_predicted": 0.000464139486,
+      "unit": "dimensionless_traverse",
+      "sota_baseline": 0.0,
+      "sota_label": "No unified portal traverse baseline",
+      "discriminant": "fsot_exceeds_sota_by_0.4",
+      "formula_branch": "term1.perceived_adjust",
+      "note": "psi_traverse = psi_portal * psi_entangle \u2014 doorway step-through scalar from warp actuation",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: fsot_exceeds_sota_by_0.4",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: fsot_exceeds_sota_by_0.4",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-037": {
+      "id": "PRED-037",
+      "name": "blackhole_whitehole_cycle_constant_drift",
+      "domain": "BlackHole_WhiteHole_Cycle_Live_Panel",
+      "fsot_predicted": 0.026472,
+      "unit": "pooled_median_error_pct",
+      "sota_baseline": 6.0,
+      "sota_label": "Desktop BH/WH cycle prototype typical error",
+      "discriminant": "within_10pct_of_observed_gap",
+      "formula_branch": "term3.poof_factor",
+      "note": "Cycle proxies + fsot-core.js canonical constants from desktop blueprint",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: within_10pct_of_observed_gap",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: within_10pct_of_observed_gap",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-042": {
+      "id": "PRED-042",
+      "name": "Sc",
+      "domain": "Chemistry",
+      "fsot_predicted": 6.54758511,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-043": {
+      "id": "PRED-043",
+      "name": "Mn",
+      "domain": "Chemistry",
+      "fsot_predicted": 7.43131763,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-044": {
+      "id": "PRED-044",
+      "name": "Co",
+      "domain": "Chemistry",
+      "fsot_predicted": 7.81180417,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-045": {
+      "id": "PRED-045",
+      "name": "BF\u2083",
+      "domain": "Chemistry",
+      "fsot_predicted": 120.0,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-046": {
+      "id": "PRED-046",
+      "name": "SF\u2086",
+      "domain": "Chemistry",
+      "fsot_predicted": 90.0,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-047": {
+      "id": "PRED-047",
+      "name": "PCl\u2083",
+      "domain": "Chemistry",
+      "fsot_predicted": 100.46282265,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-048": {
+      "id": "PRED-048",
+      "name": "SO\u2082",
+      "domain": "Chemistry",
+      "fsot_predicted": 119.08403441,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-049": {
+      "id": "PRED-049",
+      "name": "H\u2082S",
+      "domain": "Chemistry",
+      "fsot_predicted": 91.61803399,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-050": {
+      "id": "PRED-050",
+      "name": "ClF\u2083",
+      "domain": "Chemistry",
+      "fsot_predicted": 87.2224607,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-051": {
+      "id": "PRED-051",
+      "name": "XeF\u2082",
+      "domain": "Chemistry",
+      "fsot_predicted": 180.0,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-052": {
+      "id": "PRED-052",
+      "name": "BeCl\u2082",
+      "domain": "Chemistry",
+      "fsot_predicted": 180.0,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-053": {
+      "id": "PRED-053",
+      "name": "NF\u2083",
+      "domain": "Chemistry",
+      "fsot_predicted": 102.6593802,
+      "unit": "\u00b0",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-054": {
+      "id": "PRED-054",
+      "name": "C\u2082H\u2085OH(l)",
+      "domain": "Chemistry",
+      "fsot_predicted": -280.3035024,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-055": {
+      "id": "PRED-055",
+      "name": "HCl(g)",
+      "domain": "Chemistry",
+      "fsot_predicted": -91.89840805,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-056": {
+      "id": "PRED-056",
+      "name": "SO\u2082(g)",
+      "domain": "Chemistry",
+      "fsot_predicted": -296.15008038,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-057": {
+      "id": "PRED-057",
+      "name": "C\u2086H\u2081\u2082O\u2086(s)",
+      "domain": "Chemistry",
+      "fsot_predicted": -1267.40893388,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-058": {
+      "id": "PRED-058",
+      "name": "Li\u207a/Li",
+      "domain": "Chemistry",
+      "fsot_predicted": -3.01858411,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-059": {
+      "id": "PRED-059",
+      "name": "K\u207a/K",
+      "domain": "Chemistry",
+      "fsot_predicted": -2.9306276,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-060": {
+      "id": "PRED-060",
+      "name": "Ca\u00b2\u207a/Ca",
+      "domain": "Chemistry",
+      "fsot_predicted": -2.87176404,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-061": {
+      "id": "PRED-061",
+      "name": "Na\u207a/Na",
+      "domain": "Chemistry",
+      "fsot_predicted": -2.71828183,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-062": {
+      "id": "PRED-062",
+      "name": "Al\u00b3\u207a/Al",
+      "domain": "Chemistry",
+      "fsot_predicted": -1.66895973,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-063": {
+      "id": "PRED-063",
+      "name": "Zn\u00b2\u207a/Zn",
+      "domain": "Chemistry",
+      "fsot_predicted": -0.76175075,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-064": {
+      "id": "PRED-064",
+      "name": "Fe\u00b2\u207a/Fe",
+      "domain": "Chemistry",
+      "fsot_predicted": -0.44698745,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-065": {
+      "id": "PRED-065",
+      "name": "Ni\u00b2\u207a/Ni",
+      "domain": "Chemistry",
+      "fsot_predicted": -0.25690556,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-066": {
+      "id": "PRED-066",
+      "name": "Pb\u00b2\u207a/Pb",
+      "domain": "Chemistry",
+      "fsot_predicted": -0.12599437,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-067": {
+      "id": "PRED-067",
+      "name": "H\u207a/H\u2082",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.0,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-068": {
+      "id": "PRED-068",
+      "name": "Cu\u00b2\u207a/Cu",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.34186668,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-069": {
+      "id": "PRED-069",
+      "name": "Ag\u207a/Ag",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.80421999,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-070": {
+      "id": "PRED-070",
+      "name": "Au\u00b3\u207a/Au",
+      "domain": "Chemistry",
+      "fsot_predicted": 1.49318126,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-071": {
+      "id": "PRED-071",
+      "name": "Cl\u2082/Cl\u207b",
+      "domain": "Chemistry",
+      "fsot_predicted": 1.35865733,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-072": {
+      "id": "PRED-072",
+      "name": "F\u2082/F\u207b",
+      "domain": "Chemistry",
+      "fsot_predicted": 2.87176404,
+      "unit": "V",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-073": {
+      "id": "PRED-073",
+      "name": "N-H_stretch",
+      "domain": "Chemistry",
+      "fsot_predicted": 3326.31291256,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-074": {
+      "id": "PRED-074",
+      "name": "C-H_sp2",
+      "domain": "Chemistry",
+      "fsot_predicted": 3074.89137781,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-075": {
+      "id": "PRED-075",
+      "name": "C-H_sp",
+      "domain": "Chemistry",
+      "fsot_predicted": 3297.38720207,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-076": {
+      "id": "PRED-076",
+      "name": "C=O_stretch",
+      "domain": "Chemistry",
+      "fsot_predicted": 1720.65564653,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-077": {
+      "id": "PRED-077",
+      "name": "C\u2261C_stretch",
+      "domain": "Chemistry",
+      "fsot_predicted": 2152.82345183,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-078": {
+      "id": "PRED-078",
+      "name": "N-H_bend",
+      "domain": "Chemistry",
+      "fsot_predicted": 1608.69746561,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-079": {
+      "id": "PRED-079",
+      "name": "C-H_bend",
+      "domain": "Chemistry",
+      "fsot_predicted": 1466.16005297,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-080": {
+      "id": "PRED-080",
+      "name": "CCl\u2084_\u03bd\u2081",
+      "domain": "Chemistry",
+      "fsot_predicted": 458.02694353,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-081": {
+      "id": "PRED-081",
+      "name": "C\u2086\u2080",
+      "domain": "Chemistry",
+      "fsot_predicted": 1466.16005297,
+      "unit": "cm\u207b\u00b9",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-082": {
+      "id": "PRED-082",
+      "name": "Ile",
+      "domain": "Chemistry",
+      "fsot_predicted": 4.53637025,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-083": {
+      "id": "PRED-083",
+      "name": "Val",
+      "domain": "Chemistry",
+      "fsot_predicted": 4.23606798,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-084": {
+      "id": "PRED-084",
+      "name": "Leu",
+      "domain": "Chemistry",
+      "fsot_predicted": 3.81584631,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-085": {
+      "id": "PRED-085",
+      "name": "Cys",
+      "domain": "Chemistry",
+      "fsot_predicted": 2.50593605,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-086": {
+      "id": "PRED-086",
+      "name": "Tyr",
+      "domain": "Chemistry",
+      "fsot_predicted": -1.29413058,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-087": {
+      "id": "PRED-087",
+      "name": "Lys",
+      "domain": "Chemistry",
+      "fsot_predicted": -3.92953345,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-088": {
+      "id": "PRED-088",
+      "name": "Arg",
+      "domain": "Chemistry",
+      "fsot_predicted": -4.53637025,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-089": {
+      "id": "PRED-089",
+      "name": "CH\u2083Cl",
+      "domain": "Chemistry",
+      "fsot_predicted": 1.8736678,
+      "unit": "D",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-090": {
+      "id": "PRED-090",
+      "name": "NaCl_gas",
+      "domain": "Chemistry",
+      "fsot_predicted": 8.95363881,
+      "unit": "D",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-091": {
+      "id": "PRED-091",
+      "name": "KBr_gas",
+      "domain": "Chemistry",
+      "fsot_predicted": 10.65754519,
+      "unit": "D",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-092": {
+      "id": "PRED-092",
+      "name": "CsF_gas",
+      "domain": "Chemistry",
+      "fsot_predicted": 7.85599831,
+      "unit": "D",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-093": {
+      "id": "PRED-093",
+      "name": "benzene_B",
+      "domain": "Chemistry",
+      "fsot_predicted": 255.01563439,
+      "unit": "nm",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-094": {
+      "id": "PRED-094",
+      "name": "naphthalene",
+      "domain": "Chemistry",
+      "fsot_predicted": 275.0134081,
+      "unit": "nm",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-095": {
+      "id": "PRED-095",
+      "name": "anthracene",
+      "domain": "Chemistry",
+      "fsot_predicted": 374.2212875,
+      "unit": "nm",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-096": {
+      "id": "PRED-096",
+      "name": "FeCl3",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.34122402,
+      "unit": "mm/s",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-097": {
+      "id": "PRED-097",
+      "name": "FeS2",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.31345999,
+      "unit": "mm/s",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-098": {
+      "id": "PRED-098",
+      "name": "K4FeCN6",
+      "domain": "Chemistry",
+      "fsot_predicted": -0.03048556,
+      "unit": "mm/s",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-099": {
+      "id": "PRED-099",
+      "name": "FePO4",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.42373345,
+      "unit": "mm/s",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-100": {
+      "id": "PRED-100",
+      "name": "C2H2",
+      "domain": "Chemistry",
+      "fsot_predicted": 1267.40887836,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-101": {
+      "id": "PRED-101",
+      "name": "HCHO",
+      "domain": "Chemistry",
+      "fsot_predicted": 554.9289026,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-102": {
+      "id": "PRED-102",
+      "name": "CH3COOH",
+      "domain": "Chemistry",
+      "fsot_predicted": 863.98010254,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-103": {
+      "id": "PRED-103",
+      "name": "lambda_rep",
+      "domain": "Chemistry",
+      "fsot_predicted": 3.85850757,
+      "unit": "log(kf/s\u207b\u00b9)",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-104": {
+      "id": "PRED-104",
+      "name": "protein_L",
+      "domain": "Chemistry",
+      "fsot_predicted": 1.70390639,
+      "unit": "log(kf/s\u207b\u00b9)",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-105": {
+      "id": "PRED-105",
+      "name": "protein_G",
+      "domain": "Chemistry",
+      "fsot_predicted": 2.7715162,
+      "unit": "log(kf/s\u207b\u00b9)",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-106": {
+      "id": "PRED-106",
+      "name": "CheY",
+      "domain": "Chemistry",
+      "fsot_predicted": 1.93034104,
+      "unit": "log(kf/s\u207b\u00b9)",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-107": {
+      "id": "PRED-107",
+      "name": "AcP",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.59119882,
+      "unit": "log(kf/s\u207b\u00b9)",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-108": {
+      "id": "PRED-108",
+      "name": "tendamistat",
+      "domain": "Chemistry",
+      "fsot_predicted": 2.18389045,
+      "unit": "log(kf/s\u207b\u00b9)",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-109": {
+      "id": "PRED-109",
+      "name": "Squid_axon",
+      "domain": "Chemistry",
+      "fsot_predicted": 57.31643186,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-110": {
+      "id": "PRED-110",
+      "name": "Mammalian_neuron",
+      "domain": "Chemistry",
+      "fsot_predicted": 70.65713546,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-111": {
+      "id": "PRED-111",
+      "name": "Skeletal_muscle",
+      "domain": "Chemistry",
+      "fsot_predicted": 90.02003494,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-112": {
+      "id": "PRED-112",
+      "name": "Cardiac_ventricle",
+      "domain": "Chemistry",
+      "fsot_predicted": 87.53948663,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-113": {
+      "id": "PRED-113",
+      "name": "RBC",
+      "domain": "Chemistry",
+      "fsot_predicted": 10.10733793,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-114": {
+      "id": "PRED-114",
+      "name": "T_lymphocyte",
+      "domain": "Chemistry",
+      "fsot_predicted": 51.00406807,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-115": {
+      "id": "PRED-115",
+      "name": "Purkinje_fiber",
+      "domain": "Chemistry",
+      "fsot_predicted": 90.02003494,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-116": {
+      "id": "PRED-116",
+      "name": "Rod_photoreceptor",
+      "domain": "Chemistry",
+      "fsot_predicted": 40.93341034,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-117": {
+      "id": "PRED-117",
+      "name": "Hair_cell",
+      "domain": "Chemistry",
+      "fsot_predicted": 44.72854563,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-118": {
+      "id": "PRED-118",
+      "name": "Oocyte_frog",
+      "domain": "Chemistry",
+      "fsot_predicted": 51.00406807,
+      "unit": "mV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-119": {
+      "id": "PRED-119",
+      "name": "DMF",
+      "domain": "Chemistry",
+      "fsot_predicted": 27.47459302,
+      "unit": "kcal/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-120": {
+      "id": "PRED-120",
+      "name": "HMPA",
+      "domain": "Chemistry",
+      "fsot_predicted": 38.39533278,
+      "unit": "kcal/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-121": {
+      "id": "PRED-121",
+      "name": "triethylamine",
+      "domain": "Chemistry",
+      "fsot_predicted": 61.98720613,
+      "unit": "kcal/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-122": {
+      "id": "PRED-122",
+      "name": "H-H",
+      "domain": "Chemistry",
+      "fsot_predicted": 436.05310416,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-123": {
+      "id": "PRED-123",
+      "name": "CH3-H",
+      "domain": "Chemistry",
+      "fsot_predicted": 438.67113815,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-124": {
+      "id": "PRED-124",
+      "name": "NH2-H",
+      "domain": "Chemistry",
+      "fsot_predicted": 391.6241115,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-125": {
+      "id": "PRED-125",
+      "name": "HO-H",
+      "domain": "Chemistry",
+      "fsot_predicted": 497.38622102,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-126": {
+      "id": "PRED-126",
+      "name": "F-F",
+      "domain": "Chemistry",
+      "fsot_predicted": 158.86134303,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-127": {
+      "id": "PRED-127",
+      "name": "Cl-Cl",
+      "domain": "Chemistry",
+      "fsot_predicted": 242.37058663,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-128": {
+      "id": "PRED-128",
+      "name": "Br-Br",
+      "domain": "Chemistry",
+      "fsot_predicted": 193.50778357,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-129": {
+      "id": "PRED-129",
+      "name": "I-I",
+      "domain": "Chemistry",
+      "fsot_predicted": 152.64922708,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-130": {
+      "id": "PRED-130",
+      "name": "H-F",
+      "domain": "Chemistry",
+      "fsot_predicted": 569.78622451,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-131": {
+      "id": "PRED-131",
+      "name": "H-Cl",
+      "domain": "Chemistry",
+      "fsot_predicted": 431.81703618,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-132": {
+      "id": "PRED-132",
+      "name": "H-Br",
+      "domain": "Chemistry",
+      "fsot_predicted": 366.31968413,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-133": {
+      "id": "PRED-133",
+      "name": "H-I",
+      "domain": "Chemistry",
+      "fsot_predicted": 298.0711075,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-134": {
+      "id": "PRED-134",
+      "name": "N\u2261N",
+      "domain": "Chemistry",
+      "fsot_predicted": 945.41675649,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-135": {
+      "id": "PRED-135",
+      "name": "O=O",
+      "domain": "Chemistry",
+      "fsot_predicted": 498.21985054,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-136": {
+      "id": "PRED-136",
+      "name": "C\u2261O",
+      "domain": "Chemistry",
+      "fsot_predicted": 1076.54762151,
+      "unit": "kJ/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-137": {
+      "id": "PRED-137",
+      "name": "C_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 64.46775443,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-138": {
+      "id": "PRED-138",
+      "name": "N_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 77.40196878,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-139": {
+      "id": "PRED-139",
+      "name": "O_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 55.1217087,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-140": {
+      "id": "PRED-140",
+      "name": "F_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 87.10332556,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-141": {
+      "id": "PRED-141",
+      "name": "Ne_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 97.09902018,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-142": {
+      "id": "PRED-142",
+      "name": "Si_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 45.12601408,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-143": {
+      "id": "PRED-143",
+      "name": "P_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 51.45655738,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-144": {
+      "id": "PRED-144",
+      "name": "S_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 47.24137578,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-145": {
+      "id": "PRED-145",
+      "name": "Cl_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 53.50367471,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-146": {
+      "id": "PRED-146",
+      "name": "Ar_IE4",
+      "domain": "Chemistry",
+      "fsot_predicted": 59.89386606,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-147": {
+      "id": "PRED-147",
+      "name": "N_IE5",
+      "domain": "Chemistry",
+      "fsot_predicted": 97.9326497,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-148": {
+      "id": "PRED-148",
+      "name": "O_IE5",
+      "domain": "Chemistry",
+      "fsot_predicted": 113.87353426,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-149": {
+      "id": "PRED-149",
+      "name": "Ne_IE5",
+      "domain": "Chemistry",
+      "fsot_predicted": 126.23281922,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-150": {
+      "id": "PRED-150",
+      "name": "P_IE5",
+      "domain": "Chemistry",
+      "fsot_predicted": 64.98198751,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-151": {
+      "id": "PRED-151",
+      "name": "Ar_IE5",
+      "domain": "Chemistry",
+      "fsot_predicted": 75.01803747,
+      "unit": "eV",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-152": {
+      "id": "PRED-152",
+      "name": "1-Propanol",
+      "domain": "Chemistry",
+      "fsot_predicted": 50.73801277,
+      "unit": "kcal/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-153": {
+      "id": "PRED-153",
+      "name": "Acetonitrile",
+      "domain": "Chemistry",
+      "fsot_predicted": 45.6492451,
+      "unit": "kcal/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-154": {
+      "id": "PRED-154",
+      "name": "THF",
+      "domain": "Chemistry",
+      "fsot_predicted": 37.34419742,
+      "unit": "kcal/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-155": {
+      "id": "PRED-155",
+      "name": "DCM",
+      "domain": "Chemistry",
+      "fsot_predicted": 40.65956593,
+      "unit": "kcal/mol",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-156": {
+      "id": "PRED-156",
+      "name": "Quartz",
+      "domain": "Chemistry",
+      "fsot_predicted": 2.2989744,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-157": {
+      "id": "PRED-157",
+      "name": "AlN",
+      "domain": "Chemistry",
+      "fsot_predicted": 5.4820251,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-158": {
+      "id": "PRED-158",
+      "name": "LiNbO3",
+      "domain": "Chemistry",
+      "fsot_predicted": 6.03173247,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-159": {
+      "id": "PRED-159",
+      "name": "KNbO3",
+      "domain": "Chemistry",
+      "fsot_predicted": 30.00627668,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-160": {
+      "id": "PRED-160",
+      "name": "PVDF",
+      "domain": "Chemistry",
+      "fsot_predicted": 32.95276428,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-161": {
+      "id": "PRED-161",
+      "name": "BaTiO3",
+      "domain": "Chemistry",
+      "fsot_predicted": 189.84211489,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-162": {
+      "id": "PRED-162",
+      "name": "PZT-4",
+      "domain": "Chemistry",
+      "fsot_predicted": 288.7073636,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-163": {
+      "id": "PRED-163",
+      "name": "PZT-5A",
+      "domain": "Chemistry",
+      "fsot_predicted": 374.39433397,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-164": {
+      "id": "PRED-164",
+      "name": "PZT-5H",
+      "domain": "Chemistry",
+      "fsot_predicted": 594.17119805,
+      "unit": "pC/N",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-165": {
+      "id": "PRED-165",
+      "name": "Mg2Si",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.40182166,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-166": {
+      "id": "PRED-166",
+      "name": "CoSb3",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.50056,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-167": {
+      "id": "PRED-167",
+      "name": "Sb2Te3",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.50056,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-168": {
+      "id": "PRED-168",
+      "name": "Cu2Se",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.60428419,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-169": {
+      "id": "PRED-169",
+      "name": "SiGe",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.7004481,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-170": {
+      "id": "PRED-170",
+      "name": "PbTe",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.79981668,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-171": {
+      "id": "PRED-171",
+      "name": "SnSe_300K",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.89951114,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-172": {
+      "id": "PRED-172",
+      "name": "Bi2Te3",
+      "domain": "Chemistry",
+      "fsot_predicted": 1.0,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-173": {
+      "id": "PRED-173",
+      "name": "Half_Heusler",
+      "domain": "Chemistry",
+      "fsot_predicted": 0.50056,
+      "unit": "dimensionless",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-174": {
+      "id": "PRED-174",
+      "name": "13C_CO2-HCO3",
+      "domain": "Chemistry",
+      "fsot_predicted": 7.91261476,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-175": {
+      "id": "PRED-175",
+      "name": "18O_H2Ol-H2Og",
+      "domain": "Chemistry",
+      "fsot_predicted": 9.31125548,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-176": {
+      "id": "PRED-176",
+      "name": "18O_calcite-H2O",
+      "domain": "Chemistry",
+      "fsot_predicted": 28.47492066,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-177": {
+      "id": "PRED-177",
+      "name": "34S_SO4-H2S",
+      "domain": "Chemistry",
+      "fsot_predicted": 22.05737175,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-178": {
+      "id": "PRED-178",
+      "name": "D_H2Ol-H2Og",
+      "domain": "Nuclear_Physics",
+      "fsot_predicted": 75.99408545,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-179": {
+      "id": "PRED-179",
+      "name": "13C_CO2-CH4",
+      "domain": "Chemistry",
+      "fsot_predicted": 69.03608551,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-180": {
+      "id": "PRED-180",
+      "name": "18O_quartz-H2O",
+      "domain": "Chemistry",
+      "fsot_predicted": 33.37075767,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-181": {
+      "id": "PRED-181",
+      "name": "34S_gypsum-H2S",
+      "domain": "Chemistry",
+      "fsot_predicted": 16.96143989,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-182": {
+      "id": "PRED-182",
+      "name": "13C_CaCO3-CO2",
+      "domain": "Chemistry",
+      "fsot_predicted": 10.28726195,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    },
+    "PRED-183": {
+      "id": "PRED-183",
+      "name": "18O_dolomite-H2O",
+      "domain": "Chemistry",
+      "fsot_predicted": 31.51490747,
+      "unit": "\u2030",
+      "sota_baseline": null,
+      "sota_label": null,
+      "discriminant": "independent_frontier_not_in_benchmark_panel",
+      "formula_branch": null,
+      "note": "",
+      "status": "open",
+      "kill_criteria": [
+        "Discriminant fails: independent_frontier_not_in_benchmark_panel",
+        "Requires free-parameter retune to match measured value",
+        "Authority pin D1D38A mismatch at evaluation time"
+      ],
+      "pass_criteria": [
+        "Discriminant satisfied: independent_frontier_not_in_benchmark_panel",
+        "Pin D1D38A verified",
+        "No post-hoc seed or constant retuning"
+      ],
+      "measured_value": null,
+      "measured_source": null,
+      "measured_at": null,
+      "evidence_paths": [],
+      "log": [],
+      "free_parameters": 0
+    }
+  },
+  "n": 177,
+  "updated_at": "2026-07-23T02:20:57.101789+00:00",
+  "free_parameters": 0
+}

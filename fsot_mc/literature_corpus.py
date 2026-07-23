@@ -277,21 +277,33 @@ def build_arxiv_index(
     max_papers: int | None = 100_000,
     category_prefixes: list[str] | None = None,
     rebuild: bool = False,
-    fsot_priority: bool = True,
+    fsot_priority: bool | None = None,
 ) -> dict[str, Any]:
     """
     Stream arXiv JSONL into SQLite FTS5.
 
-    max_papers=None indexes the full dump (slow). Default 100k.
-    fsot_priority=True biases toward physics/astro/quant/q-bio categories first.
+    max_papers=None (CLI --max-papers 0) indexes the full OAI dump (slow).
+    Default max_papers=100k for quick maps.
+
+    fsot_priority:
+      - True  → keep only FSOT_PRIORITY_PREFIXES (physics/astro/q-bio/…)
+      - False → keep every record (true full arXiv OAI)
+      - None  → False when max_papers is None (full dump), else True
     """
     source = Path(source or DEFAULT_ARXIV)
     if not source.is_file():
         return {"ok": False, "error": "arxiv_file_missing", "path": str(source)}
 
+    if fsot_priority is None:
+        fsot_priority = max_papers is not None
+
     db = arxiv_db_path()
     if rebuild and db.is_file():
-        db.unlink()
+        try:
+            db.unlink()
+        except OSError:
+            # Windows: journal/open handle — fall through to rebuild-in-place
+            pass
 
     conn = _connect(db)
     init_arxiv_db(conn)
@@ -313,6 +325,8 @@ def build_arxiv_index(
     prefixes = category_prefixes
     if fsot_priority and prefixes is None:
         prefixes = FSOT_PRIORITY_PREFIXES
+    elif not fsot_priority and prefixes is None:
+        prefixes = None  # keep all OAI records
 
     n_in = 0
     n_kept = 0

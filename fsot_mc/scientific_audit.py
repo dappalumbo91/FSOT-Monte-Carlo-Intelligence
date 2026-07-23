@@ -1032,7 +1032,15 @@ def run_scientific_audit(
     *,
     write: bool = True,
     include_self: bool = True,
+    auto_promote: bool = True,
 ) -> dict[str, Any]:
+    """
+    Full scientific intelligence audit.
+
+    When write=True and auto_promote=True, every check + improvement_ledger
+    row is exported as a formal pending obligation and soft-courted
+    (promote_candidate ≠ Lean-proved).
+    """
     checks_spec = CHECKS if include_self else [c for c in CHECKS if c[0] != "SELF-001"]
     results: list[CheckResult] = []
     for cid, layer, title, fn, sev in checks_spec:
@@ -1095,7 +1103,8 @@ def run_scientific_audit(
         "doctrine": (
             "Audit uses the same seed engine and multipath mind under audit. "
             "Literature and multipath are observation/discovery; green-gate remains empirical bar. "
-            "Self-referral must never promote multipath-only claims to proved tier."
+            "Self-referral must never promote multipath-only claims to proved tier. "
+            "auto_promote feeds obligations; soft court ≠ Lean-proved."
         ),
     }
 
@@ -1110,6 +1119,29 @@ def run_scientific_audit(
         md_path = PACKAGE_ROOT / "docs" / "SCIENTIFIC_AUDIT_REPORT.md"
         md_path.write_text(format_audit_markdown(report), encoding="utf-8")
         report["written"] = {"json": str(path), "latest": str(latest), "markdown": str(md_path)}
+
+        if auto_promote:
+            from fsot_mc.formal_bridge import promote_from_audit
+
+            # Feed report already built — no re-audit loop
+            promo = promote_from_audit(
+                report,
+                only_failures=False,
+                also_improvements=True,
+                run_court=True,
+            )
+            report["formal_promote"] = {
+                "n_leads": promo.get("n_leads"),
+                "court": {
+                    "n_pending": (promo.get("court") or {}).get("n_pending"),
+                    "n_promoted": (promo.get("court") or {}).get("n_promoted"),
+                },
+                "formal_status": promo.get("formal_status"),
+                "note": promo.get("note"),
+            }
+            # refresh latest with promote block
+            latest.write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
+            path.write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
 
     return report
 

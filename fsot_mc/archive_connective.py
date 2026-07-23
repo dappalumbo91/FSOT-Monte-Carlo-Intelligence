@@ -69,19 +69,23 @@ def _node_id(domain: str) -> str:
 
 def build_compact_connective_tissue(
     *,
-    max_lean_overlap_degree: int = 10,
+    max_lean_overlap_degree: int = 28,
     force: bool = False,
+    dense_lean_cap: int = 22000,
 ) -> dict[str, Any]:
     """
     Compact multi-layer connective graph from archive validations.
 
     Edge layers:
-      - routes_to_core          extension panel → core fold
-      - problem_route           intent hubs → core + panels
-      - coupling_crosswalk      archive crosswalk_module edges
-      - coupling_cluster        magnetosphere / prediction / fluidlink
-      - coupling_lean_overlap   sampled maps_to_lean_overlap (degree-capped)
-      - accuracy_validation     core/extension with median_error for green gate
+      - routes_to_core          extension panel → core fold (base LOD)
+      - problem_route           intent hubs → core + panels (base)
+      - coupling_crosswalk      archive crosswalk_module edges (base)
+      - coupling_cluster        magnetosphere / prediction / fluidlink (base)
+      - coupling_lean_overlap   maps_to_lean_overlap with base/dense tiers
+      - by_core_membership      navigator membership (dense LOD — zoom reveals)
+
+    denser defaults (v1.5): base degree 28, dense cap 22k so zoom draws a much
+    larger fraction of the ~39k raw coupling mesh without melting the browser.
     """
     out_path = compact_path()
     shipped = _bundle("data__connective_tissue_compact.json")
@@ -217,6 +221,7 @@ def build_compact_connective_tissue(
                     "strength": 0.75,
                     "error_pct": meta.get("median_error_pct"),
                     "label": f"{name}→{rtc}",
+                    "density_tier": "base",
                 }
             )
 
@@ -251,10 +256,11 @@ def build_compact_connective_tissue(
                 "layer": "navigator_route",
                 "strength": 0.7,
                 "error_pct": panel.get("median_error_pct"),
+                "density_tier": "base",
             }
         )
 
-    # by_core_domain membership edges
+    # by_core_domain membership edges (dense LOD — reveal on zoom)
     for core_d, plist in (nav.get("by_core_domain") or {}).items():
         ensure_domain(str(core_d))
         if not isinstance(plist, list):
@@ -272,6 +278,7 @@ def build_compact_connective_tissue(
                     "kind": "by_core_membership",
                     "layer": "navigator_membership",
                     "strength": 0.55,
+                    "density_tier": "dense",
                 }
             )
 
@@ -303,6 +310,7 @@ def build_compact_connective_tissue(
                     "kind": "problem_route",
                     "layer": "problem_intent",
                     "strength": 0.85,
+                    "density_tier": "base",
                 }
             )
         for p in pr.get("panels") or []:
@@ -314,6 +322,7 @@ def build_compact_connective_tissue(
                     "kind": "problem_route",
                     "layer": "problem_intent",
                     "strength": 0.65,
+                    "density_tier": "base",
                 }
             )
 
@@ -326,6 +335,9 @@ def build_compact_connective_tissue(
     }
     lean_deg: dict[str, int] = defaultdict(int)
     type_counts: dict[str, int] = defaultdict(int)
+    n_lean = 0
+    # denser zoom LOD: base degree + 4× dense ring (still cap for browser RAM)
+    dense_degree = max(max_lean_overlap_degree * 4, 80)
 
     for e in coup.get("edges") or []:
         if not isinstance(e, dict):
@@ -353,38 +365,46 @@ def build_compact_connective_tissue(
                     "lean_tag": e.get("lean_tag"),
                     "label": e.get("name"),
                     "within_green_gate": err <= 0.5,
+                    "density_tier": "base",  # always drawn
                 }
             )
             type_counts[et] += 1
             continue
 
         if et == "maps_to_lean_overlap":
-            # degree-cap lean overlap so UI stays neural, not spaghetti
+            if n_lean >= dense_lean_cap:
+                continue
             sid, tid = str(src), str(tgt)
-            if lean_deg[sid] >= max_lean_overlap_degree and lean_deg[tid] >= max_lean_overlap_degree:
-                continue
-            # prefer at least one side core or in-atlas high |S|
-            prefer = sid in core or tid in core
-            if not prefer and lean_deg[sid] + lean_deg[tid] > max_lean_overlap_degree:
-                continue
+            # base tier: tighter degree for always-visible neural mesh
+            # dense tier: higher degree, drawn only when zoomed (frontend LOD)
             if lean_deg[sid] < max_lean_overlap_degree or lean_deg[tid] < max_lean_overlap_degree:
-                edges.append(
-                    {
-                        "id": f"lean_{sid}_{tid}_{e.get('lean_tag')}",
-                        "source": _node_id(sid),
-                        "target": _node_id(tid),
-                        "kind": "coupling_lean_overlap",
-                        "layer": "archive_lean_overlap",
-                        "edge_type": et,
-                        "strength": 0.35,
-                        "error_pct": err,
-                        "lean_tag": e.get("lean_tag"),
-                        "within_green_gate": err <= 0.5,
-                    }
-                )
-                lean_deg[sid] += 1
-                lean_deg[tid] += 1
-                type_counts[et] += 1
+                tier = "base"
+            elif lean_deg[sid] < dense_degree or lean_deg[tid] < dense_degree:
+                tier = "dense"
+            else:
+                continue
+            prefer = sid in core or tid in core
+            if tier == "dense" and not prefer and lean_deg[sid] > dense_degree // 2:
+                continue
+            edges.append(
+                {
+                    "id": f"lean_{sid}_{tid}_{e.get('lean_tag')}",
+                    "source": _node_id(sid),
+                    "target": _node_id(tid),
+                    "kind": "coupling_lean_overlap",
+                    "layer": "archive_lean_overlap",
+                    "edge_type": et,
+                    "strength": 0.35 if tier == "base" else 0.2,
+                    "error_pct": err,
+                    "lean_tag": e.get("lean_tag"),
+                    "within_green_gate": err <= 0.5,
+                    "density_tier": tier,
+                }
+            )
+            lean_deg[sid] += 1
+            lean_deg[tid] += 1
+            type_counts[et] += 1
+            n_lean += 1
 
     # dedupe edges by id
     seen = set()
@@ -423,6 +443,13 @@ def build_compact_connective_tissue(
         "n_with_error": len(with_err),
         "n_green_gate": len(green),
         "edge_type_counts": dict(type_counts),
+        "density_tier_counts": {
+            t: sum(1 for e in uniq_edges if e.get("density_tier") == t)
+            for t in ("base", "dense")
+        },
+        "max_lean_overlap_degree": max_lean_overlap_degree,
+        "dense_lean_cap": dense_lean_cap,
+        "dense_degree": dense_degree,
         "coupling_raw_edge_count": coup.get("edge_count"),
         "coupling_raw_node_count": coup.get("node_count"),
         "expansion_summary": exp.get("summary"),
@@ -430,8 +457,8 @@ def build_compact_connective_tissue(
         "edges": uniq_edges,
         "note": (
             "Full FSOT connective tissue: atlas folds + navigator routes + problem intents + "
-            "archive domain-coupling validations (degree-capped lean-overlap). "
-            "Green gate ≤0.5% on median_error_pct where present."
+            "archive domain-coupling validations (degree-capped lean-overlap with base/dense LOD). "
+            "Zoom densifies mesh; green gate ≤0.5% on median_error_pct where present."
         ),
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)

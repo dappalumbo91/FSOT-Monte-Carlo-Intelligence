@@ -45,8 +45,15 @@ def main(argv: list[str] | None = None) -> int:
             "literature-status",
             "scientific-audit",
             "claims",
+            "audit-promote",
+            "flip-protocols",
+            "pred-bench",
         ],
     )
+    ap.add_argument("--set", default="", help="pred-bench: PRED id to update")
+    ap.add_argument("--status", default="", help="pred-bench status: open|in_progress|pass|kill|blocked")
+    ap.add_argument("--measured", default="", help="pred-bench measured value")
+    ap.add_argument("--source", default="", help="pred-bench measured source note")
     ap.add_argument("--host", default="127.0.0.1", help="serve host")
     ap.add_argument("--port", type=int, default=8765, help="serve port")
     ap.add_argument("-q", "--query", default="", help="Question for ask/chat")
@@ -431,11 +438,17 @@ def main(argv: list[str] | None = None) -> int:
             do_arxiv, do_wiki = True, True
 
         if do_arxiv:
-            print(f"fsot_mc {__version__}  indexing arXiv (max={args.max_papers})…")
+            # --max-papers 0 → full OAI dump, no category filter (long run)
+            full = args.max_papers <= 0
+            print(
+                f"fsot_mc {__version__}  indexing arXiv "
+                f"(max={'FULL' if full else args.max_papers}, "
+                f"filter={'none' if full else 'fsot_priority'})…"
+            )
             results["arxiv"] = build_arxiv_index(
-                max_papers=None if args.max_papers <= 0 else args.max_papers,
+                max_papers=None if full else args.max_papers,
                 rebuild=args.rebuild_index,
-                fsot_priority=True,
+                fsot_priority=False if full else True,
             )
             print(
                 "  arxiv:",
@@ -457,6 +470,80 @@ def main(argv: list[str] | None = None) -> int:
         if args.json:
             print(json.dumps(results, indent=2, default=str))
         return 0 if all((v or {}).get("ok", True) for v in results.values()) else 1
+
+    if args.command == "audit-promote":
+        from fsot_mc.formal_bridge import promote_from_audit
+
+        r = promote_from_audit(only_failures=False, also_improvements=True, run_court=True)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  AUDIT → FORMAL OBLIGATIONS")
+            print(f"  leads={r.get('n_leads')} grade={r.get('audit_grade')} score={r.get('audit_score')}")
+            court = r.get("court") or {}
+            print(f"  soft_court pending={court.get('n_pending')} promoted={court.get('n_promoted')}")
+            print(f"  pending_dir={r.get('pending_dir')}")
+            print(f"  {r.get('note')}")
+        return 0
+
+    if args.command == "flip-protocols":
+        from fsot_mc.flip_protocols import build_flip_protocol_pack
+
+        r = build_flip_protocol_pack(n_paths=min(args.n_paths, 128), seed=args.seed, write=True)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  FLIP-HOTSPOT PROTOCOLS")
+            print(f"  hotspots={r.get('n_hotspots')} n_paths={r.get('n_paths')}")
+            for c in (r.get("cards") or [])[:15]:
+                print(f"  {c.get('domain')}: flip={c.get('flip_rate'):.3f} pri={c.get('priority')} S_can={c.get('S_canonical')}")
+            print(f"  written: {r.get('written')}")
+        return 0
+
+    if args.command == "pred-bench":
+        from fsot_mc.pred_bench import (
+            init_bench_from_manifest,
+            load_bench_ledger,
+            update_pred_status,
+            write_bench_markdown,
+            bench_status_summary,
+        )
+
+        if args.set and args.status:
+            measured = None
+            if args.measured != "":
+                try:
+                    measured = float(args.measured)
+                except ValueError:
+                    measured = args.measured
+            r = update_pred_status(
+                args.set,
+                status=args.status,
+                measured_value=measured,
+                measured_source=args.source or None,
+                note=args.query or None,
+            )
+            write_bench_markdown()
+            if args.json:
+                print(json.dumps(r, indent=2, default=str))
+            else:
+                print(f"fsot_mc {__version__}  PRED-BENCH UPDATE")
+                print(f"  ok={r.get('ok')} id={args.set} status={args.status}")
+                if r.get("error"):
+                    print(f"  error={r.get('error')}")
+                print(f"  summary={r.get('summary')}")
+            return 0 if r.get("ok") else 1
+        r = init_bench_from_manifest()
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            s = r.get("summary") or bench_status_summary()
+            print(f"fsot_mc {__version__}  PRED BENCH-CLOSURE LEDGER")
+            print(f"  n={s.get('n')} by_status={s.get('by_status')}")
+            print(f"  ledger={r.get('ledger_path')}")
+            print(f"  markdown={r.get('markdown')}")
+            print("  update: python -m fsot_mc pred-bench --set PRED-001 --status pass --measured 70.8")
+        return 0
 
     if args.command == "claims":
         from fsot_mc.claims_ledger import write_claims_ledger
@@ -490,6 +577,14 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"         {c.get('finding')}")
             print(f"  report: {(r.get('written') or {}).get('markdown')}")
             print(f"  json:   {(r.get('written') or {}).get('latest')}")
+            promo = r.get("formal_promote") or {}
+            if promo:
+                court = promo.get("court") or {}
+                print(
+                    f"  formal_auto_promote: leads={promo.get('n_leads')} "
+                    f"pending={court.get('n_pending')} promoted={court.get('n_promoted')} "
+                    f"(≠ Lean-proved)"
+                )
         return 0 if not r.get("critical_failures") else 2
 
     if args.command == "literature-search":
