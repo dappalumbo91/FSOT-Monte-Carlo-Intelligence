@@ -148,6 +148,27 @@ def _looks_like_identity_query(text: str) -> bool:
     return False
 
 
+def _looks_like_pathway_query(text: str) -> bool:
+    low = (text or "").lower()
+    keys = (
+        "pathway",
+        "connective",
+        "lean module",
+        "formal module",
+        "soft court",
+        "expand the graph",
+        "add a node",
+        "connect ",
+        "bridge",
+        "maps_to_lean",
+        "multi-verifier",
+        "multi verifier",
+        "alignment",
+        "physical archive",
+    )
+    return any(k in low for k in keys)
+
+
 def _looks_like_meta_eval_query(text: str) -> bool:
     """Strengths / improve / critique / status-of-the-work questions."""
     low = (text or "").lower()
@@ -231,6 +252,9 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
     # meta eval needs more doc room for claims numbers
     if _looks_like_meta_eval_query(user_message):
         limit_docs = max(limit_docs, 10)
+    if _looks_like_pathway_query(user_message):
+        prefer.extend(["PATHWAY_ALIGNMENT", "METHODOLOGY", "CLAIMS", "PRED_BENCH"])
+        limit_docs = max(limit_docs, 10)
     retrieved = search_docs(user_message, limit=limit_docs, prefer_paths=prefer)
     # force-pull full primary domain theses when named
     hits = list(retrieved.get("hits") or [])
@@ -263,6 +287,9 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
             ("docs/METHODOLOGY.md", 1600),
         ):
             _inject_doc_chunk(hits, rel, max_chars=n)
+    if _looks_like_pathway_query(user_message):
+        _inject_doc_chunk(hits, "docs/PATHWAY_ALIGNMENT.md", max_chars=2800)
+        _inject_doc_chunk(hits, "docs/METHODOLOGY.md", max_chars=1600)
     hits = hits[:limit_docs]
     scalars = _live_scalars(domains)
     docs_text = format_hits_for_prompt(hits, max_total_chars=5500)
@@ -273,8 +300,31 @@ def build_chat_context(user_message: str, *, limit_docs: int = 8) -> dict[str, A
         )
     live = "\n".join(scalar_lines) if scalar_lines else "(no domain scalars extracted this turn)"
 
+    pathway_block = ""
+    if _looks_like_pathway_query(user_message):
+        try:
+            from fsot_mc.pathway_alignment import pathway_status
+
+            pst = pathway_status()
+            pathway_block = (
+                "=== PATHWAY / FORMAL COURT STATUS (live) ===\n"
+                f"multi_verifier_ok={pst.get('multi_verifier_ok')} lean_hub={pst.get('lean_hub')}\n"
+                f"physical_archive={pst.get('physical_archive')}\n"
+                f"certificate_claims={(pst.get('formal') or {}).get('certificate_claims')} "
+                f"pending={(pst.get('formal') or {}).get('pending')} "
+                f"promoted={(pst.get('formal') or {}).get('promoted')}\n"
+                f"scaffold_deltas={(pst.get('deltas') or {})}\n"
+                "Doctrine: propose pathways → soft court / certificate gate → scaffold edges only; "
+                "never free parameters; soft promote ≠ Lean-proved.\n"
+                "If user asks to expand the graph, include a JSON proposals block:\n"
+                '{"proposals":[{"source":"DomainA","target":"DomainB","kind":"scaffold_pathway","evidence":"..."}]}\n'
+            )
+        except Exception as exc:
+            pathway_block = f"=== PATHWAY STATUS unavailable: {exc} ===\n"
+
     block = (
         f"{IDENTITY_BLOCK}\n"
+        f"{pathway_block}"
         "=== DOCUMENTS RETRIEVED FROM PROJECT (read these) ===\n"
         f"{docs_text}\n\n"
         "=== LIVE FSOT SCALARS (Fluid Spacetime Omni-Theory engine, free_parameters=0) ===\n"
@@ -449,6 +499,25 @@ def chat(
     except Exception as exc_learn:
         learn_info = {"ok": False, "error": "learn_hook_failed", "detail": str(exc_learn)}
 
+    # Optional pathway expansion: if reply (or user) carries proposals JSON and user asked to expand
+    expand_info: dict[str, Any] | None = None
+    if _looks_like_pathway_query(message) and (
+        "proposal" in text.lower()
+        or "```" in text
+        or "connect " in message.lower()
+        or "expand" in message.lower()
+    ):
+        try:
+            from fsot_mc.pathway_alignment import propose_expansion_from_text, rebuild_tissue_with_deltas
+
+            # Prefer model JSON; also try user message for "connect A to B"
+            blob = text if ("proposals" in text or "```" in text) else message
+            expand_info = propose_expansion_from_text(blob, source="qwen_chat", run_court=True)
+            if expand_info.get("ok") and expand_info.get("scaffold_admitted"):
+                expand_info["rebuild"] = rebuild_tissue_with_deltas(force=True)
+        except Exception as exc_exp:
+            expand_info = {"ok": False, "error": "expand_hook_failed", "detail": str(exc_exp)}
+
     return {
         "ok": True,
         "method": "fsot_qwen_doc_chat",
@@ -465,6 +534,7 @@ def chat(
         "live_scalars": ctx["live_scalars"],
         "qwen": {"used": True, "ready": True, "ok": True},
         "articulation_learn": learn_info,
+        "pathway_expand": expand_info,
         "note": "Conversation grounded in project documentation RAG + live fold scalars.",
     }
 

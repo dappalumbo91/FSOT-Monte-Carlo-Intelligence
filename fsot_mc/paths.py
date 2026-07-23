@@ -76,17 +76,30 @@ def realities_snapshot_dir() -> Path:
 
 def archive_root() -> Path | None:
     """
-    Optional *external* archive for refresh only.
-    Independent mode does not require this — use archive_bundle_dir().
+    Optional *external* archive for refresh / pathway alignment.
+
+    Independent runtime uses archive_bundle_dir() and does not *require* this.
+    Set FSOT_MC_USE_PHYSICAL_ARCHIVE=1 (or FSOT_ARCHIVE_ROOT) to prefer I: hub
+    when present — used by formal cross-proof + pathway alignment.
     """
     env = os.environ.get("FSOT_ARCHIVE_ROOT")
     if env:
         p = Path(env)
         return p if p.is_dir() else None
-    # Prefer local bundle existence as "archive available"
-    if archive_bundle_dir().is_dir() and (archive_bundle_dir() / "MANIFEST.json").is_file():
-        return None  # independent: no external root
     default = Path(r"I:\FSOT-Physical-Archive")
+    use_phys = os.environ.get("FSOT_MC_USE_PHYSICAL_ARCHIVE", "").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+    )
+    if use_phys and default.is_dir():
+        return default
+    # Prefer local bundle existence as "archive available" for independence
+    if archive_bundle_dir().is_dir() and (archive_bundle_dir() / "MANIFEST.json").is_file():
+        # Still expose physical hub when it exists for optional alignment tools
+        if default.is_dir():
+            return default
+        return None
     return default if default.is_dir() else None
 
 

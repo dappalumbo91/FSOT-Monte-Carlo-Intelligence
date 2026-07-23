@@ -527,6 +527,74 @@ def build_compact_connective_tissue(
             type_counts[et] += 1
             n_lean += 1
 
+    # 6) Gated scaffold deltas (Lean/court/Qwen expansion — never seeds)
+    n_scaffold_nodes = 0
+    n_scaffold_edges = 0
+    try:
+        from fsot_mc.pathway_alignment import load_scaffold_deltas
+
+        deltas = load_scaffold_deltas()
+        for sn in deltas.get("nodes") or []:
+            if not isinstance(sn, dict):
+                continue
+            name = str(sn.get("domain") or "").strip()
+            if not name:
+                continue
+            ensure_domain(
+                name,
+                {
+                    "atlas_kind": sn.get("atlas_kind") or "scaffold_panel",
+                    "kind": sn.get("kind") or "extension",
+                    "lean_module": sn.get("lean_module"),
+                    "cluster": sn.get("cluster"),
+                    "median_error_pct": sn.get("median_error_pct"),
+                    "tier": sn.get("tier"),
+                },
+            )
+            nid = _node_id(name)
+            if nid in nodes:
+                # stamp epistemic origin without wiping archive fields
+                nodes[nid].setdefault("epistemic_tier", sn.get("epistemic_tier") or "scaffold")
+                nodes[nid].setdefault("origin", sn.get("origin") or "scaffold_delta")
+                if sn.get("lean_module") and not nodes[nid].get("lean_module"):
+                    nodes[nid]["lean_module"] = sn.get("lean_module")
+                n_scaffold_nodes += 1
+        for se in deltas.get("edges") or []:
+            if not isinstance(se, dict):
+                continue
+            s = se.get("source")
+            t = se.get("target")
+            if not s or not t:
+                continue
+            # normalize ids
+            if not str(s).startswith("dom_") and not str(s).startswith("intent_"):
+                s = _node_id(str(s).replace("dom_", ""))
+            if not str(t).startswith("dom_") and not str(t).startswith("intent_"):
+                t = _node_id(str(t).replace("dom_", ""))
+            # ensure endpoints exist
+            ensure_domain(str(s).replace("dom_", ""))
+            ensure_domain(str(t).replace("dom_", ""))
+            edges.append(
+                {
+                    "id": se.get("id") or f"scaffold_{s}_{t}",
+                    "source": s if str(s) in nodes else _node_id(str(s).replace("dom_", "")),
+                    "target": t if str(t) in nodes else _node_id(str(t).replace("dom_", "")),
+                    "kind": se.get("kind") or "scaffold_pathway",
+                    "layer": se.get("layer") or "scaffold_pathway",
+                    "strength": float(se.get("strength") or 0.4),
+                    "density_tier": se.get("density_tier") or "base",
+                    "epistemic_tier": se.get("epistemic_tier") or "scaffold",
+                    "lean_module": se.get("lean_module"),
+                    "origin": se.get("origin") or "scaffold_delta",
+                    "evidence": se.get("evidence"),
+                }
+            )
+            type_counts[str(se.get("kind") or "scaffold_pathway")] += 1
+            n_scaffold_edges += 1
+    except Exception:
+        n_scaffold_nodes = 0
+        n_scaffold_edges = 0
+
     # dedupe edges by id
     seen = set()
     uniq_edges = []
@@ -574,6 +642,11 @@ def build_compact_connective_tissue(
         "coupling_raw_edge_count": coup.get("edge_count"),
         "coupling_raw_node_count": coup.get("node_count"),
         "expansion_summary": exp.get("summary"),
+        "scaffold_deltas": {
+            "n_nodes_touched": n_scaffold_nodes,
+            "n_edges_merged": n_scaffold_edges,
+            "note": "Gated Lean/court/Qwen scaffolds — not seed retune; not Lean-proved by default",
+        },
         "nodes": list(nodes.values()),
         "edges": uniq_edges,
         "note": (

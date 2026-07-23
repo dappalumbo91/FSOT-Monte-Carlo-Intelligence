@@ -26,6 +26,7 @@
 | [docs/ARTICULATION_LEARNING.md](docs/ARTICULATION_LEARNING.md) | **Adaptive mouth LoRA** (internalize FSOT identity; never trains seeds) |
 | [docs/IMPROVEMENT_CYCLE.md](docs/IMPROVEMENT_CYCLE.md) | Latest **PRED / flip / soft-court / claims** improvement cycle report |
 | [docs/PRED_PRIORITY_ROADMAP.md](docs/PRED_PRIORITY_ROADMAP.md) | Active lab-closure PRED queue |
+| [docs/PATHWAY_ALIGNMENT.md](docs/PATHWAY_ALIGNMENT.md) | **Lean + physical archive pathway alignment** + gated graph expansion |
 | [docs/METHODOLOGY.md](docs/METHODOLOGY.md) | How the system works scientifically |
 | [docs/CLAIMS.md](docs/CLAIMS.md) | Data-first claims ledger (MEASURED / PREREG / STRUCTURE) |
 | [docs/SCIENTIFIC_AUDIT_REPORT.md](docs/SCIENTIFIC_AUDIT_REPORT.md) | Full-domain scientific audit |
@@ -78,6 +79,12 @@ python -m fsot_mc serve --port 8765
 python -m fsot_mc improve --n-paths 64
 # optional mouth LoRA micro-train after harvest:
 # python -m fsot_mc improve --train-articulation --max-steps 24
+
+# align connective pathways with Lean court + physical archive (I:)
+python -m fsot_mc pathway-status
+python -m fsot_mc align-pathways
+# gated expansion (Qwen/API/CLI) — scaffold only, free_parameters=0
+# python -m fsot_mc expand-pathways -q "{\"proposals\":[{\"source\":\"Biology\",\"target\":\"Neuroscience\",\"evidence\":\"shared fluid fold\"}]}"
 ```
 
 Linux/macOS: use `source .venv/bin/activate` instead of the PowerShell activate line.

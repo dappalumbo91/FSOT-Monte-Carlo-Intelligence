@@ -33,6 +33,9 @@ def main(argv: list[str] | None = None) -> int:
             "articulate-status",
             "articulate-loop",
             "improve",
+            "align-pathways",
+            "expand-pathways",
+            "pathway-status",
             "ask",
             "chat",
             "independent",
@@ -424,6 +427,77 @@ def main(argv: list[str] | None = None) -> int:
             if args.train_articulation:
                 tr = ((r.get("articulation") or {}).get("loop") or {}).get("train") or {}
                 print(f"  articulation train ok={tr.get('ok')} steps={tr.get('steps')}")
+        return 0 if r.get("ok") else 1
+
+    if args.command == "pathway-status":
+        from fsot_mc.pathway_alignment import pathway_status
+
+        r = pathway_status()
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  PATHWAY ALIGNMENT STATUS")
+            print(f"  gate_ok={r.get('gate_ok')} multi_verifier_ok={r.get('multi_verifier_ok')}")
+            print(f"  lean_hub={r.get('lean_hub')}")
+            print(f"  physical_archive={r.get('physical_archive')}")
+            fr = r.get("formal") or {}
+            print(f"  certificate_claims={fr.get('certificate_claims')} pending={fr.get('pending')} promoted={fr.get('promoted')}")
+            d = r.get("deltas") or {}
+            print(f"  scaffold deltas nodes={d.get('n_nodes')} edges={d.get('n_edges')}")
+            doc = r.get("doctrine") or {}
+            print(f"  propose: {doc.get('propose')}")
+            print(f"  gate:    {doc.get('gate')}")
+            print(f"  never:   {doc.get('never')}")
+        return 0
+
+    if args.command == "align-pathways":
+        from fsot_mc.pathway_alignment import run_pathway_alignment
+
+        r = run_pathway_alignment(expand=True, rebuild=True, scan_disk=True)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  PATHWAY ALIGNMENT (Lean + archive court)")
+            if not r.get("ok"):
+                print("  ERROR", r.get("error"))
+                return 1
+            print(f"  gate_ok={r.get('gate_ok')} free_parameters=0")
+            hub = (r.get("lean_hub") or {}).get("primary")
+            print(f"  lean_hub={hub}")
+            mv = r.get("multi_verifier") or {}
+            print(f"  multi_verifier overall_ok={mv.get('overall_ok')} seven_way={mv.get('seven_way_bare_metal')}")
+            g = r.get("graph") or {}
+            print(f"  graph nodes={g.get('n_nodes')} edges={g.get('n_edges')} lean_modules={g.get('n_lean_modules')}")
+            cert = r.get("certificate_alignment") or {}
+            print(f"  certificate linked={cert.get('linked_to_graph')} missing={cert.get('n_missing')} admitted={cert.get('scaffold_admitted')}")
+            disk = r.get("lean_disk") or {}
+            print(f"  lean disk modules={disk.get('n_disk_modules')} missing_on_graph={disk.get('n_missing_on_graph')} admitted={disk.get('scaffold_admitted')}")
+            sc = r.get("soft_court_pathways") or {}
+            print(f"  soft_court pathways admitted={sc.get('admitted')}")
+            reb = r.get("rebuild") or {}
+            print(f"  rebuild nodes={reb.get('n_nodes')} edges={reb.get('n_edges')}")
+            print(f"  report: docs/PATHWAY_ALIGNMENT.md")
+        return 0 if r.get("ok") else 1
+
+    if args.command == "expand-pathways":
+        from fsot_mc.pathway_alignment import propose_expansion_from_text, rebuild_tissue_with_deltas
+
+        q = (args.query or "").strip()
+        if not q:
+            print("Usage: python -m fsot_mc expand-pathways -q \"{JSON proposals or connect A to B}\"")
+            return 2
+        r = propose_expansion_from_text(q, source="cli", run_court=True)
+        reb = rebuild_tissue_with_deltas(force=True) if r.get("ok") else None
+        if args.json:
+            print(json.dumps({"propose": r, "rebuild": reb}, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  EXPAND PATHWAYS (gated)")
+            print(f"  ok={r.get('ok')} proposals={r.get('n_proposals')} scaffold_admitted={r.get('scaffold_admitted')}")
+            if r.get("error"):
+                print(f"  error={r.get('error')} {r.get('hint') or ''}")
+            if reb:
+                print(f"  rebuild nodes={reb.get('n_nodes')} edges={reb.get('n_edges')}")
+            print(f"  note: {r.get('note')}")
         return 0 if r.get("ok") else 1
 
     if args.command in ("readings", "accuracy"):
