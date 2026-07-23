@@ -832,24 +832,48 @@ Or API: `GET /api/tissue` · `GET /api/tissue/{{id}}`
 
 def resolve_doc_path(node_id: str) -> Path | None:
     """Map graph node id → markdown path if present."""
-    rel = _rel_link(node_id)
-    if rel.startswith("http"):
+    if not node_id:
         return None
-    path = TISSUE_ROOT / rel
-    if path.is_file():
-        return path
-    # try domain without prefix
-    if node_id.startswith("dom_"):
-        p2 = TISSUE_ROOT / "domains" / f"{_slug(node_id[4:])}.md"
-        if p2.is_file():
-            return p2
+    nid = str(node_id).strip()
+    # candidates in order
+    candidates: list[Path] = []
+    rel = _rel_link(nid)
+    if not rel.startswith("http"):
+        candidates.append(TISSUE_ROOT / rel)
+    if nid.startswith("dom_"):
+        candidates.append(TISSUE_ROOT / "domains" / f"{_slug(nid[4:])}.md")
+    if nid.startswith("pred_"):
+        candidates.append(TISSUE_ROOT / "predictions" / f"{_slug(nid)}.md")
+    if nid.startswith("intent_"):
+        candidates.append(TISSUE_ROOT / "routes" / f"{_slug(nid)}.md")
+    if nid.startswith("seed_") or nid == "law_K":
+        candidates.append(TISSUE_ROOT / "seeds" / f"{_slug(nid)}.md")
+    # bare domain name
+    candidates.append(TISSUE_ROOT / "domains" / f"{_slug(nid)}.md")
+    # case-insensitive scan of domains if needed
+    for p in candidates:
+        if p.is_file():
+            return p
+    # fuzzy: match domain file ignoring case
+    domains_dir = TISSUE_ROOT / "domains"
+    if domains_dir.is_dir():
+        target = _slug(nid[4:] if nid.startswith("dom_") else nid).lower()
+        for f in domains_dir.glob("*.md"):
+            if f.stem.lower() == target:
+                return f
     return None
 
 
 def get_tissue_doc(node_id: str) -> dict[str, Any]:
     path = resolve_doc_path(node_id)
     if path is None:
-        return {"ok": False, "error": "not_found", "id": node_id}
+        return {
+            "ok": False,
+            "error": "not_found",
+            "id": node_id,
+            "hint": "python -m fsot_mc tissue-docs  then restart serve",
+            "tissue_root": str(TISSUE_ROOT),
+        }
     return {
         "ok": True,
         "id": node_id,

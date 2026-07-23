@@ -555,10 +555,12 @@
     el.className = "panel scroll thesis";
     el.textContent = "loading scientific tissue thesis…";
     try {
-      const r = await api("/api/tissue/" + encodeURIComponent(nodeId));
+      // Prefer query form — more reliable than path segments across servers
+      const r = await api("/api/tissue?id=" + encodeURIComponent(nodeId));
       if (!r.ok) {
         el.innerHTML = `<div class="chip pink">no thesis yet for <code>${esc(nodeId)}</code></div>
-          <div>Run <code>python -m fsot_mc tissue-docs</code> to regenerate the library.</div>`;
+          <div>${esc(r.error || "not_found")}</div>
+          <div>Run <code>python -m fsot_mc tissue-docs</code> then restart <code>python -m fsot_mc serve</code>.</div>`;
         return;
       }
       el.innerHTML = `<div class="chip gold">${esc(r.path || "")}</div>` + simpleMarkdown(r.markdown || "");
