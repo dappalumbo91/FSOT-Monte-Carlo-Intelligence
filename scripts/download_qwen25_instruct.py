@@ -10,7 +10,10 @@ Destination (default):
 Requires: huggingface_hub (pip install huggingface_hub)
 Optional: HF_TOKEN for higher rate limits (model is public).
 
-Weights are gitignored — not pushed to GitHub.
+Why not GitHub?
+  Shards are ~3.5 GB each (~14 GB total). GitHub LFS max file size is 2 GB,
+  so the weights cannot live in this git repo. Hugging Face is the host;
+  this script is how every clone attaches the same model to the code.
 """
 
 from __future__ import annotations

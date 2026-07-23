@@ -1,9 +1,33 @@
-# Local models (not in git)
+# Local models
 
-## Qwen2.5-Instruct 7B (narration mouth)
+## Why weights are not in the GitHub git tree
+
+Qwen2.5-7B-Instruct safetensors on disk:
+
+| File | Size |
+|------|------|
+| `model-00001-of-00004.safetensors` | **~3.7 GB** |
+| `model-00002…04` | **~3.3–3.6 GB each** |
+| **Total** | **~14.2 GB** |
+
+**GitHub hard limits:**
+
+- Any single file (even with Git LFS) max **2 GB** → our shards are ~3.5 GB → **rejected**
+- Free/Pro LFS storage quotas are far below **14 GB** for a normal repo
+
+So this is not “we prefer local only” — **GitHub cannot host these blobs**.  
+Canonical weights stay on **Hugging Face** (same place every clone already downloads from).
+
+| What | Where |
+|------|--------|
+| Code + docs + chat wiring | GitHub: `FSOT-Monte-Carlo-Intelligence` |
+| Model safetensors | Hugging Face: `Qwen/Qwen2.5-7B-Instruct` |
+| After download | `vendor/models/Qwen2.5-7B-Instruct/` (gitignored working copy) |
+
+## Qwen2.5-Instruct 7B (download into the project)
 
 ```powershell
-pip install torch transformers accelerate safetensors huggingface_hub
+pip install torch transformers accelerate safetensors huggingface_hub bitsandbytes
 python scripts/download_qwen25_instruct.py
 ```
 

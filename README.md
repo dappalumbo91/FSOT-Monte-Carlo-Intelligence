@@ -96,16 +96,17 @@ python -m fsot_mc literature-search -q "quantum gravity fluid spacetime"
 
 - Live web chew: `FSOT_MC_ONLINE=1`
 - Torch polar student: `FSOT_MC_USE_TORCH=1`
-- **Qwen2.5-Instruct 7B narration** (local safetensors):
+- **Qwen2.5-Instruct 7B chat** (reads all `docs/` + tissue via RAG):
 
 ```powershell
-pip install -e ".[narrate]"   # torch transformers accelerate safetensors huggingface_hub
-python scripts/download_qwen25_instruct.py   # ~15 GB → vendor/models/Qwen2.5-7B-Instruct/
-python -m fsot_mc narrate-status
-python -m fsot_mc narrate -q "Explain multipath emergence for biology under FSOT"
+pip install -e ".[narrate]"   # torch transformers accelerate safetensors huggingface_hub bitsandbytes
+python scripts/download_qwen25_instruct.py   # ~14 GB from Hugging Face → vendor/models/
+python -m fsot_mc docs-index --rebuild-index
+python -m fsot_mc chat -q "What does the Biology thesis say about S?"
+python -m fsot_mc serve --port 8765
 ```
 
-Weights are **gitignored** (download per machine). MC mind + tissue theses = intelligence; Qwen = articulate mouth only.
+**Weights are not in git:** each safetensor shard is ~3.5 GB; GitHub LFS caps files at **2 GB**, so push fails. Official source: [`Qwen/Qwen2.5-7B-Instruct`](https://huggingface.co/Qwen/Qwen2.5-7B-Instruct). One download per machine; code + docs stay on GitHub.
 
 ---
 
