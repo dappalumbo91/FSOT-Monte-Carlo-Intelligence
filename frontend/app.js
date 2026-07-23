@@ -721,6 +721,27 @@
       }
     };
   }
+  const chatHistory = []; // {role, content} for multi-turn
+  const CHAT_SESSION = "ui";
+
+  function appendChat(role, text, meta) {
+    const log = $("chat-log");
+    if (!log) return;
+    const div = document.createElement("div");
+    div.className = "answer-block";
+    div.style.marginBottom = "0.55rem";
+    const label = role === "user" ? "You" : "Qwen · docs";
+    const color = role === "user" ? "chip" : "chip gold";
+    let metaHtml = "";
+    if (meta && meta.docs && meta.docs.length) {
+      metaHtml = `<div style="font-size:0.7rem;opacity:0.75;margin-top:0.25rem">Read: ${meta.docs.map((d) => esc(d)).join(" · ")}</div>`;
+    }
+    div.innerHTML = `<span class="${color}">${label}</span>
+      <div style="white-space:pre-wrap;margin-top:0.25rem">${esc(text)}</div>${metaHtml}`;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+  }
+
   async function refreshQwenStatus() {
     const el = $("qwen-status");
     if (!el) return;
@@ -729,7 +750,7 @@
       const q = (h && h.qwen) || {};
       if (q.ready) {
         el.className = "chip gold";
-        el.textContent = "Qwen: ready (articulates full FSOT pack)";
+        el.textContent = "Qwen: ready · reads tissue + docs (conversation)";
       } else {
         el.className = "chip pink";
         el.textContent = "Qwen: weights missing — run download_qwen25_instruct.py";
@@ -739,78 +760,120 @@
     }
   }
 
-  async function runMindAsk(query, opts = {}) {
-    const useQwen = opts.useQwen != null ? opts.useQwen : ($("ask-qwen") ? $("ask-qwen").checked : true);
-    const out = $("ask-out");
-    out.textContent = useQwen
-      ? "multipath mind + packing tissue/lit → Qwen articulating… (first load may take ~20s)"
-      : "thinking (multipath only)…";
+  async function runDocChat(message) {
+    const log = $("chat-log");
+    if (log && !log.dataset.booted) {
+      log.dataset.booted = "1";
+      log.innerHTML = "";
+      appendChat(
+        "assistant",
+        "I can discuss this project's documentation: every domain tissue thesis, methodology, claims, PREDs, audit notes. Ask me anything about the work.",
+        null
+      );
+    }
+    appendChat("user", message, null);
+    const thinking = document.createElement("div");
+    thinking.className = "answer-block";
+    thinking.id = "chat-thinking";
+    thinking.innerHTML = `<span class="chip pink">reading docs…</span> <span style="opacity:0.8">retrieving theses & generating reply (can take 20–60s)</span>`;
+    if (log) {
+      log.appendChild(thinking);
+      log.scrollTop = log.scrollHeight;
+    }
+
     const body = {
-      query,
-      n_paths: opts.n_paths || 28,
-      chew: $("ask-chew") && $("ask-chew").checked ? true : null,
-      narrate: !!useQwen,
-      node_id: opts.node_id || null,
-      max_tokens: 400,
+      mode: "chat",
+      query: message,
+      message,
+      session_id: CHAT_SESSION,
+      history: chatHistory.slice(-12),
+      max_tokens: 450,
     };
-    const r = await api("/api/ask", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const th = r.thinking || {};
-    const qw = r.qwen || {};
-    const domains = (th.routed_domains || []).map((d) => `<span class="chip">${esc(d)}</span>`).join(" ");
-    const qChip = qw.used
-      ? `<span class="chip gold">Qwen on</span>`
-      : `<span class="chip pink">Qwen off${qw.error ? ": " + esc(String(qw.error)) : ""}</span>`;
-    const ans = r.answer || r.narration || "";
-    const raw = r.answer_raw || "";
-    out.innerHTML = `
-      <div class="answer-block"><span class="label">${qw.used ? "Qwen · FSOT pack" : "Mind answer"}</span>
-      <div style="white-space:pre-wrap">${esc(ans)}</div></div>
-      <div class="answer-block"><span class="label">Folds</span><div>${domains || "—"}</div></div>
-      <div>${qChip}
-        <span class="chip pink">paths ${th.n_paths || "—"}</span>
-        ${r.pack_summary && r.pack_summary.n_theses != null ? `<span class="chip">theses ${r.pack_summary.n_theses}</span>` : ""}
-        ${r.pack_summary && r.pack_summary.n_lit != null ? `<span class="chip">lit ${r.pack_summary.n_lit}</span>` : ""}
-      </div>
-      ${raw && qw.used ? `<details style="margin-top:0.5rem"><summary class="label">Raw multipath mind</summary>
-        <div style="white-space:pre-wrap;font-size:0.8rem;opacity:0.9">${esc(raw.slice(0, 2000))}${raw.length > 2000 ? "…" : ""}</div></details>` : ""}
-    `;
-    loadMemory();
-    return r;
+    try {
+      const r = await api("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const th = $("chat-thinking");
+      if (th) th.remove();
+      if (!r.ok && r.error) {
+        appendChat("assistant", `Error: ${r.error}${r.detail ? " — " + r.detail : ""}${r.hint ? " (" + r.hint + ")" : ""}`, null);
+        return r;
+      }
+      const reply = r.reply || r.answer || "(empty reply)";
+      chatHistory.push({ role: "user", content: message });
+      chatHistory.push({ role: "assistant", content: reply });
+      const docs = (r.docs_used || []).map((d) => d.path || d.title || "").filter(Boolean).slice(0, 6);
+      appendChat("assistant", reply, { docs });
+      if ($("ask-out")) {
+        $("ask-out").style.display = "none";
+      }
+      return r;
+    } catch (e) {
+      const th = $("chat-thinking");
+      if (th) th.remove();
+      appendChat("assistant", "Request failed: " + e.message + " (wait for Qwen warm; reply can take up to a minute)", null);
+      throw e;
+    }
   }
 
   $("btn-ask").onclick = async () => {
     const q = $("ask-input").value.trim();
     if (!q) return;
+    $("ask-input").value = "";
     try {
-      await runMindAsk(q);
-    } catch (e) {
-      $("ask-out").textContent = "error: " + e.message;
-    }
+      await runDocChat(q);
+    } catch (_) { /* shown in chat */ }
   };
+
+  if ($("btn-chat-clear")) {
+    $("btn-chat-clear").onclick = async () => {
+      chatHistory.length = 0;
+      try {
+        await api("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ clear: true, session_id: CHAT_SESSION }),
+        });
+      } catch (_) {}
+      const log = $("chat-log");
+      if (log) {
+        log.innerHTML = "";
+        log.dataset.booted = "";
+      }
+      appendChat("assistant", "Chat cleared. Ask about any tissue thesis, claim, or report.", null);
+    };
+  }
+
+  // Enter to send (Shift+Enter newline)
+  if ($("ask-input")) {
+    $("ask-input").addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" && !ev.shiftKey) {
+        ev.preventDefault();
+        $("btn-ask").click();
+      }
+    });
+  }
 
   if ($("btn-explain")) {
     $("btn-explain").onclick = async () => {
       if (!selected) {
-        $("ask-out").textContent = "Select a graph node first, then Explain with Qwen.";
+        appendChat("assistant", "Select a graph node first, then ask me about it.", null);
         return;
       }
       const dom = selected.domain || selected.label || selected.id;
-      const q = `Explain the FSOT fold/node "${dom}" using the full workspace pack: S, D_eff, regime, tissue thesis, multipath, and any literature. Clear scientific prose.`;
-      if ($("ask-input")) $("ask-input").value = q;
-      if ($("ask-qwen")) $("ask-qwen").checked = true;
+      const q = `Using the tissue thesis and live scalars, explain the FSOT node "${dom}" to me in clear conversation. What is S, D_eff, regime, and why does it matter in this project?`;
+      if ($("ask-input")) $("ask-input").value = "";
       try {
-        await runMindAsk(q, { node_id: selected.id || selected.domain, useQwen: true });
-      } catch (e) {
-        $("ask-out").textContent = "error: " + e.message;
-      }
+        await runDocChat(q);
+      } catch (_) {}
     };
   }
 
   refreshQwenStatus();
+  // index docs on load (async, non-blocking)
+  api("/api/docs/index?rebuild=0").catch(() => {});
 
   $("btn-readings").onclick = async () => {
     $("side-out").textContent = "loading accuracy…";

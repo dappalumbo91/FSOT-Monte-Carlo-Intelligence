@@ -32,15 +32,20 @@
     <main class="layout">
       <aside class="sidebar left">
         <section>
-          <h2>Mind + Qwen</h2>
-          <textarea id="ask-input" rows="3" placeholder="Ask FSOT… multipath mind + Qwen2.5 articulates"></textarea>
+          <h2>Talk to the work</h2>
+          <p style="font-size:0.75rem;opacity:0.8;margin:0 0 0.35rem 0">
+            Qwen reads tissue theses + docs (RAG) and converses about this project.
+          </p>
+          <div id="chat-log" class="panel scroll" style="min-height:12rem;max-height:22rem;margin-bottom:0.4rem"></div>
+          <textarea id="ask-input" rows="3" placeholder="Ask about Biology, Cosmology, claims, methodology, PREDs…"></textarea>
           <div class="row">
-            <label><input type="checkbox" id="ask-chew" /> chew literature</label>
-            <label title="Uses Qwen2.5-7B over full FSOT pack (default on)"><input type="checkbox" id="ask-qwen" checked /> Qwen</label>
-            <button id="btn-ask">Think</button>
+            <button id="btn-ask">Send</button>
+            <button id="btn-chat-clear" type="button">Clear chat</button>
           </div>
           <div id="qwen-status" class="chip" style="margin:0.35rem 0;font-size:0.75rem">Qwen: …</div>
-          <div id="ask-out" class="panel scroll"></div>
+          <div id="ask-out" class="panel scroll" style="display:none"></div>
+          <label style="display:none"><input type="checkbox" id="ask-chew" /></label>
+          <label style="display:none"><input type="checkbox" id="ask-qwen" checked /></label>
         </section>
         <section>
           <h2>Legend</h2>
@@ -64,7 +69,7 @@
           <h2>Selection</h2>
           <div id="sel-out" class="panel scroll empty">Click a seed, fold, memory, or prediction</div>
           <button id="btn-thesis" class="full" style="margin-top:0.45rem;width:100%">Open scientific tissue thesis</button>
-          <button id="btn-explain" class="full" style="margin-top:0.35rem;width:100%">Explain with Qwen (selected node)</button>
+          <button id="btn-explain" class="full" style="margin-top:0.35rem;width:100%">Ask Qwen about selected node</button>
         </section>
         <section>
           <h2>Tissue thesis</h2>

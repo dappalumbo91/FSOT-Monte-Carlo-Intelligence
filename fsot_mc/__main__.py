@@ -51,6 +51,9 @@ def main(argv: list[str] | None = None) -> int:
             "narrate",
             "narrate-status",
             "download-qwen",
+            "docs-index",
+            "docs-search",
+            "chat",
         ],
     )
     ap.add_argument("--node", default="", help="narrate: tissue node id or domain name")
@@ -627,6 +630,73 @@ def main(argv: list[str] | None = None) -> int:
 
         script = PACKAGE_ROOT / "scripts" / "download_qwen25_instruct.py"
         return subprocess.call([sys.executable, str(script)])
+
+    if args.command == "docs-index":
+        from fsot_mc.doc_rag import build_doc_index
+
+        r = build_doc_index(rebuild=bool(args.rebuild_index))
+        if args.json:
+            print(json.dumps(r, indent=2))
+        else:
+            print(f"fsot_mc {__version__}  DOCS INDEX")
+            print(f"  ok={r.get('ok')} files={r.get('n_files')} chunks={r.get('n_chunks')}")
+            print(f"  db={r.get('db')}")
+        return 0 if r.get("ok") else 1
+
+    if args.command == "docs-search":
+        from fsot_mc.doc_rag import search_docs
+
+        q = (args.query or "").strip() or "Biology multipath FSOT"
+        r = search_docs(q, limit=8)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  DOCS SEARCH")
+            print(f"  Q: {q}  hits={r.get('n_hits')}")
+            for h in r.get("hits") or []:
+                print(f"  - {h.get('path')} :: {h.get('title')}")
+                print(f"    {(h.get('body') or '')[:160].replace(chr(10), ' ')}…")
+        return 0 if r.get("ok") else 1
+
+    if args.command == "chat":
+        from fsot_mc.qwen_chat import chat as qwen_chat, clear_history
+
+        q = (args.query or "").strip()
+        if not q:
+            # interactive
+            print(f"fsot_mc {__version__}  CHAT  (Qwen · reads docs/tissue)")
+            print("Type 'quit' to exit, 'clear' to reset history.\n")
+            sid = "cli"
+            while True:
+                try:
+                    line = input("you> ").strip()
+                except (EOFError, KeyboardInterrupt):
+                    print()
+                    break
+                if not line:
+                    continue
+                if line.lower() in ("quit", "exit", "q"):
+                    break
+                if line.lower() == "clear":
+                    clear_history(sid)
+                    print("(history cleared)")
+                    continue
+                r = qwen_chat(line, session_id=sid, max_new_tokens=args.max_tokens, temperature=args.temperature)
+                if not r.get("ok"):
+                    print("error>", r.get("error"), r.get("detail") or r.get("hint") or "")
+                    continue
+                docs = ", ".join((d.get("path") or "") for d in (r.get("docs_used") or [])[:4])
+                print(f"docs> {docs}")
+                print(f"qwen> {r.get('reply')}\n")
+            return 0
+        r = qwen_chat(q, session_id="cli-once", max_new_tokens=args.max_tokens, temperature=args.temperature)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  CHAT")
+            print(f"  docs: {[d.get('path') for d in (r.get('docs_used') or [])]}")
+            print(f"  A: {r.get('reply') or r.get('error')}")
+        return 0 if r.get("ok") else 1
 
     if args.command == "narrate-status":
         from fsot_mc.qwen_narrate import model_ready, model_dir, DEFAULT_HF_ID

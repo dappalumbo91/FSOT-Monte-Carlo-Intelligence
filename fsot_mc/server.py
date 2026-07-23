@@ -118,16 +118,59 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
             return _json_bytes(t)
 
         if path == "/api/ask" and method == "POST":
+            """
+            Default UI path = DOCUMENTATION CHAT with Qwen (reads tissue + docs).
+            mode=mind → legacy multipath-only / full_mind_answer pipeline.
+            """
+            data = json.loads(body.decode("utf-8") or "{}")
+            mode = str(data.get("mode") or "chat").lower()
+            query = str(data.get("query") or data.get("message") or "").strip()
+            if not query:
+                return _json_bytes({"ok": False, "error": "query_required"}, 400)
+
+            # Prefer real documentation conversation
+            if mode in ("chat", "docs", "converse", "default", ""):
+                from fsot_mc.qwen_chat import chat as qwen_chat
+
+                r = qwen_chat(
+                    query,
+                    session_id=str(data.get("session_id") or "ui"),
+                    history=data.get("history"),
+                    max_new_tokens=int(data.get("max_tokens") or 450),
+                    temperature=float(data.get("temperature") or 0.45),
+                )
+                return _json_bytes(
+                    {
+                        "ok": r.get("ok"),
+                        "error": r.get("error"),
+                        "detail": r.get("detail"),
+                        "answer": r.get("reply") or r.get("answer"),
+                        "reply": r.get("reply"),
+                        "qwen": r.get("qwen")
+                        or {
+                            "used": bool(r.get("ok")),
+                            "ready": True,
+                            "ok": bool(r.get("ok")),
+                        },
+                        "docs_used": r.get("docs_used"),
+                        "n_docs": r.get("n_docs"),
+                        "domains": r.get("domains"),
+                        "live_scalars": r.get("live_scalars"),
+                        "method": r.get("method") or "fsot_qwen_doc_chat",
+                        "session_id": r.get("session_id"),
+                        "free_parameters": 0,
+                        "note": r.get("note"),
+                    }
+                )
+
+            # Legacy multipath mind (+ optional narrate pack)
             from fsot_mc.qwen_narrate import full_mind_answer
 
-            data = json.loads(body.decode("utf-8") or "{}")
-            # Default: Qwen articulates the full FSOT pack (mind+tissue+lit+…).
-            # Pass narrate=false only to force raw mind text.
             use_qwen = data.get("narrate", data.get("use_qwen", True))
             if isinstance(use_qwen, str):
                 use_qwen = use_qwen.lower() not in ("0", "false", "no")
             r = full_mind_answer(
-                str(data.get("query") or "What is the FSOT universe state?"),
+                query,
                 n_paths=int(data.get("n_paths") or 32),
                 chew=data.get("chew"),
                 node_id=data.get("node_id") or data.get("node"),
@@ -158,6 +201,42 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
                     "free_parameters": 0,
                 }
             )
+
+        if path == "/api/chat" and method == "POST":
+            from fsot_mc.qwen_chat import chat as qwen_chat, clear_history
+
+            data = json.loads(body.decode("utf-8") or "{}")
+            if data.get("clear"):
+                clear_history(str(data.get("session_id") or "ui"))
+                return _json_bytes({"ok": True, "cleared": True, "free_parameters": 0})
+            msg = str(data.get("message") or data.get("query") or "").strip()
+            if not msg:
+                return _json_bytes({"ok": False, "error": "message_required"}, 400)
+            r = qwen_chat(
+                msg,
+                session_id=str(data.get("session_id") or "ui"),
+                history=data.get("history"),
+                max_new_tokens=int(data.get("max_tokens") or 450),
+                temperature=float(data.get("temperature") or 0.45),
+            )
+            return _json_bytes(r)
+
+        if path == "/api/docs/search" and method == "GET":
+            from fsot_mc.doc_rag import search_docs, index_status
+
+            q = q1("q", "") or q1("query", "")
+            if not q:
+                return _json_bytes({"ok": True, "index": index_status(), "hits": []})
+            return _json_bytes(search_docs(q, limit=int(q1("limit", "8"))))
+
+        if path == "/api/docs/index" and method in ("POST", "GET"):
+            from fsot_mc.doc_rag import build_doc_index
+
+            rebuild = q1("rebuild", "0") in ("1", "true", "yes")
+            if method == "POST" and body:
+                data = json.loads(body.decode("utf-8") or "{}")
+                rebuild = bool(data.get("rebuild", rebuild))
+            return _json_bytes(build_doc_index(rebuild=rebuild))
 
         if path == "/api/narrate/status" and method == "GET":
             from fsot_mc.qwen_narrate import model_ready, DEFAULT_HF_ID, model_dir
