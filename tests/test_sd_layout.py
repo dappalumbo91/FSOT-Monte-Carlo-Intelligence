@@ -1,47 +1,11 @@
-"""S–D_eff polar layout: geometry must track signed S and D_eff."""
+"""Classic D_eff-ring layout with S-ordering on each shell."""
 
 from __future__ import annotations
 
-from fsot_mc.graph_model import build_universe_graph, layout_diagnostics, s_to_angle, deff_to_radius
+from fsot_mc.graph_model import build_universe_graph
 
 
-def test_s_to_angle_hemispheres():
-    # emergence (S>0) → smaller |angle from east| than dispersal
-    a_pos = s_to_angle(1.0)
-    a_neg = s_to_angle(-1.0)
-    a_zero = s_to_angle(0.0)
-    assert abs(a_pos) < 0.5  # near east (0)
-    assert abs(a_neg - 3.14159) < 0.5 or abs(a_neg + 3.14159) < 0.5  # near west (π)
-    assert 1.2 < a_zero < 1.9  # near north (π/2)
-
-
-def test_deff_radius_monotonic():
-    assert deff_to_radius(5) < deff_to_radius(15) < deff_to_radius(25)
-
-
-def test_core_layout_organization():
-    g = build_universe_graph(
-        scope="core",
-        with_mc=False,
-        with_archive_connective=False,
-        with_memory=False,
-        with_predictions=False,
-    )
-    d = layout_diagnostics(g["nodes"])
-    assert d["n_dispersal_S_lt_0"] >= 5
-    assert d["n_emergence_S_gt_0"] >= 15
-    # hemispheric rank layout: strong S→east and D→radius
-    assert d["order_score_S_vs_east_x"] >= 0.85
-    assert d["order_score_D_vs_radius"] >= 0.99
-    by = {r["domain"]: r for r in d["core_table"]}
-    # dispersal west (x<0), emergence east (x>0)
-    assert by["Fluid_Dynamics"]["x_east"] < 0
-    assert by["Particle_Physics"]["x_east"] > 0
-    assert by["Fluid_Dynamics"]["x_east"] < by["Particle_Physics"]["x_east"]
-    assert by["Cosmology"]["layout_r"] > by["Particle_Physics"]["layout_r"]
-
-
-def test_seed_hub_connected():
+def test_seed_hub_present():
     g = build_universe_graph(
         scope="core",
         with_mc=False,
@@ -53,34 +17,47 @@ def test_seed_hub_connected():
     law = [n for n in g["nodes"] if n.get("kind") == "law"]
     assert len(seeds) == 5
     assert len(law) == 1
-    assert float(law[0].get("layout_r") or 0) == 0.0
-    for s in seeds:
-        assert float(s.get("layout_r") or 0) > 0
-        # seeds inside hub, cores outside
-        assert float(s["layout_r"]) < 80
-    cores = [n for n in g["nodes"] if n.get("is_core")]
-    min_core_r = min(float(n["layout_r"]) for n in cores)
-    max_seed_r = max(float(n["layout_r"]) for n in seeds)
-    assert min_core_r > max_seed_r + 40  # clear gap so spokes read
-    kinds = {e.get("kind") for e in g["edges"]}
-    assert "seed_to_law" in kinds
-    assert "law_to_domain" in kinds
-    seed_edges = [e for e in g["edges"] if e.get("kind") == "seed_to_law"]
-    assert len(seed_edges) == 5
+    assert sum(1 for e in g["edges"] if e.get("kind") == "seed_to_law") == 5
+    assert sum(1 for e in g["edges"] if e.get("kind") == "law_to_domain") >= 30
 
 
-def test_full_layout_keeps_signed_s():
+def test_ring_from_deff_and_s_order_within_ring():
+    g = build_universe_graph(
+        scope="core",
+        with_mc=False,
+        with_archive_connective=False,
+        with_memory=False,
+        with_predictions=False,
+    )
+    cores = [n for n in g["nodes"] if n.get("is_core") or n.get("kind") == "domain"]
+    assert len(cores) >= 30
+    # same D_eff share a ring band
+    by_ring: dict[int, list] = {}
+    for n in cores:
+        by_ring.setdefault(int(n["ring"]), []).append(n)
+    # within each ring with 2+ nodes that have S, angles follow S order
+    for ring, group in by_ring.items():
+        with_s = [n for n in group if n.get("S") is not None and n.get("angle") is not None]
+        if len(with_s) < 2:
+            continue
+        ordered = sorted(with_s, key=lambda n: float(n["angle"]))
+        s_vals = [float(n["S"]) for n in ordered]
+        # non-decreasing S as we walk the shell angles (allowing wrap at cut)
+        # check majority of consecutive pairs increase or stay
+        ups = sum(1 for a, b in zip(s_vals, s_vals[1:]) if b >= a - 1e-12)
+        assert ups >= len(s_vals) - 2 or ups >= (len(s_vals) - 1) * 0.7
+
+
+def test_signed_s_not_path_mean():
     g = build_universe_graph(scope="full", with_mc=True, n_paths=16)
     cores = [n for n in g["nodes"] if n.get("is_core")]
     neg = [n for n in cores if float(n.get("S") or 0) < 0]
-    pos = [n for n in cores if float(n.get("S") or 0) > 0]
-    assert len(neg) >= 5
-    assert len(pos) >= 15
+    assert len(neg) >= 5  # dispersal cores keep negative S
     for n in cores:
         if n.get("S_path_mean") is not None and n.get("S_canonical") is not None:
             assert abs(float(n["S"]) - float(n["S_canonical"])) < 1e-9
-    d = g["meta"]["layout_diagnostics"]
-    assert d["order_score_D_vs_radius"] >= 0.9
-    assert d["order_score_S_vs_east_x"] >= 0.85
-    # seeds still present in full graph
-    assert sum(1 for n in g["nodes"] if n.get("kind") == "seed") == 5
+
+
+def test_meta_layout_mode():
+    g = build_universe_graph(scope="core", with_mc=False, with_archive_connective=False)
+    assert (g.get("meta") or {}).get("layout_mode") == "deff_ring_s_ordered"
