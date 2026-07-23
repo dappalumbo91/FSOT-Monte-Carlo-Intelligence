@@ -250,6 +250,26 @@ def handle_api(method: str, path: str, query: dict[str, list[str]], body: bytes)
             m = generate_all_tissue_docs(write=True)
             return _json_bytes({"ok": True, **m})
 
+        if path == "/api/literature" and method == "GET":
+            from fsot_mc.literature_corpus import literature_search, literature_status
+
+            q = q1("q", "") or q1("query", "")
+            if not q:
+                return _json_bytes(literature_status())
+            return _json_bytes(
+                literature_search(
+                    q,
+                    arxiv_limit=int(q1("arxiv_limit", "6")),
+                    wiki_limit=int(q1("wiki_limit", "4")),
+                    with_fsot=True,
+                )
+            )
+
+        if path == "/api/literature/status" and method == "GET":
+            from fsot_mc.literature_corpus import literature_status
+
+            return _json_bytes(literature_status())
+
         return _json_bytes({"ok": False, "error": "not_found", "path": path}, 404)
     except Exception as exc:
         return _json_bytes(

@@ -23,6 +23,7 @@ data/exports/
 
 data/memory/
 data/connective_tissue_compact.json
+data/literature/
 
 
 # huge raw coupling (compact tissue is shipped instead)

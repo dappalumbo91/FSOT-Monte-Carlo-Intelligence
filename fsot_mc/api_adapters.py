@@ -341,15 +341,46 @@ def fetch_wikipedia_summary(title: str) -> dict[str, Any]:
 def chew_science_text(query: str) -> dict[str, Any]:
     """
     Chew natural + structural science language for the mind.
-    Prefers arXiv; falls back to Wikipedia summary of a key phrase.
+
+    Order:
+      1) Local arXiv + Simple Wikipedia corpus (offline, FSOT cross-ref)
+      2) Live arXiv Atom API (if FSOT_MC_ONLINE=1)
+      3) Live Wikipedia REST
+      4) Offline demo stubs
     """
     q = (query or "").strip()
     if not q:
         return {"ok": False, "error": "empty_query"}
 
-    # Prefer arXiv for science-y queries
+    # 1) Local literature corpus (D: dump / simple-wiki indexes)
+    try:
+        from fsot_mc.literature_corpus import literature_search, literature_status
+
+        st = literature_status()
+        if (st.get("arxiv_indexed") or 0) > 0 or (st.get("wiki_indexed") or 0) > 0:
+            lit = literature_search(q, arxiv_limit=5, wiki_limit=3, with_fsot=True)
+            if lit.get("ok") and lit.get("excerpt"):
+                return {
+                    "ok": True,
+                    "source": "local_literature_corpus",
+                    "title": lit.get("title"),
+                    "excerpt": lit.get("excerpt"),
+                    "n_chars": lit.get("n_chars"),
+                    "query": q,
+                    "domain_hint": lit.get("domain_hint"),
+                    "primary_domains": lit.get("primary_domains"),
+                    "literature": lit,
+                    "fsot_crossref": True,
+                    "free_parameters": 0,
+                }
+    except Exception as exc:
+        lit_err = str(exc)
+    else:
+        lit_err = None
+
+    # 2) Prefer live arXiv when online
     arx = fetch_arxiv_search(q, max_results=2)
-    if arx.get("ok") and arx.get("excerpt"):
+    if arx.get("ok") and arx.get("excerpt") and arx.get("source") != "demo_offline":
         return {
             "ok": True,
             "source": f"arxiv:{arx.get('source')}",
@@ -361,7 +392,7 @@ def chew_science_text(query: str) -> dict[str, Any]:
             "free_parameters": 0,
         }
 
-    # Wikipedia: pick a topic keyword
+    # 3) Wikipedia online / offline
     topic = q
     for key in (
         "general relativity",
@@ -375,12 +406,11 @@ def chew_science_text(query: str) -> dict[str, Any]:
             topic = key.title() if key != "spacetime" else "Spacetime"
             break
     else:
-        # first 3 significant words
         words = [w for w in q.replace("?", "").split() if len(w) > 3][:3]
         topic = " ".join(words) if words else "Spacetime"
 
     wiki = fetch_wikipedia_summary(topic)
-    if wiki.get("ok"):
+    if wiki.get("ok") and wiki.get("source") != "demo_offline":
         return {
             "ok": True,
             "source": f"wikipedia:{wiki.get('source')}",
@@ -391,7 +421,39 @@ def chew_science_text(query: str) -> dict[str, Any]:
             "domain_hint": wiki.get("domain_hint"),
             "free_parameters": 0,
         }
-    return {"ok": False, "error": "chew_failed", "arxiv": arx, "wikipedia": wiki}
+
+    # 4) Fall back to whatever we got (including demos)
+    if arx.get("ok") and arx.get("excerpt"):
+        return {
+            "ok": True,
+            "source": f"arxiv:{arx.get('source')}",
+            "title": arx.get("title"),
+            "excerpt": arx.get("excerpt"),
+            "n_chars": arx.get("n_chars"),
+            "query": q,
+            "domain_hint": arx.get("domain_hint"),
+            "local_literature_error": lit_err,
+            "free_parameters": 0,
+        }
+    if wiki.get("ok"):
+        return {
+            "ok": True,
+            "source": f"wikipedia:{wiki.get('source')}",
+            "title": wiki.get("title"),
+            "excerpt": wiki.get("excerpt"),
+            "n_chars": wiki.get("n_chars"),
+            "query": q,
+            "domain_hint": wiki.get("domain_hint"),
+            "local_literature_error": lit_err,
+            "free_parameters": 0,
+        }
+    return {
+        "ok": False,
+        "error": "chew_failed",
+        "arxiv": arx,
+        "wikipedia": wiki,
+        "local_literature_error": lit_err,
+    }
 
 
 ADAPTERS: dict[str, Callable[[], dict[str, Any]]] = {

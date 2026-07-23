@@ -5,7 +5,7 @@
 | | |
 |--|--|
 | **Author** | Damian Arthur Palumbo |
-| **Version** | 1.2.0 |
+| **Version** | 1.3.0 |
 | **Authority pin** | **D1D38A** · `free_parameters = 0` |
 | **Theory law court** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | **Product** | Universe multipath intelligence (**not** markets) |
@@ -94,6 +94,20 @@ python -m fsot_mc serve
 ```
 
 API: `/api/graph` `/api/ask` `/api/readings` `/api/memory` `/api/protocols` `/api/solidify` `/api/mc` `/api/tissue/{id}`
+
+### Local literature (arXiv dump + Simple Wikipedia)
+
+Offline cross-ref of verified research into FSOT folds (does not rewrite seeds):
+
+```powershell
+python -m fsot_mc literature-status
+python -m fsot_mc literature-index --max-papers 100000 --max-articles 50000
+python -m fsot_mc literature-search -q "Hubble tension dark energy"
+```
+
+Default arXiv path: `D:\training data\arXiv Dataset\arxiv-metadata-oai-snapshot.json`  
+Wiki: `D:\training data\nlp\simple-wiki` (override with `FSOT_MC_ARXIV_JSON` / `FSOT_MC_WIKI_ROOT`)  
+Docs: [docs/LITERATURE_CORPUS.md](docs/LITERATURE_CORPUS.md)
 
 ### Scientific tissue theses (per node)
 

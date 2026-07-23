@@ -40,6 +40,9 @@ def main(argv: list[str] | None = None) -> int:
             "solidify",
             "protocols",
             "tissue-docs",
+            "literature-index",
+            "literature-search",
+            "literature-status",
         ],
     )
     ap.add_argument("--host", default="127.0.0.1", help="serve host")
@@ -49,6 +52,11 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--think", action="store_true", help="Show full thinking trace")
     ap.add_argument("--chew", action="store_true", help="Chew arXiv/Wikipedia into mind (FSOT_MC_ONLINE=1 for live)")
+    ap.add_argument("--max-papers", type=int, default=100_000, help="literature-index max arXiv papers")
+    ap.add_argument("--max-articles", type=int, default=50_000, help="literature-index max wiki articles")
+    ap.add_argument("--wiki", action="store_true", help="index Simple Wikipedia in literature-index")
+    ap.add_argument("--arxiv-only", action="store_true", help="literature-index: arXiv only")
+    ap.add_argument("--rebuild-index", action="store_true", help="rebuild literature indexes")
     ap.add_argument(
         "--scope",
         default="core",
@@ -393,6 +401,87 @@ def main(argv: list[str] | None = None) -> int:
             print("  root=docs/tissue/  index=docs/tissue/INDEX.md")
             print("  each node = miniature thesis (math · results · application · connective tissue)")
         return 0
+
+    if args.command == "literature-status":
+        from fsot_mc.literature_corpus import literature_status
+
+        st = literature_status()
+        if args.json:
+            print(json.dumps(st, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  LITERATURE CORPUS")
+            print(f"  arxiv file: {st.get('arxiv_path')} exists={st.get('arxiv_exists')} size_gb={st.get('arxiv_size_gb')}")
+            print(f"  arxiv index: {st.get('arxiv_indexed')} papers → {st.get('arxiv_db')}")
+            print(f"  wiki root: {st.get('wiki_root')} exists={st.get('wiki_exists')}")
+            print(f"  wiki index: {st.get('wiki_indexed')} articles → {st.get('wiki_db')}")
+        return 0
+
+    if args.command == "literature-index":
+        from fsot_mc.literature_corpus import build_arxiv_index, build_wiki_index
+
+        results: dict = {}
+        do_arxiv = not args.wiki or args.arxiv_only or True
+        do_wiki = not args.arxiv_only
+        if args.arxiv_only:
+            do_arxiv, do_wiki = True, False
+        # default both; --arxiv-only skips wiki; --wiki still indexes arxiv too unless arxiv-only
+        if not args.arxiv_only:
+            do_arxiv, do_wiki = True, True
+
+        if do_arxiv:
+            print(f"fsot_mc {__version__}  indexing arXiv (max={args.max_papers})…")
+            results["arxiv"] = build_arxiv_index(
+                max_papers=None if args.max_papers <= 0 else args.max_papers,
+                rebuild=args.rebuild_index,
+                fsot_priority=True,
+            )
+            print(
+                "  arxiv:",
+                {
+                    k: results["arxiv"].get(k)
+                    for k in ("ok", "n_papers", "n_scanned", "seconds", "error")
+                },
+            )
+        if do_wiki:
+            print(f"fsot_mc {__version__}  indexing Simple Wikipedia (max={args.max_articles})…")
+            results["wiki"] = build_wiki_index(
+                max_articles=None if args.max_articles <= 0 else args.max_articles,
+                rebuild=args.rebuild_index,
+            )
+            print(
+                "  wiki:",
+                {k: results["wiki"].get(k) for k in ("ok", "n_articles", "seconds", "error")},
+            )
+        if args.json:
+            print(json.dumps(results, indent=2, default=str))
+        return 0 if all((v or {}).get("ok", True) for v in results.values()) else 1
+
+    if args.command == "literature-search":
+        from fsot_mc.literature_corpus import literature_search
+
+        q = (args.query or "").strip() or "quantum gravity fluid spacetime cosmology"
+        r = literature_search(q, arxiv_limit=5, wiki_limit=3, with_fsot=True)
+        if args.json:
+            print(json.dumps(r, indent=2, default=str))
+        else:
+            print(f"fsot_mc {__version__}  LITERATURE SEARCH + FSOT CROSS-REF")
+            print(f"  Q: {q}")
+            print(f"  source={r.get('source')} domains={r.get('primary_domains')}")
+            print(f"  index={r.get('index_status')}")
+            for h in ((r.get("arxiv") or {}).get("hits") or [])[:5]:
+                print(f"  arXiv {h.get('id')}: {h.get('title')}")
+                print(f"    cats={h.get('categories')} → FSOT {h.get('fsot_domains')}")
+                folds = h.get("fsot_fold_panel") or []
+                if folds:
+                    print(
+                        "    folds:",
+                        "; ".join(
+                            f"{f.get('domain')} S={f.get('S')} {f.get('regime')}" for f in folds[:3]
+                        ),
+                    )
+            for h in ((r.get("wikipedia") or {}).get("hits") or [])[:3]:
+                print(f"  Wiki: {h.get('title')} → {h.get('fsot_domains')}")
+        return 0 if r.get("ok") else 1
 
     if args.command == "ask":
         from fsot_mc.mind import ask

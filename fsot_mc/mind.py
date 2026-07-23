@@ -441,6 +441,23 @@ def _compose_scientific_answer(
             "Text is treated as observation stream into the fluid map — it does not rewrite seeds; "
             "it densifies routing and explanation against real literature structure."
         )
+        if chew.get("fsot_crossref") and chew.get("primary_domains"):
+            parts.append(
+                "LITERATURE→FSOT CROSS-REF: mapped paper/wiki categories onto folds "
+                f"{chew.get('primary_domains')}. "
+                "Use these as co-sign targets with multipath S/regime (not free invention)."
+            )
+        lit = chew.get("literature") or {}
+        arx_hits = ((lit.get("arxiv") or {}).get("hits") or [])[:2]
+        for h in arx_hits:
+            folds = h.get("fsot_fold_panel") or []
+            fold_s = "; ".join(
+                f"{f.get('domain')} S={f.get('S')}" for f in folds[:3] if isinstance(f, dict)
+            )
+            parts.append(
+                f"arXiv {h.get('id')}: {h.get('title')} "
+                f"[{h.get('categories')}] → FSOT {{{fold_s or h.get('fsot_domains')}}}."
+            )
         if chew.get("excerpt"):
             parts.append(f"Chew excerpt: {str(chew['excerpt'])[:480]}")
 
