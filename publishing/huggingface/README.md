@@ -81,4 +81,4 @@ Windows: double-click `START_FSOT.bat` after first install.
 | Theory (Lean) | https://github.com/dappalumbo91/FSOT-2.1-Lean |
 | Chat weights | https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct |
 | This dataset | https://huggingface.co/datasets/dappalumbo91/fsot-monte-carlo-intelligence |
-| Kaggle exports | https://www.kaggle.com/datasets/dappalumbo91/fsot-monte-carlo-intelligence |
+| Kaggle exports | https://www.kaggle.com/datasets/damianpalumbo/fsot-monte-carlo-intelligence |

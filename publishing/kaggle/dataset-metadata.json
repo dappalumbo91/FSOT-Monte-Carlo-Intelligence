@@ -1,5 +1,7 @@
 {
-  "title": "FSOT Monte Carlo Intelligence Exports",
-  "id": "dappalumbo91/fsot-monte-carlo-intelligence",
-  "licenses": [{"name": "CC0-1.0"}]
+  "title": "FSOT Monte Carlo Intelligence",
+  "id": "damianpalumbo/fsot-monte-carlo-intelligence",
+  "licenses": [{"name": "CC0-1.0"}],
+  "keywords": ["physics", "simulation", "fsot", "monte carlo"],
+  "subtitle": "Fluid Spacetime Omni-Theory multipath intelligence exports (v1.5)"
 }
