@@ -4,8 +4,13 @@ cd /d "%~dp0"
 title Stop FSOT Monte Carlo Intelligence
 
 set "PORT=8765"
+if not "%FSOT_MC_PORT%"=="" set "PORT=%FSOT_MC_PORT%"
+set "NOPAUSE=0"
+if /I "%~1"=="nopause" set "NOPAUSE=1"
+
 echo.
 echo  Stopping FSOT server on port %PORT% ...
+echo  Folder: %CD%
 echo.
 
 powershell -NoProfile -Command ^
@@ -24,5 +29,5 @@ powershell -NoProfile -Command ^
    if ($left) { Write-Host 'WARNING: port still in use.' } else { Write-Host 'Done. Port is free.' }"
 
 echo.
-pause
+if "%NOPAUSE%"=="0" pause
 exit /b 0
