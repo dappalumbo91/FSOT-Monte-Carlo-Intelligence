@@ -1,6 +1,6 @@
 # Pre-FSOT concept vision (FSUFT / AASB era)
 
-**Source folder:** `I:\fsuft aasb`  
+**Source folder:** `<local folder, not included in repo: fsuft aasb>`  
 **Author vision:** Damian Arthur Palumbo  
 **Status in this product:** **CONCEPT LEDGER ONLY** — not math authority, not pin D1D38A inputs  
 

@@ -2,7 +2,7 @@
 
 **Product:** Simulate the universe under FSOT; discover pathways/physics; see symbolically; verify formally.  
 **Not markets.**  
-**Law authority:** `I:\FSOT-Physical-Archive` · pin **D1D38A** · multi-prover spine in Lean hub.
+**Law authority:** `<local folder, not included in repo: FSOT-Physical-Archive>` · pin **D1D38A** · multi-prover spine in Lean hub.
 
 ---
 
@@ -84,7 +84,7 @@
 ### How
 
 ```
-I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full
+FSOT-2.1-Lean
         │  scripts/sync_archive_bundle.py  (read-only)
         ▼
 FSOT-Monte-Carlo-Intelligence\vendor\archive_bundle\

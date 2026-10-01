@@ -36,7 +36,7 @@
 | Adaptive memory (engrams) | Routing / recall | Engrams, not GPU LoRA |
 | **Qwen + LoRA** | Mouth / articulation | **Yes — adapters only** |
 
-Lean court live location (your machines): GitHub [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean), Desktop checkout, and optional `I:\FSOT-Physical-Archive` hub. Runtime pin stays independent of I:.
+Lean court live location (your machines): GitHub [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean), Desktop checkout, and optional `<local folder, not included in repo: FSOT-Physical-Archive>` hub. Runtime pin stays independent of I:.
 
 ---
 

@@ -6,8 +6,8 @@ Hook offline research dumps into the multipath mind so reasoning can **cross-ref
 
 | Corpus | Default path | Env override |
 |--------|--------------|--------------|
-| arXiv OAI snapshot (JSONL) | `D:\training data\arXiv Dataset\arxiv-metadata-oai-snapshot.json` (~4.8 GB) | `FSOT_MC_ARXIV_JSON` |
-| Simple English Wikipedia | `D:\training data\nlp\simple-wiki\` | `FSOT_MC_WIKI_ROOT` |
+| arXiv OAI snapshot (JSONL) | `<local file, not included in repo: arxiv-metadata-oai-snapshot.json>` (~4.8 GB) | `FSOT_MC_ARXIV_JSON` |
+| Simple English Wikipedia | `<local folder, not included in repo: training data/nlp/simple-wiki>` | `FSOT_MC_WIKI_ROOT` |
 | **Shipped FTS pack (clone)** | `vendor/literature/*.sqlite` (Git LFS) | used automatically if `data/literature` empty |
 
 Live network APIs remain optional (`FSOT_MC_ONLINE=1`); **local index is preferred**.
