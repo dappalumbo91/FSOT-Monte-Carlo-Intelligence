@@ -622,7 +622,7 @@ def build_compact_connective_tissue(
             "navigator": "data__fsot_domain_navigator.json",
             "expansion_map": "data__scientific_domain_expansion_map.json",
             "atlas": "full_atlas.json",
-            "physical_archive": "I:/FSOT-Physical-Archive (synced subset)",
+            "physical_archive": "$FSOT_LOCAL_DATA/FSOT-Physical-Archive (synced subset)",
         },
         "n_nodes": len(nodes),
         "n_edges": len(uniq_edges),

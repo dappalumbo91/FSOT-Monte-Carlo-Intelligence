@@ -6,13 +6,25 @@ Hooks offline verified research into FSOT connective tissue:
   → cross-ref with domain folds / S / green-gate → chew for mind + memory
 
 Default paths (override with env):
-  FSOT_MC_ARXIV_JSON  = D:\\training data\\arXiv Dataset\\arxiv-metadata-oai-snapshot.json
-  FSOT_MC_WIKI_ROOT   = D:\\training data\\nlp\\simple-wiki
+  FSOT_MC_ARXIV_JSON  = $FSOT_TRAINING_DATA/arXiv Dataset/arxiv-metadata-oai-snapshot.json
+  FSOT_MC_WIKI_ROOT   = $FSOT_TRAINING_DATA/nlp/simple-wiki
 
 Indexes live under data/literature/ (SQLite FTS5). free_parameters = 0.
 """
 
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import os
@@ -27,13 +39,13 @@ from fsot_mc.paths import data_root
 DEFAULT_ARXIV = Path(
     os.environ.get(
         "FSOT_MC_ARXIV_JSON",
-        r"D:\training data\arXiv Dataset\arxiv-metadata-oai-snapshot.json",
+        _os.fspath(_REPO_ROOT / 'data_external/training_data' / 'arXiv Dataset' / 'arxiv-metadata-oai-snapshot.json'),
     )
 )
 DEFAULT_WIKI = Path(
     os.environ.get(
         "FSOT_MC_WIKI_ROOT",
-        r"D:\training data\nlp\simple-wiki",
+        _os.fspath(_REPO_ROOT / 'data_external/training_data' / 'nlp' / 'simple-wiki'),
     )
 )
 

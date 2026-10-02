@@ -7,6 +7,18 @@ Read-only on archive. Writes hashed portable bundle for Monte Carlo intelligence
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import hashlib
 import json
 import shutil
@@ -15,7 +27,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_ARCHIVE = Path(r"I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full")
+DEFAULT_ARCHIVE = _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean')
 OUT = ROOT / "vendor" / "archive_bundle"
 
 # Relative paths under Lean hub

@@ -39,3 +39,6 @@ vendor/models/**
 .hf_token
 *.hf_token
 
+
+# Local external data (see FSOT_* env vars); never committed
+data_external/

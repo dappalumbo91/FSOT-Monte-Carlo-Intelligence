@@ -8,6 +8,18 @@ Always validates local independence_status().
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import shutil
 import sys
@@ -52,7 +64,7 @@ def main() -> int:
         print(f"atlas core={a['n_core']} ext={a['n_extension']} total={a['n_total']}")
 
     # Optional refresh from external if present (not required)
-    ext_pflt = Path(r"C:\Users\damia\Desktop\pflt\fsot_multilayer_vision.py")
+    ext_pflt = _fsot_local_path('PROTOFLUID_LANGUAGE_TRANSLATOR_ROOT', '../protofluid-language-translator') / 'fsot_multilayer_vision.py'
     if ext_pflt.is_file() and not (pflt_vendor_dir() / "fsot_multilayer_vision.py").is_file():
         pflt_vendor_dir().mkdir(parents=True, exist_ok=True)
         shutil.copy2(ext_pflt, pflt_vendor_dir() / "fsot_multilayer_vision.py")
