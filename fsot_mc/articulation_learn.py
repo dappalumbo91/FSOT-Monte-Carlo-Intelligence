@@ -28,6 +28,18 @@ CLI
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import hashlib
 import json
 import os
@@ -362,9 +374,9 @@ def harvest_from_docs(*, limit: int = 24) -> dict[str, Any]:
             break
 
     # optional Lean court README if present on Desktop
-    lean_readme = Path(r"C:\Users\damia\Desktop\FSOT-2.1-Lean\FSOT-2.1-Lean-main\FSOT-2.1-Lean-main\README.md")
+    lean_readme = _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean') / 'README.md'
     if not lean_readme.is_file():
-        lean_readme = Path(r"C:\Users\damia\Desktop\FSOT-2.1-Lean\FSOT-2.1-Lean-main\README.md")
+        lean_readme = _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean') / 'README.md'
     if lean_readme.is_file():
         try:
             lt = lean_readme.read_text(encoding="utf-8", errors="replace")[:1200]

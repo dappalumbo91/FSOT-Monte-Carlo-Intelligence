@@ -52,9 +52,9 @@ echo %CD%| findstr /I /B "I:" >nul
 if not errorlevel 1 (
   echo.
   echo NOTE: Launching from I: drive — can be slow for first Qwen warm.
-  if exist "C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence\vendor\models\Qwen2.5-7B-Instruct\config.json" (
+  if exist "%USERPROFILE%\Desktop\FSOT-Monte-Carlo-Intelligence\vendor\models\Qwen2.5-7B-Instruct\config.json" (
     if "%FSOT_MC_QWEN_PATH%"=="" (
-      set "FSOT_MC_QWEN_PATH=C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence\vendor\models\Qwen2.5-7B-Instruct"
+      set "FSOT_MC_QWEN_PATH=%USERPROFILE%\Desktop\FSOT-Monte-Carlo-Intelligence\vendor\models\Qwen2.5-7B-Instruct"
       echo Using FAST Desktop Qwen weights for chat:
       echo   %FSOT_MC_QWEN_PATH%
     )

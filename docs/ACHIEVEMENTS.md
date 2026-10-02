@@ -29,7 +29,7 @@ Not a chatbot that free-associates physics. Not a market product.
 |-------------|-----------|
 | Pin **D1D38A** in-repo | Same seed engine as Physical Archive / Lean hub — no drift |
 | `free_parameters = 0` | All constants seed-derived; domain routes are fractal coordinates, not fits |
-| Independent `vendor/` + atlas | Runtime must not require `I:\` — science must be portable and auditable |
+| Independent `vendor/` + atlas | Runtime must not require `<local drive>` — science must be portable and auditable |
 | Float hot path + mpmath authority | Speed for MC + exact pin for gate |
 
 ### Universe multipath

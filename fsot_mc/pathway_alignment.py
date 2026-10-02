@@ -3,7 +3,7 @@ Pathway alignment + gated connective expansion.
 
 Aligns the MC connective graph with:
   - Local multi-verifier court (certificate + cross_proof in vendor/archive_bundle)
-  - Optional physical archive hub: I:\\FSOT-Physical-Archive\\02_FSOT-2.1-Lean-Full
+  - Optional physical archive hub: FSOT-2.1-Lean
   - Optional Desktop Lean: FSOT-2.1-Lean
 
 Fine-tunes *pathways* only via soft court + scaffold deltas — never moves seeds / pin D1D38A.
@@ -21,6 +21,18 @@ CLI:
 """
 
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import re
@@ -46,10 +58,10 @@ REPORT_MD = PACKAGE_ROOT / "docs" / "PATHWAY_ALIGNMENT.md"
 
 # Known Lean hub roots (optional external truth surfaces)
 _LEAN_HUB_CANDIDATES = (
-    Path(r"I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full"),
-    Path(r"C:\Users\damia\Desktop\FSOT-2.1-Lean\FSOT-2.1-Lean-main\FSOT-2.1-Lean-main"),
-    Path(r"C:\Users\damia\Desktop\FSOT-2.1-Lean\FSOT-2.1-Lean-main"),
-    Path(r"C:\Users\damia\Desktop\FSOT-2.1-Lean"),
+    _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean'),
+    _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean'),
+    _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean'),
+    _fsot_local_path('FSOT_2_1_LEAN_ROOT', '../FSOT-2.1-Lean'),
 )
 
 
@@ -76,8 +88,8 @@ def resolve_lean_hub() -> dict[str, Any]:
     return {
         "primary": primary,
         "candidates": found,
-        "physical_archive": str(Path(r"I:\FSOT-Physical-Archive"))
-        if Path(r"I:\FSOT-Physical-Archive").is_dir()
+        "physical_archive": str(_fsot_local_path('FSOT_ARCHIVE_ROOT', 'data_external/physical_archive'))
+        if _fsot_local_path('FSOT_ARCHIVE_ROOT', 'data_external/physical_archive').is_dir()
         else None,
         "local_bundle": str(archive_bundle_dir()),
     }

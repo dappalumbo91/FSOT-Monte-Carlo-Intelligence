@@ -142,7 +142,7 @@ See [MEMORY_ARCHITECTURE.md](./MEMORY_ARCHITECTURE.md). Long-term store path: `d
 
 ## 8. Optional archive refresh
 
-If `I:\FSOT-Physical-Archive` is present:
+If `<local folder, not included in repo: FSOT-Physical-Archive>` is present:
 
 ```powershell
 python scripts\sync_archive_bundle.py
@@ -245,8 +245,8 @@ python scripts\package_optional_assets.py --max-papers 100000
 
 ## 13. What is *not* required to reproduce
 
-- Physical Archive drive letter (`I:\…`)  
-- Local `D:\training data\…` arXiv / wiki dumps  
+- Physical Archive drive letter (`<local drive>`)  
+- Local `<local folder, not included in repo: training data>` arXiv / wiki dumps  
 - Live Realities OS kernel (snapshot is enough)  
 - Live network (unless testing online chew)  
 - GPU / Torch (CPU polar student fallback)  

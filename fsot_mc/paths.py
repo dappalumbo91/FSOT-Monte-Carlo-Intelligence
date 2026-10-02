@@ -15,6 +15,18 @@ Optional overrides (never required):
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import os
 from pathlib import Path
 
@@ -86,7 +98,7 @@ def archive_root() -> Path | None:
     if env:
         p = Path(env)
         return p if p.is_dir() else None
-    default = Path(r"I:\FSOT-Physical-Archive")
+    default = _fsot_local_path('FSOT_ARCHIVE_ROOT', 'data_external/physical_archive')
     use_phys = os.environ.get("FSOT_MC_USE_PHYSICAL_ARCHIVE", "").strip().lower() in (
         "1",
         "true",

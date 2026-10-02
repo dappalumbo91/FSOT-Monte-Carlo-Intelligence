@@ -7,6 +7,18 @@ Independent mode never requires a live kernel.
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[1]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import os
 from datetime import datetime, timezone
@@ -27,7 +39,7 @@ def realities_root() -> Path | None:
         env = os.environ.get(key)
         if env and Path(env).is_dir():
             return Path(env)
-    legacy = Path(r"I:\FSOT-Physical-Archive\10_Realities-OS")
+    legacy = _fsot_local_path('FSOT_ARCHIVE_ROOT', 'data_external/physical_archive') / '10_Realities-OS'
     if legacy.is_dir() and (legacy / "data" / "runtime").is_dir():
         return legacy
     return None

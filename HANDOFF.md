@@ -1,8 +1,8 @@
 # Handoff — FSOT Universe Monte Carlo Intelligence
 
-**Workspace:** `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence`  
+**Workspace:** `.`  
 **Version:** 1.5.0  
-**Mode:** **Independent** — no I:/D:/Desktop required at runtime  
+**Mode:** **Independent** — no local drive or Desktop paths required at runtime  
 **Chat weights (Hugging Face):** https://huggingface.co/dappalumbo91/FSOT-Qwen2.5-7B-Instruct  
 **GitHub code:** https://github.com/dappalumbo91/FSOT-Monte-Carlo-Intelligence
 

@@ -4,7 +4,7 @@
 **Not:** markets, trading, or free-parameter fitting  
 **Authority:** seed pin **D1D38A** · `free_parameters = 0`  
 **Law court:** [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)  
-**Physical archive origin:** `I:\FSOT-Physical-Archive` (synced subset under `vendor/archive_bundle/`)
+**Physical archive origin:** `<local folder, not included in repo: FSOT-Physical-Archive>` (synced subset under `vendor/archive_bundle/`)
 
 ---
 
@@ -142,7 +142,7 @@ This repository is an **independent runtime** that copies the verified subset of
 | `vendor/pflt/` | π-ring eyes + language surface |
 | `data/realities_snapshot/` | Offline Realities runtime |
 
-External `I:\` is **optional refresh only** (`scripts/sync_archive_bundle.py`). Runtime must not require I:.
+External `<local drive>` is **optional refresh only** (`scripts/sync_archive_bundle.py`). Runtime must not require I:.
 
 ---
 

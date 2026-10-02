@@ -12,14 +12,14 @@ Authority: **D1D38A185487…** · `free_parameters = 0` · gate_ok=True
 
 ## Hubs
 
-- Local bundle: `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence\vendor\archive_bundle`
-- Physical archive: `I:\FSOT-Physical-Archive`
-- Lean hub primary: `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full`
+- Local bundle: `vendor/archive_bundle`
+- Physical archive: `<local folder, not included in repo: FSOT-Physical-Archive>`
+- Lean hub primary: `FSOT-2.1-Lean`
 
 ## Multi-verifier (batch)
 
 - overall_ok: **True** · seven_way: **True** · github_ready: True
-- source: `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence\vendor\archive_bundle\data__cross_proof_verification_report.json`
+- source: `vendor/archive_bundle/data__cross_proof_verification_report.json`
 
 ## Graph snapshot
 
