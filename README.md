@@ -1,5 +1,7 @@
 # FSOT Monte Carlo Intelligence
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Simulate the universe under Fluid Spacetime Omni-Theory — discover pathways, physics, and engineering leads.**
 
 | | |
